@@ -135,14 +135,6 @@ body {
     stroke-dashoffset: -1000;
   }
 }
-@keyframes pm-testi-scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
 @keyframes pm-modal-in {
   from {
     transform: translateY(10px);
@@ -377,21 +369,75 @@ body {
   padding: 2px 20px 20px;
 }
 
-/* ---------- Testimonials marquee ---------- */
-.pm-testi-viewport {
+/* ---------- Testimonials scroller (user-controlled, no autoplay) ---------- */
+.pm-testi-wrap {
   position: relative;
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
-  mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
 }
-.pm-testi-track {
+.pm-testi-scroller {
   display: flex;
-  width: max-content;
-  will-change: transform;
-  animation: pm-testi-scroll 34s linear infinite;
+  gap: 22px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: 4px 2px 22px;
+  cursor: grab;
+  scrollbar-width: none; /* Firefox */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 3%, #000 97%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 3%, #000 97%, transparent 100%);
 }
-.pm-testi-track:hover {
-  animation-play-state: paused;
+.pm-testi-scroller::-webkit-scrollbar {
+  display: none;
+}
+.pm-testi-scroller.pm-dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  scroll-behavior: auto; /* let direct scrollLeft writes track the pointer */
+}
+.pm-testi-scroller.pm-dragging a {
+  pointer-events: none;
+}
+.pm-testi-card {
+  flex: none;
+  width: 360px;
+  scroll-snap-align: start;
+}
+.pm-testi-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1px solid var(--pm-card-border);
+  background: #fff;
+  color: var(--pm-purple-primary);
+  font-size: 24px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(80, 40, 120, 0.16);
+  transition: background 0.18s ease, color 0.18s ease, opacity 0.18s ease;
+}
+.pm-testi-arrow:hover {
+  background: var(--pm-purple-primary);
+  color: #fff;
+}
+.pm-testi-prev {
+  left: -6px;
+}
+.pm-testi-next {
+  right: -6px;
+}
+@media (max-width: 760px) {
+  .pm-testi-card {
+    width: 300px;
+  }
+  .pm-testi-arrow {
+    display: none; /* touch users swipe */
+  }
 }
 
 /* ---------- Modal ---------- */
@@ -542,19 +588,8 @@ body {
   .pm-anim-twinkle {
     animation: none !important;
   }
-  /* Marquee becomes a static, centered, wrapping grid */
-  .pm-testi-track {
-    animation: none !important;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: 100%;
-  }
-  .pm-testi-viewport {
-    -webkit-mask-image: none;
-    mask-image: none;
-  }
-  .pm-testi-group[data-clone="true"] {
-    display: none !important;
+  .pm-testi-scroller {
+    scroll-behavior: auto;
   }
   .pm-modal-card {
     animation: none !important;

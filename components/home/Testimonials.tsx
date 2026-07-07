@@ -1,23 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { testimonials, type Testimonial } from "@/content/home";
 import TestimonialModal from "@/components/TestimonialModal";
 
-function TestiCard({
-  t,
-  onOpen,
-}: {
-  t: Testimonial;
-  onOpen: () => void;
-}) {
+const GAP = 22;
+
+function TestiCard({ t, onOpen }: { t: Testimonial; onOpen: () => void }) {
   return (
     <figure
+      className="pm-testi-card"
       style={{
         boxSizing: "border-box",
-        flex: "none",
-        width: 360,
-        margin: "0 22px 0 0",
+        margin: 0,
         background: "var(--pm-card-light)",
         border: "1px solid var(--pm-card-border)",
         borderRadius: 20,
@@ -96,6 +91,73 @@ function TestiCard({
 
 export default function Testimonials() {
   const [selected, setSelected] = useState<number | null>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const drag = useRef({ startX: 0, startLeft: 0, active: false });
+  const movedRef = useRef(false);
+  const [prevDisabled, setPrevDisabled] = useState(true);
+  const [nextDisabled, setNextDisabled] = useState(false);
+
+  const updateArrows = useCallback(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    // Small tolerance: scroll-snap + the track's 2px side padding mean the
+    // resting scrollLeft is a couple px off 0 / the exact max.
+    const EPS = 4;
+    setPrevDisabled(el.scrollLeft <= EPS);
+    setNextDisabled(el.scrollLeft >= el.scrollWidth - el.clientWidth - EPS);
+  }, []);
+
+  useEffect(() => {
+    updateArrows();
+    window.addEventListener("resize", updateArrows);
+    return () => window.removeEventListener("resize", updateArrows);
+  }, [updateArrows]);
+
+  const step = () => {
+    const card = trackRef.current?.querySelector<HTMLElement>(".pm-testi-card");
+    return (card?.offsetWidth ?? 360) + GAP;
+  };
+  const scrollByCard = (dir: number) => {
+    trackRef.current?.scrollBy({ left: dir * step(), behavior: "smooth" });
+  };
+
+  // Mouse drag-to-scroll (touch is left to native scrolling).
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== "mouse") return;
+    const el = trackRef.current;
+    if (!el) return;
+    drag.current = { startX: e.clientX, startLeft: el.scrollLeft, active: true };
+    movedRef.current = false;
+    el.classList.add("pm-dragging");
+    el.setPointerCapture?.(e.pointerId);
+  };
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!drag.current.active) return;
+    const el = trackRef.current;
+    if (!el) return;
+    const dx = e.clientX - drag.current.startX;
+    if (Math.abs(dx) > 4) movedRef.current = true;
+    el.scrollLeft = drag.current.startLeft - dx;
+  };
+  const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!drag.current.active) return;
+    drag.current.active = false;
+    const el = trackRef.current;
+    el?.classList.remove("pm-dragging");
+    try {
+      el?.releasePointerCapture?.(e.pointerId);
+    } catch {
+      /* pointer already released */
+    }
+  };
+  // Suppress the click synthesized after a drag so it doesn't open the modal.
+  const onClickCapture = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (movedRef.current) {
+      e.preventDefault();
+      e.stopPropagation();
+      movedRef.current = false;
+    }
+  };
 
   return (
     <section aria-labelledby="testimonials-heading" style={{ background: "var(--pm-bg)" }}>
@@ -124,24 +186,44 @@ export default function Testimonials() {
           </p>
         </div>
 
-        <div className="pm-testi-viewport">
-          <div className="pm-testi-track">
-            <div className="pm-testi-group" style={{ display: "flex" }}>
-              {testimonials.map((t, i) => (
-                <TestiCard key={`a-${t.name}`} t={t} onOpen={() => setSelected(i)} />
-              ))}
-            </div>
-            <div
-              className="pm-testi-group"
-              data-clone="true"
-              aria-hidden="true"
-              style={{ display: "flex" }}
-            >
-              {testimonials.map((t, i) => (
-                <TestiCard key={`b-${t.name}`} t={t} onOpen={() => setSelected(i)} />
-              ))}
-            </div>
+        <div className="pm-testi-wrap">
+          <button
+            type="button"
+            className="pm-testi-arrow pm-testi-prev"
+            aria-label="Previous testimonials"
+            onClick={() => scrollByCard(-1)}
+            style={{ opacity: prevDisabled ? 0.35 : 1 }}
+          >
+            <span aria-hidden="true">‹</span>
+          </button>
+
+          <div
+            ref={trackRef}
+            className="pm-testi-scroller"
+            tabIndex={0}
+            role="group"
+            aria-label="Client testimonials"
+            onScroll={updateArrows}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={endDrag}
+            onPointerCancel={endDrag}
+            onClickCapture={onClickCapture}
+          >
+            {testimonials.map((t, i) => (
+              <TestiCard key={t.name} t={t} onOpen={() => setSelected(i)} />
+            ))}
           </div>
+
+          <button
+            type="button"
+            className="pm-testi-arrow pm-testi-next"
+            aria-label="Next testimonials"
+            onClick={() => scrollByCard(1)}
+            style={{ opacity: nextDisabled ? 0.35 : 1 }}
+          >
+            <span aria-hidden="true">›</span>
+          </button>
         </div>
       </div>
 

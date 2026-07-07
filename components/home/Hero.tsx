@@ -64,7 +64,7 @@ export default function Hero() {
           position: "relative",
         }}
       >
-        <div>
+        <div className="pm-hero-copy">
           <div
             style={{
               display: "inline-flex",
@@ -105,10 +105,12 @@ export default function Hero() {
               margin: "0 0 22px",
             }}
           >
-            Workflow <span style={{ color: "var(--pm-lime)" }}>Design</span> &amp;
-            Business Process <span style={{ color: "var(--pm-lime)" }}>Automation</span>
+            Workflow <span style={{ color: "var(--pm-lime)" }}>Design</span>
+            {" & "}Business Process{" "}
+            <span style={{ color: "var(--pm-lime)" }}>Automation</span>
           </h1>
           <p
+            className="pm-hero-subhead"
             style={{
               fontSize: 19,
               lineHeight: 1.6,
@@ -121,6 +123,7 @@ export default function Hero() {
             training and maintenance.
           </p>
           <div
+            className="pm-hero-ctas"
             style={{
               display: "flex",
               flexWrap: "wrap",
@@ -162,6 +165,7 @@ export default function Hero() {
             </a>
           </div>
           <ul
+            className="pm-hero-pills"
             style={{
               display: "flex",
               flexWrap: "wrap",

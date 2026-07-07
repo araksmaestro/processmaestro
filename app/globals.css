@@ -258,7 +258,9 @@ body {
 }
 
 /* ---------- Expertise widget ---------- */
-.pm-exp-widget {
+/* Desktop side-panel layout. Both this and .pm-exp-mobile are rendered;
+   the 820px media query below decides which is shown (SSR-safe, no flash). */
+.pm-exp-desktop {
   display: grid;
   grid-template-columns: 340px 1fr;
   gap: 28px;
@@ -309,6 +311,70 @@ body {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+}
+
+/* ---------- Expertise accordion (<=820px) ---------- */
+.pm-exp-mobile {
+  display: none;
+}
+.pm-acc-row {
+  border: 1px solid var(--pm-card-border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(80, 40, 120, 0.05);
+}
+.pm-acc-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  padding: 16px 20px;
+  border: none;
+  background: #fff;
+  color: var(--pm-muted-3);
+  font-family: inherit;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+.pm-acc-row[data-open="true"] .pm-acc-header {
+  background: var(--pm-purple-primary);
+  color: #fff;
+}
+.pm-acc-name {
+  font-family: var(--pm-font-display);
+  font-weight: 600;
+  font-size: 16px;
+}
+.pm-acc-chevron {
+  margin-left: auto;
+  font-size: 13px;
+  line-height: 1;
+  transition: transform 0.25s ease;
+}
+.pm-acc-row[data-open="true"] .pm-acc-chevron {
+  transform: rotate(180deg);
+}
+/* Animate open/close via grid-template-rows (no JS height measuring). */
+.pm-acc-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
+}
+.pm-acc-row[data-open="true"] .pm-acc-body {
+  grid-template-rows: 1fr;
+}
+.pm-acc-body-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+.pm-acc-desc {
+  font-size: 15.5px;
+  line-height: 1.65;
+  color: var(--pm-muted-4);
+  margin: 0;
+  padding: 2px 20px 20px;
 }
 
 /* ---------- Testimonials marquee ---------- */
@@ -363,8 +429,13 @@ body {
   }
 }
 @media (max-width: 820px) {
-  .pm-exp-widget {
-    grid-template-columns: 1fr;
+  .pm-exp-desktop {
+    display: none;
+  }
+  .pm-exp-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
 }
 @media (max-width: 760px) {

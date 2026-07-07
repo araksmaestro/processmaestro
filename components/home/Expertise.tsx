@@ -4,7 +4,10 @@ import { useState } from "react";
 import { expertise } from "@/content/home";
 
 export default function Expertise() {
-  const [active, setActive] = useState(0);
+  // activeIndex drives both layouts. null = all-collapsed (mobile only);
+  // the desktop panel falls back to item 0 when null.
+  const [active, setActive] = useState<number | null>(0);
+  const desktopIndex = active ?? 0;
 
   return (
     <section
@@ -37,8 +40,8 @@ export default function Expertise() {
           </p>
         </div>
 
-        <div className="pm-exp-widget">
-          {/* Selector list */}
+        {/* ===== Desktop: selector list + shared detail panel (> 820px) ===== */}
+        <div className="pm-exp-desktop">
           <div
             role="tablist"
             aria-label="Core expertise areas"
@@ -50,9 +53,9 @@ export default function Expertise() {
                 type="button"
                 role="tab"
                 id={`exp-tab-${i}`}
-                aria-selected={active === i}
+                aria-selected={desktopIndex === i}
                 aria-controls={`exp-panel-${i}`}
-                data-active={active === i}
+                data-active={desktopIndex === i}
                 className="pm-exp-btn"
                 onClick={() => setActive(i)}
               >
@@ -66,8 +69,8 @@ export default function Expertise() {
             ))}
           </div>
 
-          {/* Detail panel — all items stacked in one grid cell so height is
-              locked to the tallest item (zero layout shift on switch). */}
+          {/* All items stacked in one grid cell → panel height is locked to the
+              tallest item natively (zero layout shift, no JS measuring). */}
           <div className="pm-exp-panel">
             {expertise.map((item, i) => (
               <div
@@ -75,8 +78,8 @@ export default function Expertise() {
                 id={`exp-panel-${i}`}
                 role="tabpanel"
                 aria-labelledby={`exp-tab-${i}`}
-                aria-hidden={active !== i}
-                data-active={active === i}
+                aria-hidden={desktopIndex !== i}
+                data-active={desktopIndex === i}
                 className="pm-exp-item"
               >
                 <div
@@ -114,6 +117,37 @@ export default function Expertise() {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* ===== Mobile: accordion, one open at a time (<= 820px) ===== */}
+        <div className="pm-exp-mobile">
+          {expertise.map((item, i) => {
+            const open = active === i;
+            return (
+              <div key={item.name} className="pm-acc-row" data-open={open}>
+                <button
+                  type="button"
+                  className="pm-acc-header"
+                  aria-expanded={open}
+                  aria-controls={`acc-body-${i}`}
+                  onClick={() => setActive(open ? null : i)}
+                >
+                  <span style={{ fontSize: 20, lineHeight: 1 }} aria-hidden="true">
+                    {item.icon}
+                  </span>
+                  <span className="pm-acc-name">{item.name}</span>
+                  <span className="pm-acc-chevron" aria-hidden="true">
+                    ▾
+                  </span>
+                </button>
+                <div id={`acc-body-${i}`} role="region" aria-label={item.name} className="pm-acc-body">
+                  <div className="pm-acc-body-inner">
+                    <p className="pm-acc-desc">{item.desc}</p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

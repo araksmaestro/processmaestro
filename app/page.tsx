@@ -11,7 +11,7 @@ import CtaBand from "@/components/home/CtaBand";
 import Footer from "@/components/home/Footer";
 
 // Revalidate periodically so featured case-study changes appear without a redeploy.
-export const revalidate = 300;
+export const revalidate = 30;
 
 export default function Home() {
   return (

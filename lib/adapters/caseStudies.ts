@@ -52,7 +52,8 @@ export async function getFeaturedCaseStudies(limit = 3): Promise<CaseStudy[]> {
     hydrated: true,
   };
 
-  const { items } = await listRecords<CaseStudyRecord>(CASE_STUDIES_TABLE, body);
+  // Keep the fetch Data Cache TTL in sync with the homepage `revalidate` (30s).
+  const { items } = await listRecords<CaseStudyRecord>(CASE_STUDIES_TABLE, body, 30);
 
   return items.map((rec): CaseStudy => {
     const handle = Array.isArray(rec.sae9c2cd99) ? rec.sae9c2cd99[0]?.handle : undefined;

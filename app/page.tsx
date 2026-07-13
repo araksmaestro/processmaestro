@@ -10,6 +10,9 @@ import Testimonials from "@/components/home/Testimonials";
 import CtaBand from "@/components/home/CtaBand";
 import Footer from "@/components/home/Footer";
 
+// Revalidate periodically so featured case-study changes appear without a redeploy.
+export const revalidate = 300;
+
 export default function Home() {
   return (
     <>

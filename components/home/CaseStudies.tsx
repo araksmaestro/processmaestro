@@ -1,8 +1,25 @@
 import Link from "next/link";
 import CaseCard from "@/components/CaseCard";
 import { homeCases } from "@/content/home";
+import { getFeaturedCaseStudies } from "@/lib/adapters/caseStudies";
 
-export default function CaseStudies() {
+export default async function CaseStudies() {
+  // Pull featured case studies from SmartSuite; on any error or empty result,
+  // fall back wholesale to the static homeCases so the section always renders.
+  let cases = homeCases;
+  try {
+    const featured = await getFeaturedCaseStudies(3);
+    if (featured.length > 0) cases = featured;
+  } catch (err) {
+    console.error("[CaseStudies] SmartSuite fetch failed, using static fallback:", err);
+  }
+
+  // Keep the 3-up desktop layout identical; center 1–2 cards so the grid reads cleanly.
+  const gridColumns =
+    cases.length >= 3
+      ? "repeat(3, 1fr)"
+      : `repeat(${cases.length}, minmax(0, 360px))`;
+
   return (
     <section
       id="cases"
@@ -35,9 +52,14 @@ export default function CaseStudies() {
 
         <div
           className="pm-cards"
-          style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 22 }}
+          style={{
+            display: "grid",
+            gridTemplateColumns: gridColumns,
+            gap: 22,
+            justifyContent: "center",
+          }}
         >
-          {homeCases.map((cs) => (
+          {cases.map((cs) => (
             <CaseCard key={cs.title} {...cs} />
           ))}
         </div>

@@ -2,15 +2,39 @@
 // Mirrors how the homepage uses content/home.ts. A later prompt can swap this
 // for a SmartSuite adapter (cover ← file field, url ← /case-studies/{Slug}, etc.).
 
+export type CaseMedia = {
+  type: "image" | "video";
+  src: string;
+  poster?: string;
+  alt?: string;
+};
+
+// Detail-page-only fields. A record with `detail` set is rendered by the
+// /case-studies/[slug] template; records without it are card-only for now.
+export type CaseStudyDetail = {
+  subhead: string;
+  client: string;
+  duration: string;
+  heroStat?: { value: string; label: string };
+  media: CaseMedia[];
+  aboutClient: string;
+  challenge: string;
+  solution: { tool: string; desc: string }[];
+  resultCards: { text: string }[];
+  tools: { icon: string; name: string }[];
+  testimonial: { quote: string; author: string; org: string; rating?: number };
+};
+
 export type CaseStudy = {
-  slug: string; // stable id for the future detail route
-  url?: string; // explicit override; falls back to '#' in v1
+  slug: string; // stable id / detail route param (bare, no "case-studies/" prefix)
+  url?: string; // explicit card link override; falls back to '#' in v1
   cover: string; // '/case-studies/case-*.png'
   category: string;
   location: string;
   title: string;
   summary: string;
   results: string[];
+  detail?: CaseStudyDetail; // present → has a detail page
 };
 
 export const caseStudies: CaseStudy[] = [
@@ -28,7 +52,8 @@ export const caseStudies: CaseStudy[] = [
     ],
   },
   {
-    slug: "facebook-campaign-automation",
+    slug: "facebook-automation",
+    url: "/case-studies/facebook-automation",
     cover: "/case-studies/case-facebook.png",
     category: "Digital Marketing",
     location: "Poland",
@@ -39,6 +64,54 @@ export const caseStudies: CaseStudy[] = [
       "Campaign launch time reduced from 2 hours to under 2 minutes",
       "Eliminated manual Meta logins and copy/paste workflows",
     ],
+    detail: {
+      subhead: "Scalable Ads, Zero Manual Work — A Fully Automated FB Ads Engine",
+      client: "Digital Marketing Agency",
+      duration: "3 months",
+      heroStat: { value: "2 hrs → 2 min", label: "to launch a campaign, fully automated" },
+      media: [
+        {
+          type: "image",
+          src: "/case-studies/case-facebook-hero.png",
+          alt: "Automating Facebook Campaign Creation",
+        },
+      ],
+      aboutClient:
+        "A digital-first marketing team running frequent Facebook ad campaigns for multiple clients. They needed a scalable way to launch campaigns without manually jumping between spreadsheets, ad copy drafts, and Meta Business Manager.",
+      challenge:
+        "Before automation, launching each campaign required copying data from Google Sheets, manually drafting ad copy, and logging into Meta to set up audiences and targeting. The team wanted to move fast, but bottlenecks and manual steps made campaign setup time-consuming and error-prone.",
+      solution: [
+        { tool: "Google Sheets", desc: "Campaign data auto-synced in real time" },
+        { tool: "ChatGPT", desc: "AI generates high-converting headlines & ad copy" },
+        { tool: "Validation Layer", desc: "Built-in checks catch errors before launch" },
+        {
+          tool: "Meta API",
+          desc: "5 automated calls handle campaign creation, audience setup, ad deployment, and publishing",
+        },
+        { tool: "Cloud Storage", desc: "All creative assets are uploaded and managed automatically" },
+      ],
+      resultCards: [
+        { text: "Campaign launch time reduced from 2 hours to under 2 minutes" },
+        { text: "Launch ten campaigns as easily as one" },
+        { text: "Eliminated manual Meta logins and copy/paste workflows" },
+        { text: "Near real-time deployment across multiple accounts" },
+      ],
+      tools: [
+        { icon: "📊", name: "Google Sheets" },
+        { icon: "◆", name: "Meta API" },
+        { icon: "☁️", name: "ChatGPT (OpenAI)" },
+        { icon: "⚙️", name: "Make (for automation logic)" },
+        { icon: "🗂️", name: "Google Drive" },
+        { icon: "✅", name: "Validation Layer" },
+      ],
+      testimonial: {
+        quote:
+          "This setup lets us move fast. It's like having a full-time ad ops team working behind the scenes — automatically.",
+        author: "Marketing Team Lead",
+        org: "Digital Marketing Agency",
+        rating: 5,
+      },
+    },
   },
   {
     slug: "acuity-research-task-management",

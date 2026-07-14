@@ -4,19 +4,37 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-const linkStyle = {
-  textDecoration: "none",
-  color: "var(--pm-muted-3)",
-  fontWeight: 500,
-  fontSize: 15,
-} as const;
+type NavVariant = "light" | "dark";
+type NavActive = "industries" | "case-studies" | "services";
 
-export default function Nav() {
+export default function Nav({
+  variant = "light",
+  active,
+}: {
+  variant?: NavVariant;
+  active?: NavActive;
+}) {
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
 
+  const dark = variant === "dark";
+  // On dark (sub-page) headers the in-page anchors point back to the homepage.
+  const anchorBase = dark ? "/" : "";
+  const baseColor = dark ? "var(--pm-on-dark-1)" : "var(--pm-muted-3)";
+
+  const linkStyle = (isActive: boolean) =>
+    ({
+      textDecoration: "none",
+      color: isActive ? "#fff" : baseColor,
+      fontWeight: isActive ? 600 : 500,
+      fontSize: 15,
+      ...(isActive
+        ? { borderBottom: "2px solid var(--pm-lime)", paddingBottom: 2 }
+        : null),
+    }) as const;
+
   return (
-    <header className="pm-header">
+    <header className={`pm-header${dark ? " pm-header--dark" : ""}`}>
       <nav
         className="pm-nav pm-pad"
         style={{
@@ -42,17 +60,21 @@ export default function Nav() {
 
         {/* Desktop links */}
         <div className="pm-nav-links" style={{ display: "flex", alignItems: "center", gap: 32 }}>
-          <a href="#industries" style={linkStyle}>
+          <a href={`${anchorBase}#industries`} style={linkStyle(active === "industries")}>
             Industries
           </a>
-          <Link href="/case-studies" style={linkStyle}>
+          <Link
+            href="/case-studies"
+            aria-current={active === "case-studies" ? "page" : undefined}
+            style={linkStyle(active === "case-studies")}
+          >
             Case Studies
           </Link>
-          <Link href="/services" style={linkStyle}>
+          <Link href="/services" style={linkStyle(active === "services")}>
             Services
           </Link>
           <a
-            href="#consult"
+            href={`${anchorBase}#consult`}
             className="pm-nav-consult pm-display"
             style={{
               textDecoration: "none",
@@ -82,9 +104,9 @@ export default function Nav() {
         </button>
       </nav>
 
-      {/* Mobile dropdown drawer */}
+      {/* Mobile dropdown drawer (active underline intentionally not applied here) */}
       <div id="pm-mobile-menu" className={`pm-mobile-menu${open ? " pm-open" : ""}`}>
-        <a href="#industries" onClick={close}>
+        <a href={`${anchorBase}#industries`} onClick={close}>
           Industries
         </a>
         <Link href="/case-studies" onClick={close}>
@@ -93,7 +115,7 @@ export default function Nav() {
         <Link href="/services" onClick={close}>
           Services
         </Link>
-        <a href="#consult" className="pm-mobile-consult" onClick={close}>
+        <a href={`${anchorBase}#consult`} className="pm-mobile-consult" onClick={close}>
           Free Consultation
         </a>
       </div>

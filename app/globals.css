@@ -1,26 +1,597 @@
 @import "tailwindcss";
 
+/* ============================================================
+   Process Maestro — marketing site design tokens
+   (Light theme with dark gradient sections. Intentionally
+   different from the dark portal UI conventions.)
+   ============================================================ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Fonts (wired to next/font variables in app/layout.tsx) */
+  --pm-font-display: var(--font-space-grotesk), "Space Grotesk", sans-serif;
+  --pm-font-body: var(--font-instrument-sans), "Instrument Sans", system-ui, sans-serif;
+
+  /* Accent — lime */
+  --pm-lime: #8cdc00;
+  --pm-lime-hover: #7cc700;
+  --pm-lime-light: #b6f24d;
+
+  /* Purples */
+  --pm-purple-darkest: #2a1440;
+  --pm-purple-1: #5c2f86;
+  --pm-purple-2: #3a1e5c;
+  --pm-purple-3: #4a2775;
+  --pm-purple-4: #331b52;
+  --pm-purple-primary: #502878; /* tiles / active */
+  --pm-avatar-a: #643c8c;
+  --pm-avatar-b: #502878;
+
+  /* Warm accent */
+  --pm-amber: #ffb43c;
+
+  /* Text on light */
+  --pm-ink-1: #1e1330;
+  --pm-ink-2: #2e223f;
+  --pm-ink-3: #2e1747;
+  --pm-muted-1: #6b5b84;
+  --pm-muted-2: #7a6a92;
+  --pm-muted-3: #3d2b57;
+  --pm-muted-4: #4a3b63;
+
+  /* Text on dark */
+  --pm-on-dark: #ffffff;
+  --pm-on-dark-1: #d8ccea;
+  --pm-on-dark-2: #c4b5db;
+  --pm-on-dark-3: #ede6f7;
+  --pm-on-dark-muted-1: #9e8cbb;
+  --pm-on-dark-muted-2: #b0a0cc;
+  --pm-on-dark-muted-3: #7e6c9b;
+
+  /* Surfaces */
+  --pm-bg: #ffffff;
+  --pm-lilac: #f7f5fb;
+  --pm-card-light: #fbfafe;
+  --pm-card-border: #ece6f3;
+  --pm-footer-bg: #22103a;
+  --pm-case-bg: #241f30;
+
+  /* Signature gradients */
+  --pm-grad-hero: radial-gradient(120% 120% at 15% 10%, #5c2f86 0%, #3a1e5c 55%, #2a1440 100%);
+  --pm-grad-cases: radial-gradient(120% 120% at 85% 0%, #4a2775 0%, #331b52 60%, #2a1440 100%);
+  --pm-grad-whoneeds: radial-gradient(120% 120% at 15% 100%, #4a2775 0%, #331b52 60%, #2a1440 100%);
+  --pm-grad-cta: linear-gradient(115deg, #8cdc00 0%, #a6e63a 100%);
+  --pm-grad-founder-frame: linear-gradient(140deg, #8cdc00, #ffb43c);
+  --pm-grad-avatar: linear-gradient(135deg, #643c8c, #502878);
+
+  /* Shadows */
+  --pm-shadow-cta: 0 8px 24px rgba(140, 220, 0, 0.35);
+  --pm-shadow-card-hover: 0 12px 26px rgba(80, 40, 120, 0.1);
+  --pm-shadow-panel: 0 6px 26px rgba(80, 40, 120, 0.08);
+  --pm-shadow-modal: 0 30px 80px rgba(30, 16, 48, 0.4);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-display: var(--pm-font-display);
+  --font-body: var(--pm-font-body);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--pm-bg);
+  color: var(--pm-ink-1);
+  font-family: var(--pm-font-body);
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--pm-lime);
+  color: var(--pm-purple-darkest);
+}
+
+/* ---------- Reusable text helpers ---------- */
+.pm-eyebrow {
+  font-family: var(--pm-font-display);
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.pm-display {
+  font-family: var(--pm-font-display);
+}
+
+/* ---------- Animations ---------- */
+@keyframes pm-floaty {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+@keyframes pm-twinkle {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+@keyframes pm-dash {
+  to {
+    stroke-dashoffset: -1000;
+  }
+}
+@keyframes pm-modal-in {
+  from {
+    transform: translateY(10px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.pm-anim-dash {
+  animation: pm-dash 14s linear infinite;
+}
+.pm-anim-floaty {
+  animation: pm-floaty 6s ease-in-out infinite;
+}
+.pm-anim-twinkle {
+  animation: pm-twinkle 3s ease-in-out infinite;
+}
+
+/* ---------- Buttons / hovers (can't be inline styles) ---------- */
+.pm-cta-primary {
+  transition: transform 0.18s ease, background 0.18s ease;
+}
+.pm-cta-primary:hover {
+  transform: translateY(-2px);
+}
+.pm-nav-consult {
+  transition: transform 0.18s ease, background 0.18s ease;
+}
+.pm-nav-consult:hover {
+  background: var(--pm-lime-hover);
+  transform: translateY(-1px);
+}
+
+/* ---------- Header / mobile nav ---------- */
+.pm-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--pm-card-border);
+}
+.pm-logo-img {
+  height: 34px;
+  width: auto;
+  display: block;
+}
+/* Hamburger is desktop-hidden; revealed at <=760px. */
+.pm-hamburger {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: none;
+  background: transparent;
+  color: var(--pm-muted-3);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 10px;
+}
+/* Mobile dropdown drawer — hidden until opened at <=760px. */
+.pm-mobile-menu {
+  display: none;
+}
+.pm-ghost {
+  transition: background 0.18s ease;
+}
+.pm-ghost:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+.pm-dark-cta {
+  transition: transform 0.18s ease;
+}
+.pm-dark-cta:hover {
+  transform: translateY(-2px);
+}
+.pm-footer-link {
+  transition: color 0.18s ease;
+}
+.pm-footer-link:hover {
+  color: #fff;
+}
+.pm-social {
+  transition: background 0.18s ease, color 0.18s ease;
+}
+.pm-social:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+
+/* Industry cards */
+.pm-industry-card {
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+.pm-industry-card:hover {
+  border-color: var(--pm-lime);
+  transform: translateY(-3px);
+  box-shadow: var(--pm-shadow-card-hover);
+}
+
+/* Case card */
+.pm-case-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.pm-case-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 22px 44px rgba(15, 6, 30, 0.5);
+  border-color: rgba(140, 220, 0, 0.4);
+}
+
+/* ---------- Expertise widget ---------- */
+/* Desktop side-panel layout. Both this and .pm-exp-mobile are rendered;
+   the 820px media query below decides which is shown (SSR-safe, no flash). */
+.pm-exp-desktop {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 28px;
+  align-items: start;
+}
+.pm-exp-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  padding: 16px 20px;
+  border-radius: 14px;
+  font-family: inherit;
+  background: #fff;
+  color: var(--pm-muted-3);
+  border: 1px solid var(--pm-card-border);
+  box-shadow: 0 2px 8px rgba(80, 40, 120, 0.05);
+  transition: background 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+.pm-exp-btn[data-active="true"] {
+  background: var(--pm-purple-primary);
+  color: #fff;
+  border-color: var(--pm-purple-primary);
+  box-shadow: 0 8px 22px rgba(80, 40, 120, 0.28);
+}
+/* Stack all panels in one grid cell so the card is always as tall as the
+   tallest item — locks height with zero layout shift, no JS measuring. */
+.pm-exp-panel {
+  position: relative;
+  display: grid;
+  background: #fff;
+  border: 1px solid var(--pm-card-border);
+  border-radius: 22px;
+  padding: 40px;
+  box-shadow: var(--pm-shadow-panel);
+  overflow: hidden;
+}
+.pm-exp-item {
+  grid-area: 1 / 1;
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+  transition: opacity 0.2s ease;
+}
+.pm-exp-item[data-active="false"] {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* ---------- Expertise accordion (<=820px) ---------- */
+.pm-exp-mobile {
+  display: none;
+}
+.pm-acc-row {
+  border: 1px solid var(--pm-card-border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(80, 40, 120, 0.05);
+}
+.pm-acc-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  padding: 16px 20px;
+  border: none;
+  background: #fff;
+  color: var(--pm-muted-3);
+  font-family: inherit;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+.pm-acc-row[data-open="true"] .pm-acc-header {
+  background: var(--pm-purple-primary);
+  color: #fff;
+}
+.pm-acc-name {
+  font-family: var(--pm-font-display);
+  font-weight: 600;
+  font-size: 16px;
+}
+.pm-acc-chevron {
+  margin-left: auto;
+  font-size: 13px;
+  line-height: 1;
+  transition: transform 0.25s ease;
+}
+.pm-acc-row[data-open="true"] .pm-acc-chevron {
+  transform: rotate(180deg);
+}
+/* Animate open/close via grid-template-rows (no JS height measuring). */
+.pm-acc-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
+}
+.pm-acc-row[data-open="true"] .pm-acc-body {
+  grid-template-rows: 1fr;
+}
+.pm-acc-body-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+.pm-acc-desc {
+  font-size: 15.5px;
+  line-height: 1.65;
+  color: var(--pm-muted-4);
+  margin: 0;
+  padding: 2px 20px 20px;
+}
+
+/* ---------- Testimonials scroller (user-controlled, no autoplay) ---------- */
+.pm-testi-wrap {
+  position: relative;
+}
+.pm-testi-scroller {
+  display: flex;
+  gap: 22px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: 4px 2px 22px;
+  cursor: grab;
+  scrollbar-width: none; /* Firefox */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 3%, #000 97%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 3%, #000 97%, transparent 100%);
+}
+.pm-testi-scroller::-webkit-scrollbar {
+  display: none;
+}
+.pm-testi-scroller.pm-dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  scroll-behavior: auto; /* let direct scrollLeft writes track the pointer */
+}
+.pm-testi-scroller.pm-dragging a {
+  pointer-events: none;
+}
+.pm-testi-card {
+  flex: none;
+  width: 360px;
+  scroll-snap-align: start;
+}
+.pm-testi-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1px solid var(--pm-card-border);
+  background: #fff;
+  color: var(--pm-purple-primary);
+  font-size: 24px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(80, 40, 120, 0.16);
+  transition: background 0.18s ease, color 0.18s ease, opacity 0.18s ease;
+}
+.pm-testi-arrow:hover {
+  background: var(--pm-purple-primary);
+  color: #fff;
+}
+.pm-testi-prev {
+  left: -6px;
+}
+.pm-testi-next {
+  right: -6px;
+}
+@media (max-width: 760px) {
+  .pm-testi-card {
+    width: 300px;
+  }
+  .pm-testi-arrow {
+    display: none; /* touch users swipe */
+  }
+}
+
+/* ---------- Modal ---------- */
+.pm-modal-card {
+  animation: pm-modal-in 0.2s ease;
+}
+
+/* ============================================================
+   Responsive — exact breakpoints from the design prototype
+   ============================================================ */
+@media (max-width: 960px) {
+  .pm-split {
+    grid-template-columns: 1fr !important;
+    gap: 40px !important;
+  }
+  .pm-cards {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .pm-footer {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .pm-h1 {
+    font-size: 42px !important;
+  }
+  .pm-hero-motif {
+    display: none !important;
+  }
+  .pm-hero-pad {
+    padding-top: 56px !important;
+    padding-bottom: 60px !important;
+  }
+  .pm-sec-pad {
+    padding-top: 64px !important;
+    padding-bottom: 64px !important;
+  }
+}
+@media (max-width: 820px) {
+  .pm-exp-desktop {
+    display: none;
+  }
+  .pm-exp-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+@media (max-width: 760px) {
+  /* Dark, seamless-with-hero header */
+  .pm-header {
+    background: rgba(42, 20, 64, 0.9);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .pm-logo-img {
+    filter: brightness(0) invert(1);
+  }
+  /* Swap desktop links for the hamburger */
+  .pm-nav-links {
+    display: none !important;
+  }
+  .pm-hamburger {
+    display: flex;
+    color: #fff;
+  }
+  /* Full-width dropdown drawer below the bar */
+  .pm-mobile-menu.pm-open {
+    display: flex;
+    flex-direction: column;
+    padding: 6px 20px 20px;
+    background: rgba(42, 20, 64, 0.98);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .pm-mobile-menu a {
+    color: #d8ccea;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 16px;
+    padding: 15px 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .pm-mobile-menu a.pm-mobile-consult {
+    margin-top: 14px;
+    text-align: center;
+    background: var(--pm-lime);
+    color: var(--pm-purple-darkest);
+    font-family: var(--pm-font-display);
+    font-weight: 600;
+    border-radius: 10px;
+    border-bottom: none;
+    padding: 15px 20px;
+  }
+
+  /* Centered, balanced hero on mobile */
+  .pm-hero-copy {
+    text-align: center;
+  }
+  .pm-hero-subhead {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .pm-hero-ctas {
+    flex-direction: column;
+    justify-content: center;
+  }
+  .pm-hero-ctas a {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .pm-hero-pills {
+    justify-content: center;
+  }
+}
+@media (max-width: 620px) {
+  .pm-cards {
+    grid-template-columns: 1fr !important;
+  }
+  .pm-duo {
+    grid-template-columns: 1fr !important;
+  }
+  .pm-footer {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .pm-h1 {
+    font-size: 33px !important;
+  }
+  .pm-h2 {
+    font-size: 30px !important;
+  }
+  .pm-pad {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+}
+@media (max-width: 430px) {
+  .pm-footer {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .pm-anim-dash,
+  .pm-anim-floaty,
+  .pm-anim-twinkle {
+    animation: none !important;
+  }
+  .pm-testi-scroller {
+    scroll-behavior: auto;
+  }
+  .pm-modal-card {
+    animation: none !important;
+  }
 }

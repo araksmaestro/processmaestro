@@ -1,18 +1,15 @@
 import Link from "next/link";
 import CaseCard from "@/components/CaseCard";
 import { homeCases } from "@/content/home";
-import { getFeaturedCaseStudies } from "@/lib/adapters/caseStudies";
+import { getCaseStudies } from "@/lib/adapters/case-studies";
 
 export default async function CaseStudies() {
-  // Pull featured case studies from SmartSuite; on any error or empty result,
-  // fall back wholesale to the static homeCases so the section always renders.
+  // Featured, published case studies from SmartSuite (same shared adapter as the
+  // list page). On empty/error, fall back to the static homeCases so the section
+  // always renders. Keep the count (3) this section has always shown.
   let cases = homeCases;
-  try {
-    const featured = await getFeaturedCaseStudies(3);
-    if (featured.length > 0) cases = featured;
-  } catch (err) {
-    console.error("[CaseStudies] SmartSuite fetch failed, using static fallback:", err);
-  }
+  const featured = await getCaseStudies({ featuredOnly: true, limit: 3 });
+  if (featured.length > 0) cases = featured;
 
   // Keep the 3-up desktop layout identical; center 1–2 cards so the grid reads cleanly.
   const gridColumns =

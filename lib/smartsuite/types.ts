@@ -15,11 +15,14 @@ export type SmartSuiteFile = {
 export type SmartSuiteLinkedRecord = { id: string; title?: string };
 export type LinkedField = Array<SmartSuiteLinkedRecord | string> | undefined;
 
-// Case Studies table record (only the fields the homepage cards need).
+// Case Studies table record (only the fields the cards need).
 export type CaseStudyRecord = {
   id: string;
+  autonumber?: number;
   title?: string;
-  s4affd4869?: string; // Short Description
+  status?: { value?: string }; // { value: "complete" } = Ready for Publishing
+  s48d6c3d8d?: string; // About the Client (card summary)
+  s4affd4869?: string; // Short Description (headline — not used on cards)
   sf1fb67a8f?: string; // Slug (already includes "case-studies/" prefix)
   s03f4a8d8f?: boolean; // Featured (yes/no)
   sae9c2cd99?: SmartSuiteFile[]; // Cover Image (card thumbnail)

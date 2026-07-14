@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import Nav from "@/components/home/Nav";
 import Footer from "@/components/home/Footer";
 import CaseCard from "@/components/CaseCard";
-import { caseStudies } from "@/content/case-studies";
+import { getCaseStudies, type CaseStudyCard } from "@/lib/adapters/case-studies";
+import { caseStudies as staticCaseStudies } from "@/content/case-studies";
+
+// Cover URLs are served through the same-origin /api/ss-file proxy (stable
+// paths), so ISR is safe; revalidate so publish/featured changes appear.
+export const revalidate = 30;
 
 export const metadata: Metadata = {
   title: "Case Studies",
@@ -28,7 +33,23 @@ const HEADLINE_GRADIENT = {
   color: "transparent",
 } as const;
 
-export default function CaseStudiesPage() {
+export default async function CaseStudiesPage() {
+  // Live published case studies. On empty/error, fall back to the static set so
+  // the index is never blank.
+  let cards: CaseStudyCard[] = await getCaseStudies();
+  if (cards.length === 0) {
+    cards = staticCaseStudies.map((c) => ({
+      slug: c.slug,
+      href: c.url ?? "#",
+      cover: c.cover,
+      category: c.category,
+      location: c.location,
+      title: c.title,
+      summary: c.summary,
+      results: c.results,
+    }));
+  }
+
   return (
     <>
       <Nav variant="dark" active="case-studies" />
@@ -93,10 +114,10 @@ export default function CaseStudiesPage() {
                 className="pm-cards"
                 style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 28 }}
               >
-                {caseStudies.map((cs) => (
+                {cards.map((cs) => (
                   <CaseCard
-                    key={cs.slug}
-                    href={cs.url ?? "#"}
+                    key={cs.slug || cs.title}
+                    href={cs.href}
                     cover={cs.cover}
                     category={cs.category}
                     location={cs.location}

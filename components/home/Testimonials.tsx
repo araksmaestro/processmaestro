@@ -149,22 +149,27 @@ export default function Testimonials({ testimonials }: { testimonials: Testimoni
   };
 
   // Mouse drag-to-scroll (touch is left to native scrolling).
+  // Capture + the dragging class are deferred to the first real move (>4px) so a
+  // plain click still reaches the card button — capturing on pointerdown would
+  // retarget the click to the scroller and swallow it.
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if (e.pointerType !== "mouse") return;
     const el = trackRef.current;
     if (!el) return;
     drag.current = { startX: e.clientX, startLeft: el.scrollLeft, active: true };
     movedRef.current = false;
-    el.classList.add("pm-dragging");
-    el.setPointerCapture?.(e.pointerId);
   };
   const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!drag.current.active) return;
     const el = trackRef.current;
     if (!el) return;
     const dx = e.clientX - drag.current.startX;
-    if (Math.abs(dx) > 4) movedRef.current = true;
-    el.scrollLeft = drag.current.startLeft - dx;
+    if (Math.abs(dx) > 4 && !movedRef.current) {
+      movedRef.current = true;
+      el.classList.add("pm-dragging");
+      el.setPointerCapture?.(e.pointerId);
+    }
+    if (movedRef.current) el.scrollLeft = drag.current.startLeft - dx;
   };
   const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!drag.current.active) return;

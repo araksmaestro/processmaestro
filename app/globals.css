@@ -377,8 +377,10 @@ body {
   display: flex;
   gap: 22px;
   overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
+  /* No scroll-snap: it fights the continuous auto-drift. scroll-behavior is
+     auto so per-frame scrollLeft writes apply instantly; the arrows opt into
+     smooth via the scrollBy() options. */
+  scroll-behavior: auto;
   padding: 4px 2px 22px;
   cursor: grab;
   scrollbar-width: none; /* Firefox */

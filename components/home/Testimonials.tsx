@@ -1,10 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { Testimonial } from "@/lib/adapters/testimonials";
 import TestimonialModal from "@/components/TestimonialModal";
 
 const GAP = 22;
+const AUTO_SPEED = 0.5; // px per animation frame (~30px/s) — gentle drift
 
 // Display shape derived from the adapter data: initials avatar + "Role, Company".
 type DisplayTestimonial = {
@@ -117,42 +118,107 @@ function TestiCard({ t, onOpen }: { t: DisplayTestimonial; onOpen: () => void })
 
 export default function Testimonials({ testimonials }: { testimonials: Testimonial[] }) {
   const items = testimonials.map(toDisplay);
+  const n = items.length;
+
   const [selected, setSelected] = useState<number | null>(null);
+  // Copies of the base set rendered back-to-back for a seamless loop. Grown
+  // after measuring so the track always overflows the viewport by >= 1 period.
+  const [reps, setReps] = useState(3);
+
   const trackRef = useRef<HTMLDivElement>(null);
+  const periodRef = useRef(0); // width of one base-set period (incl. connecting gap)
+  const initedRef = useRef(false);
+  const hoveringRef = useRef(false);
+  const interactingRef = useRef(false);
   const drag = useRef({ startX: 0, startLeft: 0, active: false });
   const movedRef = useRef(false);
-  const [prevDisabled, setPrevDisabled] = useState(true);
-  const [nextDisabled, setNextDisabled] = useState(false);
+  const resumeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const updateArrows = useCallback(() => {
+  // Keep scrollLeft in the middle band [period, 2*period) so it can loop forever
+  // in either direction — the jump by one period is invisible (content repeats).
+  const wrap = useCallback(() => {
     const el = trackRef.current;
-    if (!el) return;
-    // Small tolerance: scroll-snap + the track's 2px side padding mean the
-    // resting scrollLeft is a couple px off 0 / the exact max.
-    const EPS = 4;
-    setPrevDisabled(el.scrollLeft <= EPS);
-    setNextDisabled(el.scrollLeft >= el.scrollWidth - el.clientWidth - EPS);
+    const p = periodRef.current;
+    if (!el || p <= 0) return;
+    if (el.scrollLeft >= 2 * p) el.scrollLeft -= p;
+    else if (el.scrollLeft < p) el.scrollLeft += p;
   }, []);
 
+  // Measure the period, ensure enough copies to fill the viewport, then center.
+  const measure = useCallback(() => {
+    const el = trackRef.current;
+    if (!el || n === 0) return;
+    const cards = el.querySelectorAll<HTMLElement>(".pm-testi-card");
+    if (cards.length < n + 1) return; // need 2 copies to measure one period
+    const period = cards[n].offsetLeft - cards[0].offsetLeft;
+    if (period <= 0) return;
+    periodRef.current = period;
+    const needed = Math.ceil((el.clientWidth + 2 * period) / period) + 1;
+    if (needed > reps) {
+      setReps(needed);
+      return; // re-measure after the re-render
+    }
+    if (!initedRef.current) {
+      el.scrollLeft = period;
+      initedRef.current = true;
+    }
+  }, [n, reps]);
+
+  useLayoutEffect(() => {
+    measure();
+  }, [measure]);
+
   useEffect(() => {
-    updateArrows();
-    window.addEventListener("resize", updateArrows);
-    return () => window.removeEventListener("resize", updateArrows);
-  }, [updateArrows]);
+    const onResize = () => measure();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [measure]);
+
+  // Auto-drift loop. Disabled under reduced motion (manual looping still works).
+  useEffect(() => {
+    if (n === 0) return;
+    const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) return;
+
+    let raf = 0;
+    const tick = () => {
+      const el = trackRef.current;
+      if (el && periodRef.current > 0 && !hoveringRef.current && !interactingRef.current) {
+        el.scrollLeft += AUTO_SPEED;
+        wrap();
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [n, wrap]);
+
+  const pauseInteract = () => {
+    if (resumeTimer.current) clearTimeout(resumeTimer.current);
+    interactingRef.current = true;
+  };
+  const resumeInteract = (delay: number) => {
+    if (resumeTimer.current) clearTimeout(resumeTimer.current);
+    resumeTimer.current = setTimeout(() => {
+      interactingRef.current = false;
+    }, delay);
+  };
 
   const step = () => {
     const card = trackRef.current?.querySelector<HTMLElement>(".pm-testi-card");
     return (card?.offsetWidth ?? 360) + GAP;
   };
   const scrollByCard = (dir: number) => {
+    pauseInteract();
     trackRef.current?.scrollBy({ left: dir * step(), behavior: "smooth" });
+    resumeInteract(700);
   };
 
-  // Mouse drag-to-scroll (touch is left to native scrolling).
-  // Capture + the dragging class are deferred to the first real move (>4px) so a
-  // plain click still reaches the card button — capturing on pointerdown would
-  // retarget the click to the scroller and swallow it.
+  // Pointer drag: pauses auto for any pointer; mouse also drives scrollLeft.
+  // Capture is deferred to the first real move (>4px) so a plain click reaches
+  // the card button (capturing on pointerdown would swallow the click).
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    pauseInteract();
     if (e.pointerType !== "mouse") return;
     const el = trackRef.current;
     if (!el) return;
@@ -169,18 +235,25 @@ export default function Testimonials({ testimonials }: { testimonials: Testimoni
       el.classList.add("pm-dragging");
       el.setPointerCapture?.(e.pointerId);
     }
-    if (movedRef.current) el.scrollLeft = drag.current.startLeft - dx;
+    if (movedRef.current) {
+      el.scrollLeft = drag.current.startLeft - dx;
+      wrap();
+    }
   };
   const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!drag.current.active) return;
+    const wasMouseDrag = drag.current.active;
     drag.current.active = false;
     const el = trackRef.current;
     el?.classList.remove("pm-dragging");
-    try {
-      el?.releasePointerCapture?.(e.pointerId);
-    } catch {
-      /* pointer already released */
+    if (wasMouseDrag) {
+      try {
+        el?.releasePointerCapture?.(e.pointerId);
+      } catch {
+        /* pointer already released */
+      }
     }
+    // Let touch momentum settle before auto resumes.
+    resumeInteract(e.pointerType === "mouse" ? 300 : 800);
   };
   // Suppress the click synthesized after a drag so it doesn't open the modal.
   const onClickCapture = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -191,8 +264,16 @@ export default function Testimonials({ testimonials }: { testimonials: Testimoni
     }
   };
 
-  // Nothing to show (empty or backend error) → render nothing rather than an empty section.
-  if (items.length === 0) return null;
+  const onMouseEnter = () => {
+    hoveringRef.current = true;
+  };
+  const onMouseLeave = () => {
+    hoveringRef.current = false;
+  };
+
+  if (n === 0) return null;
+
+  const rendered = Array.from({ length: reps }, () => items).flat();
 
   return (
     <section aria-labelledby="testimonials-heading" style={{ background: "var(--pm-bg)" }}>
@@ -221,13 +302,12 @@ export default function Testimonials({ testimonials }: { testimonials: Testimoni
           </p>
         </div>
 
-        <div className="pm-testi-wrap">
+        <div className="pm-testi-wrap" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
           <button
             type="button"
             className="pm-testi-arrow pm-testi-prev"
             aria-label="Previous testimonials"
             onClick={() => scrollByCard(-1)}
-            style={{ opacity: prevDisabled ? 0.35 : 1 }}
           >
             <span aria-hidden="true">‹</span>
           </button>
@@ -238,15 +318,15 @@ export default function Testimonials({ testimonials }: { testimonials: Testimoni
             tabIndex={0}
             role="group"
             aria-label="Client testimonials"
-            onScroll={updateArrows}
+            onScroll={wrap}
             onPointerDown={onPointerDown}
             onPointerMove={onPointerMove}
             onPointerUp={endDrag}
             onPointerCancel={endDrag}
             onClickCapture={onClickCapture}
           >
-            {items.map((t, i) => (
-              <TestiCard key={t.id} t={t} onOpen={() => setSelected(i)} />
+            {rendered.map((t, i) => (
+              <TestiCard key={i} t={t} onOpen={() => setSelected(i % n)} />
             ))}
           </div>
 
@@ -255,7 +335,6 @@ export default function Testimonials({ testimonials }: { testimonials: Testimoni
             className="pm-testi-arrow pm-testi-next"
             aria-label="Next testimonials"
             onClick={() => scrollByCard(1)}
-            style={{ opacity: nextDisabled ? 0.35 : 1 }}
           >
             <span aria-hidden="true">›</span>
           </button>

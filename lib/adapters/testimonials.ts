@@ -8,6 +8,7 @@ const CONTACTS_TABLE = "64ceb4f21c6a27ff1583dcb9";
 const ORGS_TABLE = "64ceb00a3dd12a0e8b9c920e";
 const SECTION_FIELD = "s7987685a8";
 const SECTION_TESTIMONIALS = "KwWGD"; // "Testimonials" option value code
+const STATUS_PUBLISH = "complete"; // "Publish" status value (is_complete)
 const REVALIDATE = 30;
 
 export type Testimonial = {
@@ -66,6 +67,7 @@ export async function getTestimonials(): Promise<Testimonial[]> {
         operator: "and",
         fields: [
           { field: SECTION_FIELD, comparison: "has_any_of", value: [SECTION_TESTIMONIALS] },
+          { field: "status", comparison: "is", value: STATUS_PUBLISH },
         ],
       },
       sort: [{ field: "autonumber", direction: "asc" }],
@@ -73,9 +75,12 @@ export async function getTestimonials(): Promise<Testimonial[]> {
 
     const { items } = await listRecords<TestimonialRecord>(TESTIMONIALS_TABLE, body, REVALIDATE);
 
-    // Safety net: never let an untagged record through even if the server filter changes.
+    // Safety net: only tagged AND published records, even if the server filter changes.
     const tagged = items.filter(
-      (r) => Array.isArray(r.s7987685a8) && r.s7987685a8.includes(SECTION_TESTIMONIALS)
+      (r) =>
+        Array.isArray(r.s7987685a8) &&
+        r.s7987685a8.includes(SECTION_TESTIMONIALS) &&
+        r.status?.value === STATUS_PUBLISH
     );
 
     const contactIds = tagged.map(contactIdOf).filter((x): x is string => Boolean(x));

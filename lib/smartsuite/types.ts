@@ -42,6 +42,7 @@ export type ListResponse<T> = {
 export type TestimonialRecord = {
   id: string;
   autonumber?: number;
+  status?: { value?: string }; // e.g. { value: "complete" } = Publish
   se807231b4?: string; // Testimonial (quote, plain text)
   sc53e5a510?: string[][]; // Position (lookup → e.g. [["CFO"]])
   s57b3d9959?: string[]; // Contact (linked record → [contactId])

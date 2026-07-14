@@ -1,12 +1,38 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { testimonials, type Testimonial } from "@/content/home";
+import type { Testimonial } from "@/lib/adapters/testimonials";
 import TestimonialModal from "@/components/TestimonialModal";
 
 const GAP = 22;
 
-function TestiCard({ t, onOpen }: { t: Testimonial; onOpen: () => void }) {
+// Display shape derived from the adapter data: initials avatar + "Role, Company".
+type DisplayTestimonial = {
+  id: string;
+  initials: string;
+  name: string;
+  role: string;
+  quote: string;
+};
+
+function initialsFromName(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "";
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
+function toDisplay(t: Testimonial): DisplayTestimonial {
+  return {
+    id: t.id,
+    initials: initialsFromName(t.name),
+    name: t.name,
+    role: [t.position, t.company].filter(Boolean).join(", "),
+    quote: t.quote,
+  };
+}
+
+function TestiCard({ t, onOpen }: { t: DisplayTestimonial; onOpen: () => void }) {
   return (
     <figure
       className="pm-testi-card"
@@ -89,7 +115,8 @@ function TestiCard({ t, onOpen }: { t: Testimonial; onOpen: () => void }) {
   );
 }
 
-export default function Testimonials() {
+export default function Testimonials({ testimonials }: { testimonials: Testimonial[] }) {
+  const items = testimonials.map(toDisplay);
   const [selected, setSelected] = useState<number | null>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const drag = useRef({ startX: 0, startLeft: 0, active: false });
@@ -159,6 +186,9 @@ export default function Testimonials() {
     }
   };
 
+  // Nothing to show (empty or backend error) → render nothing rather than an empty section.
+  if (items.length === 0) return null;
+
   return (
     <section aria-labelledby="testimonials-heading" style={{ background: "var(--pm-bg)" }}>
       <div style={{ maxWidth: 1120, margin: "0 auto", padding: "92px 32px" }} className="pm-pad">
@@ -210,8 +240,8 @@ export default function Testimonials() {
             onPointerCancel={endDrag}
             onClickCapture={onClickCapture}
           >
-            {testimonials.map((t, i) => (
-              <TestiCard key={t.name} t={t} onOpen={() => setSelected(i)} />
+            {items.map((t, i) => (
+              <TestiCard key={t.id} t={t} onOpen={() => setSelected(i)} />
             ))}
           </div>
 
@@ -228,7 +258,7 @@ export default function Testimonials() {
       </div>
 
       <TestimonialModal
-        testimonial={selected === null ? null : testimonials[selected]}
+        testimonial={selected === null ? null : items[selected]}
         onClose={() => setSelected(null)}
       />
     </section>

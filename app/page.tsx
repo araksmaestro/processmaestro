@@ -9,11 +9,14 @@ import PainPoints from "@/components/home/PainPoints";
 import Testimonials from "@/components/home/Testimonials";
 import CtaBand from "@/components/home/CtaBand";
 import Footer from "@/components/home/Footer";
+import { getTestimonials } from "@/lib/adapters/testimonials";
 
-// Revalidate periodically so featured case-study changes appear without a redeploy.
+// Revalidate periodically so SmartSuite content changes appear without a redeploy.
 export const revalidate = 30;
 
-export default function Home() {
+export default async function Home() {
+  const testimonials = await getTestimonials();
+
   return (
     <>
       <Nav />
@@ -25,7 +28,7 @@ export default function Home() {
         <Industries />
         <Tools />
         <PainPoints />
-        <Testimonials />
+        <Testimonials testimonials={testimonials} />
         <CtaBand />
       </main>
       <Footer />

@@ -46,6 +46,32 @@ export async function listRecords<T = Record<string, unknown>>(
 }
 
 /**
+ * GET a single record by id. Used to resolve linked-record ids to display
+ * values — SmartSuite rejects filtering the `id` field in records/list, so
+ * per-id GET is the working path for a targeted lookup.
+ */
+export async function getRecord<T = Record<string, unknown>>(
+  tableId: string,
+  recordId: string,
+  revalidateSeconds = 300
+): Promise<T> {
+  try {
+    const res = await fetch(
+      `${BASE_URL}/applications/${tableId}/records/${recordId}/`,
+      { headers: buildHeaders(), next: { revalidate: revalidateSeconds } }
+    );
+    if (!res.ok) {
+      throw new Error(`records/${recordId} ${tableId} → ${res.status} ${res.statusText}`);
+    }
+    return (await res.json()) as T;
+  } catch (err) {
+    throw new Error(
+      `SmartSuite getRecord failed: ${err instanceof Error ? err.message : String(err)}`
+    );
+  }
+}
+
+/**
  * Resolve a file field handle to a streamable Response of the file bytes.
  * The `get_url/` endpoint (with Token auth) serves the file content directly;
  * in case a deployment returns a JSON `{ url }` instead, we follow that once.

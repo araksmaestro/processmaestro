@@ -35,3 +35,20 @@ export type ListResponse<T> = {
   offset: number;
   limit: number;
 };
+
+// --- Testimonials table + name/company resolution ---
+
+// Testimonials table record (only the slugs the section needs).
+export type TestimonialRecord = {
+  id: string;
+  autonumber?: number;
+  se807231b4?: string; // Testimonial (quote, plain text)
+  sc53e5a510?: string[][]; // Position (lookup → e.g. [["CFO"]])
+  s57b3d9959?: string[]; // Contact (linked record → [contactId])
+  s839847d0a?: unknown; // Organization (lookup of a link → nested [[[orgId]]])
+  s7987685a8?: string[]; // Section (multi-select option codes)
+  [key: string]: unknown;
+};
+
+// Minimal shape for Contacts / Organizations lookups (id + title).
+export type NamedRecord = { id: string; title?: string };

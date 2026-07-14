@@ -203,6 +203,18 @@ body {
 .pm-mobile-menu {
   display: none;
 }
+/* Dark nav variant — dark translucent header on all widths (dark-bg pages
+   like Case Studies). Defaults elsewhere keep the light homepage header. */
+.pm-header--dark {
+  background: rgba(42, 20, 64, 0.82);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.pm-header--dark .pm-logo-img {
+  filter: brightness(0) invert(1);
+}
+.pm-header--dark .pm-hamburger {
+  color: #fff;
+}
 .pm-ghost {
   transition: background 0.18s ease;
 }
@@ -595,5 +607,83 @@ body {
   }
   .pm-modal-card {
     animation: none !important;
+  }
+}
+
+/* ============================================================
+   Case Studies list page (/case-studies)
+   ============================================================ */
+.cs-hero {
+  position: relative;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 84px 32px 96px;
+  text-align: center;
+}
+.cs-h1 {
+  font-family: var(--pm-font-display);
+  font-weight: 700;
+  font-size: 76px;
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  margin: 0 0 28px;
+}
+.cs-sub {
+  font-size: 19px;
+  line-height: 1.65;
+  color: var(--pm-on-dark-1);
+  max-width: 720px;
+  margin: 0 auto;
+}
+.cs-grid-pad {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 24px 90px;
+}
+.cs-panel {
+  background: var(--pm-purple-3);
+  border-radius: 28px;
+  padding: 56px 48px;
+  box-shadow: 0 30px 70px rgba(20, 8, 40, 0.45);
+}
+.cs-cta-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 66px 32px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+}
+@media (max-width: 960px) {
+  .cs-h1 {
+    font-size: 52px;
+  }
+}
+@media (max-width: 620px) {
+  .cs-h1 {
+    font-size: 40px;
+  }
+  .cs-hero {
+    padding: 56px 20px 60px;
+  }
+  .cs-sub {
+    font-size: 17px;
+  }
+  .cs-grid-pad {
+    padding: 0 16px 64px;
+  }
+  .cs-panel {
+    padding: 36px 20px;
+  }
+  .cs-cta-inner {
+    padding: 48px 20px;
+  }
+}
+@media (max-width: 430px) {
+  .cs-h1 {
+    font-size: 34px;
   }
 }

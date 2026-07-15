@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import Nav from "@/components/home/Nav";
 import Footer from "@/components/home/Footer";
 import CaseCard from "@/components/CaseCard";
-import { getCaseStudies, type CaseStudyCard } from "@/lib/adapters/case-studies";
-import { caseStudies as staticCaseStudies } from "@/content/case-studies";
+import { getCaseStudies } from "@/lib/adapters/case-studies";
 
 // Cover URLs are served through the same-origin /api/ss-file proxy (stable
 // paths), so ISR is safe; revalidate so publish/featured changes appear.
@@ -34,21 +33,8 @@ const HEADLINE_GRADIENT = {
 } as const;
 
 export default async function CaseStudiesPage() {
-  // Live published case studies. On empty/error, fall back to the static set so
-  // the index is never blank.
-  let cards: CaseStudyCard[] = await getCaseStudies();
-  if (cards.length === 0) {
-    cards = staticCaseStudies.map((c) => ({
-      slug: c.slug,
-      href: c.url ?? "#",
-      cover: c.cover,
-      category: c.category,
-      location: c.location,
-      title: c.title,
-      summary: c.summary,
-      results: c.results,
-    }));
-  }
+  // Live published case studies from SmartSuite only (no static fallback).
+  const cards = await getCaseStudies();
 
   return (
     <>

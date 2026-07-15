@@ -4,12 +4,13 @@ import { notFound } from "next/navigation";
 import Nav from "@/components/home/Nav";
 import Footer from "@/components/home/Footer";
 import CaseMediaSlider from "@/components/case-studies/CaseMediaSlider";
-import { caseStudies } from "@/content/case-studies";
+import { getCaseStudy, getCaseStudySlugs } from "@/lib/adapters/case-studies";
 
-const withDetail = caseStudies.filter((c) => c.detail);
+// Revalidate so newly published / edited case studies appear without a redeploy.
+export const revalidate = 30;
 
-export function generateStaticParams() {
-  return withDetail.map((c) => ({ slug: c.slug }));
+export async function generateStaticParams() {
+  return (await getCaseStudySlugs()).map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -18,16 +19,16 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const cs = withDetail.find((c) => c.slug === slug);
-  if (!cs) return { title: "Case Study" };
+  const c = await getCaseStudy(slug);
+  if (!c) return { title: "Case Study" };
   return {
-    title: cs.title,
-    description: cs.detail?.subhead ?? cs.summary,
-    alternates: { canonical: `/case-studies/${cs.slug}` },
+    title: c.title,
+    description: c.subhead,
+    alternates: { canonical: `/case-studies/${c.slug}` },
     openGraph: {
-      title: `${cs.title} | Process Maestro`,
-      description: cs.detail?.subhead ?? cs.summary,
-      url: `/case-studies/${cs.slug}`,
+      title: `${c.title} | Process Maestro`,
+      description: c.subhead,
+      url: `/case-studies/${c.slug}`,
       type: "article",
     },
   };
@@ -134,10 +135,13 @@ export default async function CaseStudyDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const cs = withDetail.find((c) => c.slug === slug);
-  if (!cs || !cs.detail) notFound();
+  const c = await getCaseStudy(slug);
+  if (!c) notFound();
 
-  const d = cs.detail;
+  // Alias so the existing markup keeps using cs.* (card fields) and d.* (detail
+  // fields); CaseStudyFull is flat and carries both sets.
+  const cs = c;
+  const d = c;
 
   // Conditional rendering: only render sections/elements whose data is present,
   // so cases with sparse content (and SmartSuite records with empty fields later)

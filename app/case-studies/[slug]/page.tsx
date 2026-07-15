@@ -139,6 +139,14 @@ export default async function CaseStudyDetailPage({
 
   const d = cs.detail;
 
+  // Conditional rendering: only render sections/elements whose data is present,
+  // so cases with sparse content (and SmartSuite records with empty fields later)
+  // never show empty headings, blank cards, or dangling dividers.
+  const hasMeta = Boolean(d.client || d.duration);
+  const hasOutcomes = d.resultCards.length > 0;
+  const hasTestimonial = Boolean(d.testimonial && d.testimonial.quote);
+  const hasKeyOutcomesCard = hasOutcomes || hasTestimonial;
+
   return (
     <>
       <Nav variant="dark" active="case-studies" />
@@ -180,7 +188,9 @@ export default async function CaseStudyDetailPage({
             </div>
 
             <h1 className="cd-h1 pm-display">{cs.title}</h1>
-            <p style={{ fontSize: 18, color: "#C4B5DB", margin: "0 0 26px", maxWidth: 680 }}>{d.subhead}</p>
+            {d.subhead && (
+              <p style={{ fontSize: 18, color: "#C4B5DB", margin: "0 0 26px", maxWidth: 680 }}>{d.subhead}</p>
+            )}
 
             {d.heroStat && (
               <div
@@ -202,24 +212,30 @@ export default async function CaseStudyDetailPage({
               </div>
             )}
 
-            <div
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: 28,
-                paddingBottom: 44,
-                borderBottom: "1px solid rgba(255,255,255,0.08)",
-              }}
-            >
-              <span style={{ display: "inline-flex", alignItems: "center", gap: 9, fontSize: 15, color: "#D8CCEA" }}>
-                <ClientIcon />
-                <span style={{ color: "#A99CC2" }}>Client:</span> {d.client}
-              </span>
-              <span style={{ display: "inline-flex", alignItems: "center", gap: 9, fontSize: 15, color: "#D8CCEA" }}>
-                <ClockIcon />
-                <span style={{ color: "#A99CC2" }}>Duration:</span> {d.duration}
-              </span>
-            </div>
+            {hasMeta && (
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: 28,
+                  paddingBottom: 44,
+                  borderBottom: "1px solid rgba(255,255,255,0.08)",
+                }}
+              >
+                {d.client && (
+                  <span style={{ display: "inline-flex", alignItems: "center", gap: 9, fontSize: 15, color: "#D8CCEA" }}>
+                    <ClientIcon />
+                    <span style={{ color: "#A99CC2" }}>Client:</span> {d.client}
+                  </span>
+                )}
+                {d.duration && (
+                  <span style={{ display: "inline-flex", alignItems: "center", gap: 9, fontSize: 15, color: "#D8CCEA" }}>
+                    <ClockIcon />
+                    <span style={{ color: "#A99CC2" }}>Duration:</span> {d.duration}
+                  </span>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
@@ -227,18 +243,23 @@ export default async function CaseStudyDetailPage({
         <div className="cd-main pm-pad">
           {/* LEFT — article */}
           <article>
-            <CaseMediaSlider media={d.media} />
+            {d.media.length > 0 && <CaseMediaSlider media={d.media} />}
 
-            <section style={{ marginBottom: 44 }} aria-label="About the Client">
-              <SectionH2 icon={<AboutIcon />}>About the Client</SectionH2>
-              <p style={paragraphStyle}>{d.aboutClient}</p>
-            </section>
+            {d.aboutClient && (
+              <section style={{ marginBottom: 44 }} aria-label="About the Client">
+                <SectionH2 icon={<AboutIcon />}>About the Client</SectionH2>
+                <p style={paragraphStyle}>{d.aboutClient}</p>
+              </section>
+            )}
 
-            <section style={{ marginBottom: 44 }} aria-label="The Challenge">
-              <SectionH2 icon={<ChallengeIcon />}>The Challenge</SectionH2>
-              <p style={paragraphStyle}>{d.challenge}</p>
-            </section>
+            {d.challenge && (
+              <section style={{ marginBottom: 44 }} aria-label="The Challenge">
+                <SectionH2 icon={<ChallengeIcon />}>The Challenge</SectionH2>
+                <p style={paragraphStyle}>{d.challenge}</p>
+              </section>
+            )}
 
+            {d.solution.length > 0 && (
             <section style={{ marginBottom: 44 }} aria-label="The Solution">
               <SectionH2 icon={<SolutionIcon />} mb={18}>
                 The Solution
@@ -257,7 +278,9 @@ export default async function CaseStudyDetailPage({
                 ))}
               </ul>
             </section>
+            )}
 
+            {d.resultCards.length > 0 && (
             <section style={{ marginBottom: 44 }} aria-label="The Results">
               <SectionH2 icon={<ChartIcon />} mb={18}>
                 The Results
@@ -282,7 +305,9 @@ export default async function CaseStudyDetailPage({
                 ))}
               </div>
             </section>
+            )}
 
+            {d.tools.length > 0 && (
             <section style={{ marginBottom: 20 }} aria-label="Tools Used">
               <SectionH2 icon={<ToolsIcon />} mb={18}>
                 Tools Used
@@ -324,49 +349,61 @@ export default async function CaseStudyDetailPage({
                 ))}
               </div>
             </section>
+            )}
           </article>
 
           {/* RIGHT — sticky sidebar */}
           <aside className="cd-aside">
-            <div
-              style={{
-                background: "var(--pm-case-bg)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                borderRadius: 20,
-                padding: 26,
-              }}
-            >
-              <h3
-                className="pm-display"
-                style={{ display: "flex", alignItems: "center", gap: 10, fontWeight: 700, fontSize: 18, margin: "0 0 20px", color: "#fff" }}
+            {hasKeyOutcomesCard && (
+              <div
+                style={{
+                  background: "var(--pm-case-bg)",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  borderRadius: 20,
+                  padding: 26,
+                }}
               >
-                <ChartIcon size={20} />
-                Key Outcomes
-              </h3>
-              <ul style={{ listStyle: "none", margin: "0 0 24px", padding: 0, display: "flex", flexDirection: "column", gap: 16 }}>
-                {d.resultCards.map((r) => (
-                  <li
-                    key={r.text}
-                    style={{ display: "flex", alignItems: "flex-start", gap: 11, fontSize: 14.5, lineHeight: 1.5, color: "#CFC5DE" }}
-                  >
-                    <CheckIcon size={18} />
-                    <span>{r.text}</span>
-                  </li>
-                ))}
-              </ul>
-              <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: 20 }}>
-                <div aria-label={`Rated ${d.testimonial.rating ?? 5} out of 5`} style={{ color: "var(--pm-lime)", fontSize: 14, letterSpacing: 2, marginBottom: 12 }}>
-                  ★★★★★
-                </div>
-                <blockquote style={{ margin: "0 0 16px", fontSize: 14.5, lineHeight: 1.6, fontStyle: "italic", color: "#CFC5DE" }}>
-                  &ldquo;{d.testimonial.quote}&rdquo;
-                </blockquote>
-                <div className="pm-display" style={{ fontWeight: 600, fontSize: 15, color: "#fff" }}>
-                  {d.testimonial.author}
-                </div>
-                <div style={{ fontSize: 13, color: "#A99CC2" }}>{d.testimonial.org}</div>
+                {hasOutcomes && (
+                  <>
+                    <h3
+                      className="pm-display"
+                      style={{ display: "flex", alignItems: "center", gap: 10, fontWeight: 700, fontSize: 18, margin: "0 0 20px", color: "#fff" }}
+                    >
+                      <ChartIcon size={20} />
+                      Key Outcomes
+                    </h3>
+                    <ul style={{ listStyle: "none", margin: "0 0 24px", padding: 0, display: "flex", flexDirection: "column", gap: 16 }}>
+                      {d.resultCards.map((r) => (
+                        <li
+                          key={r.text}
+                          style={{ display: "flex", alignItems: "flex-start", gap: 11, fontSize: 14.5, lineHeight: 1.5, color: "#CFC5DE" }}
+                        >
+                          <CheckIcon size={18} />
+                          <span>{r.text}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+                {hasTestimonial && (
+                  <div style={hasOutcomes ? { borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: 20 } : undefined}>
+                    <div
+                      aria-label={`Rated ${d.testimonial.rating ?? 5} out of 5`}
+                      style={{ color: "var(--pm-lime)", fontSize: 14, letterSpacing: 2, marginBottom: 12 }}
+                    >
+                      ★★★★★
+                    </div>
+                    <blockquote style={{ margin: "0 0 16px", fontSize: 14.5, lineHeight: 1.6, fontStyle: "italic", color: "#CFC5DE" }}>
+                      &ldquo;{d.testimonial.quote}&rdquo;
+                    </blockquote>
+                    <div className="pm-display" style={{ fontWeight: 600, fontSize: 15, color: "#fff" }}>
+                      {d.testimonial.author}
+                    </div>
+                    {d.testimonial.org && <div style={{ fontSize: 13, color: "#A99CC2" }}>{d.testimonial.org}</div>}
+                  </div>
+                )}
               </div>
-            </div>
+            )}
 
             <div
               style={{

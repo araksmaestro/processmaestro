@@ -1,18 +1,32 @@
 import type { Metadata } from "next";
-import PlaceholderPage from "@/components/PlaceholderPage";
+import Nav from "@/components/home/Nav";
+import Footer from "@/components/home/Footer";
+import ServicePanels from "@/components/services/ServicePanels";
 
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Hourly consulting, custom development, and fractional services — coming soon from Process Maestro.",
+    "Hourly consulting, fractional services, and custom development — expert help with workflow design, automation, and the systems your business runs on.",
+  alternates: { canonical: "/services" },
+  openGraph: {
+    title: "Services | Process Maestro",
+    description:
+      "Hourly consulting, fractional services, and custom development from Process Maestro.",
+    url: "/services",
+    type: "website",
+  },
 };
 
 export default function ServicesPage() {
   return (
-    <PlaceholderPage
-      eyebrow="What we do"
-      title="Services"
-      blurb="Detailed service offerings are coming soon. In the meantime, see our core expertise on the homepage or book a free consultation."
-    />
+    <>
+      <Nav variant="dark" active="services" />
+
+      <main style={{ background: "var(--pm-services-bg)", color: "#fff", overflowX: "hidden" }}>
+        <ServicePanels />
+      </main>
+
+      <Footer />
+    </>
   );
 }

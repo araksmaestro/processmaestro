@@ -668,30 +668,32 @@ body {
   .pm-mobile-group {
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   }
+  /* Caret sits directly after the "Services" label rather than pushed to the
+     far edge, so the group reads as one unit. */
   .pm-mobile-group-head {
     display: flex;
     align-items: center;
-    justify-content: space-between;
   }
   .pm-mobile-group-head .pm-mobile-link {
-    flex: 1;
+    flex: 0 0 auto;
+    padding-right: 0;
   }
+  /* Static down-chevron (⌄) next to the label, matching the design. No
+     rotate-on-expand: the group ships expanded, so the resting look is what
+     shows, and a flipped-up caret would contradict the reference. */
   .pm-mobile-caret {
-    width: 42px;
     height: 42px;
+    padding: 0 8px;
+    margin-left: 2px;
     border: none;
     background: transparent;
-    color: #d8ccea;
-    font-size: 15px;
+    color: var(--pm-on-dark-muted-2);
+    font-size: 13px;
     line-height: 1;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.25s ease;
-  }
-  .pm-mobile-caret[aria-expanded="true"] {
-    transform: rotate(180deg);
   }
   /* Indented one level, and lighter than the parent, to read as inside it. */
   .pm-mobile-sub {

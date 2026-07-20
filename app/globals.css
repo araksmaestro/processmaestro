@@ -1032,6 +1032,12 @@ body {
   .svc-h1 {
     font-size: 34px;
   }
+  /* Stacked below the copy the cover earns none of its 380px, so drop it at the
+     same width the split collapses. The <img> is lazy (not priority) precisely
+     so display:none also means "never fetched" here. */
+  .svc-hero-media {
+    display: none;
+  }
 }
 @media (max-width: 760px) {
   .svc-tabs {

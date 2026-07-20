@@ -106,12 +106,14 @@ export default function ServicePanels() {
             </div>
 
             <div className="svc-hero-media">
+              {/* Deliberately not `priority`: that emits a preload link on every
+                  viewport, which would download the cover even at widths where
+                  CSS hides it. Lazy + display:none means mobile never fetches it. */}
               <Image
                 src={active.image.src}
                 alt={active.image.alt}
                 fill
-                priority
-                sizes="(max-width: 860px) 100vw, 50vw"
+                sizes="(max-width: 860px) 0px, 50vw"
                 style={{ objectFit: "cover" }}
               />
             </div>

@@ -1,6 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { SITE } from "@/lib/site";
+import { serviceNavItems, type ServiceSlug } from "@/content/services";
+
+// The footer lists the services in its own order (per the design), which is not
+// the nav's order — but the labels and hrefs still come from the one record set.
+const FOOTER_SERVICE_ORDER: ServiceSlug[] = [
+  "hourly-consulting",
+  "custom-development",
+  "fractional-services",
+];
 
 const linkStyle = {
   textDecoration: "none",
@@ -111,15 +120,18 @@ export default function Footer() {
             Services
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
-            <Link href="/services#hourly-consulting" className="pm-footer-link" style={linkStyle}>
-              Hourly Consulting
-            </Link>
-            <Link href="/services#custom-development" className="pm-footer-link" style={linkStyle}>
-              Custom Development
-            </Link>
-            <Link href="/services#fractional-services" className="pm-footer-link" style={linkStyle}>
-              Fractional Services
-            </Link>
+            {FOOTER_SERVICE_ORDER.map((slug) => {
+              const item = serviceNavItems.find((service) => service.slug === slug);
+              if (!item) return null;
+              // Plain <a>, not next/link: next/link pushStates, which does not fire
+              // `hashchange`, so these would silently fail to switch the tab for
+              // someone already on /services.
+              return (
+                <a key={slug} href={item.href} className="pm-footer-link" style={linkStyle}>
+                  {item.label}
+                </a>
+              );
+            })}
           </div>
         </nav>
 

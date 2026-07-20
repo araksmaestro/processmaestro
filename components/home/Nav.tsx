@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { serviceNavItems } from "@/content/services";
 
 type NavVariant = "light" | "dark";
 type NavActive = "industries" | "case-studies" | "services";
@@ -15,19 +16,71 @@ export default function Nav({
   active?: NavActive;
 }) {
   const [open, setOpen] = useState(false);
-  const close = () => setOpen(false);
+  const [servicesOpen, setServicesOpen] = useState(false);
+  // Expanded by default so the three services are visible without an extra tap.
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(true);
+  const servicesRef = useRef<HTMLDivElement>(null);
+
+  const close = useCallback(() => {
+    setOpen(false);
+    setServicesOpen(false);
+  }, []);
+
+  // Escape closes whichever menu is open.
+  useEffect(() => {
+    if (!open && !servicesOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") close();
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [open, servicesOpen, close]);
+
+  // Outside click closes the desktop dropdown.
+  useEffect(() => {
+    if (!servicesOpen) return;
+    const onPointerDown = (e: PointerEvent) => {
+      if (!servicesRef.current?.contains(e.target as Node)) setServicesOpen(false);
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [servicesOpen]);
+
+  // The panel is a <=760px affordance; widening past it strands an open panel.
+  useEffect(() => {
+    if (!open) return;
+    const mq = window.matchMedia("(min-width: 761px)");
+    const onChange = () => mq.matches && setOpen(false);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [open]);
 
   const dark = variant === "dark";
   // On dark (sub-page) headers the in-page anchors point back to the homepage.
   const anchorBase = dark ? "/" : "";
   const baseColor = dark ? "var(--pm-on-dark-1)" : "var(--pm-muted-3)";
+  const servicesActive = active === "services";
 
-  const linkStyle = (isActive: boolean) =>
+  const linkBase = (isActive: boolean) =>
     ({
       textDecoration: "none",
       color: isActive ? "#fff" : baseColor,
       fontWeight: isActive ? 600 : 500,
       fontSize: 15,
+    }) as const;
+
+  const linkStyle = (isActive: boolean) =>
+    ({
+      ...linkBase(isActive),
       ...(isActive
         ? { borderBottom: "2px solid var(--pm-lime)", paddingBottom: 2 }
         : null),
@@ -70,9 +123,53 @@ export default function Nav({
           >
             Case Studies
           </Link>
-          <Link href="/services" style={linkStyle(active === "services")}>
-            Services
-          </Link>
+
+          {/* Services + dropdown — ships to every page, independent of the
+              Services page's tab state. The hash is the only interface. */}
+          <div
+            className="pm-nav-services"
+            ref={servicesRef}
+            onMouseEnter={() => setServicesOpen(true)}
+            onMouseLeave={() => setServicesOpen(false)}
+          >
+            {/* Color lives on the wrapper so the caret inherits it via
+                currentColor — the ▾ always matches the label, never its own tint. */}
+            <span
+              className="pm-nav-services-face"
+              data-active={servicesActive}
+              style={{ color: servicesActive ? "#fff" : baseColor }}
+            >
+              <Link
+                href="/services"
+                aria-current={servicesActive ? "page" : undefined}
+                style={linkBase(servicesActive)}
+              >
+                Services
+              </Link>
+              {/* Separate control so hover isn't the only way in (touch + keyboard). */}
+              <button
+                type="button"
+                className="pm-nav-caret"
+                aria-label="Toggle services menu"
+                aria-expanded={servicesOpen}
+                aria-controls="pm-services-menu"
+                onClick={() => setServicesOpen((v) => !v)}
+              >
+                <span aria-hidden="true">▾</span>
+              </button>
+            </span>
+
+            <div id="pm-services-menu" className="pm-services-menu" data-open={servicesOpen}>
+              {serviceNavItems.map((item) => (
+                // Plain <a>: a same-document hash change fires `hashchange`, which is
+                // what the Services page listens on. next/link would pushState instead.
+                <a key={item.slug} href={item.href} onClick={() => setServicesOpen(false)}>
+                  {item.label}
+                </a>
+              ))}
+            </div>
+          </div>
+
           <a
             href={`${anchorBase}#consult`}
             className="pm-nav-consult pm-display"
@@ -95,30 +192,90 @@ export default function Nav({
         <button
           type="button"
           className="pm-hamburger"
-          aria-label={open ? "Close menu" : "Open menu"}
+          aria-label="Open menu"
           aria-expanded={open}
           aria-controls="pm-mobile-menu"
-          onClick={() => setOpen((v) => !v)}
+          onClick={() => setOpen(true)}
         >
-          <span aria-hidden="true">{open ? "✕" : "☰"}</span>
+          <span aria-hidden="true">☰</span>
         </button>
       </nav>
 
-      {/* Mobile dropdown drawer (active underline intentionally not applied here) */}
-      <div id="pm-mobile-menu" className={`pm-mobile-menu${open ? " pm-open" : ""}`}>
-        <a href={`${anchorBase}#industries`} onClick={close}>
-          Industries
-        </a>
-        <Link href="/case-studies" onClick={close}>
-          Case Studies
-        </Link>
-        <Link href="/services" onClick={close}>
-          Services
-        </Link>
-        <a href={`${anchorBase}#consult`} className="pm-mobile-consult" onClick={close}>
-          Free Consultation
-        </a>
-      </div>
+      {/* Mobile panel (<=760px) */}
+      {open && (
+        <>
+          <div className="pm-mobile-backdrop" onClick={close} aria-hidden="true" />
+          <div
+            id="pm-mobile-menu"
+            className="pm-mobile-panel"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menu"
+          >
+            <div className="pm-mobile-head">
+              <Link href="/" onClick={close} aria-label="Process Maestro home">
+                {/* The logo asset already carries the wordmark. */}
+                <Image
+                  src="/pm-logo.png"
+                  alt="Process Maestro"
+                  width={108}
+                  height={32}
+                  className="pm-mobile-logo"
+                />
+              </Link>
+              <button
+                type="button"
+                className="pm-mobile-close"
+                aria-label="Close menu"
+                onClick={close}
+              >
+                <span aria-hidden="true">✕</span>
+              </button>
+            </div>
+
+            <nav className="pm-mobile-body" aria-label="Mobile">
+              <a href={`${anchorBase}#industries`} className="pm-mobile-link" onClick={close}>
+                Industries
+              </a>
+              <Link href="/case-studies" className="pm-mobile-link" onClick={close}>
+                Case Studies
+              </Link>
+
+              {/* Services owns its three sub-items rather than listing them as siblings. */}
+              <div className="pm-mobile-group">
+                <div className="pm-mobile-group-head">
+                  <Link href="/services" className="pm-mobile-link" onClick={close}>
+                    Services
+                  </Link>
+                  <button
+                    type="button"
+                    className="pm-mobile-caret"
+                    aria-label="Toggle services"
+                    aria-expanded={mobileServicesOpen}
+                    aria-controls="pm-mobile-services"
+                    onClick={() => setMobileServicesOpen((v) => !v)}
+                  >
+                    <span aria-hidden="true">▾</span>
+                  </button>
+                </div>
+                {mobileServicesOpen && (
+                  <div id="pm-mobile-services" className="pm-mobile-sub">
+                    {serviceNavItems.map((item) => (
+                      <a key={item.slug} href={item.href} onClick={close}>
+                        {item.label}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <a href={`${anchorBase}#consult`} className="pm-mobile-consult" onClick={close}>
+                Free Consultation
+              </a>
+            </nav>
+          </div>
+        </>
+      )}
     </header>
   );
 }

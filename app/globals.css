@@ -678,16 +678,16 @@ body {
     flex: 0 0 auto;
     padding-right: 0;
   }
-  /* Small, light down-chevron (⌄) sitting next to the label, per the design.
-     Flips to point up while the group is expanded. */
+  /* Down-chevron (⌄) sitting next to the label rather than pushed to the far
+     edge. Flips to point up while the group is expanded. */
   .pm-mobile-caret {
     height: 42px;
     padding: 0 8px;
     margin-left: 2px;
     border: none;
     background: transparent;
-    color: var(--pm-on-dark-muted-2);
-    font-size: 13px;
+    color: #d8ccea;
+    font-size: 15px;
     line-height: 1;
     cursor: pointer;
     display: flex;

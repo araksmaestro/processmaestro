@@ -237,9 +237,15 @@ body {
   padding: 0;
   font-size: 11px;
   line-height: 1;
+  color: inherit; /* currentColor from the face wrapper — matches the label */
   cursor: pointer;
   display: inline-flex;
   align-items: center;
+  transition: transform 0.16s ease;
+}
+/* Expanded state = the same ▾ rotated 180°, never a swapped glyph. */
+.pm-nav-caret[aria-expanded="true"] {
+  transform: rotate(180deg);
 }
 .pm-services-menu {
   position: absolute;
@@ -673,21 +679,22 @@ body {
   .pm-mobile-group-head {
     display: flex;
     align-items: center;
+    color: #d8ccea; /* so the caret's currentColor matches the Services label */
   }
   .pm-mobile-group-head .pm-mobile-link {
     flex: 0 0 auto;
     padding-right: 0;
   }
-  /* Down-chevron (⌄) sitting next to the label rather than pushed to the far
-     edge. Flips to point up while the group is expanded. */
+  /* Small inline ▾ next to the label (same triangle as desktop), inheriting the
+     label color. Rotates 180° while the group is expanded. */
   .pm-mobile-caret {
     height: 42px;
     padding: 0 8px;
     margin-left: 2px;
     border: none;
     background: transparent;
-    color: #d8ccea;
-    font-size: 15px;
+    color: inherit;
+    font-size: 11px;
     line-height: 1;
     cursor: pointer;
     display: flex;

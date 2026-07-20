@@ -132,7 +132,13 @@ export default function Nav({
             onMouseEnter={() => setServicesOpen(true)}
             onMouseLeave={() => setServicesOpen(false)}
           >
-            <span className="pm-nav-services-face" data-active={servicesActive}>
+            {/* Color lives on the wrapper so the caret inherits it via
+                currentColor — the ▾ always matches the label, never its own tint. */}
+            <span
+              className="pm-nav-services-face"
+              data-active={servicesActive}
+              style={{ color: servicesActive ? "#fff" : baseColor }}
+            >
               <Link
                 href="/services"
                 aria-current={servicesActive ? "page" : undefined}
@@ -147,7 +153,6 @@ export default function Nav({
                 aria-label="Toggle services menu"
                 aria-expanded={servicesOpen}
                 aria-controls="pm-services-menu"
-                style={{ color: servicesActive ? "#fff" : baseColor }}
                 onClick={() => setServicesOpen((v) => !v)}
               >
                 <span aria-hidden="true">▾</span>
@@ -250,7 +255,7 @@ export default function Nav({
                     aria-controls="pm-mobile-services"
                     onClick={() => setMobileServicesOpen((v) => !v)}
                   >
-                    <span aria-hidden="true">⌄</span>
+                    <span aria-hidden="true">▾</span>
                   </button>
                 </div>
                 {mobileServicesOpen && (

@@ -678,9 +678,8 @@ body {
     flex: 0 0 auto;
     padding-right: 0;
   }
-  /* Static down-chevron (⌄) next to the label, matching the design. No
-     rotate-on-expand: the group ships expanded, so the resting look is what
-     shows, and a flipped-up caret would contradict the reference. */
+  /* Small, light down-chevron (⌄) sitting next to the label, per the design.
+     Flips to point up while the group is expanded. */
   .pm-mobile-caret {
     height: 42px;
     padding: 0 8px;
@@ -694,6 +693,10 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: transform 0.25s ease;
+  }
+  .pm-mobile-caret[aria-expanded="true"] {
+    transform: rotate(180deg);
   }
   /* Indented one level, and lighter than the parent, to read as inside it. */
   .pm-mobile-sub {

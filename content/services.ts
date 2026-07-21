@@ -11,11 +11,6 @@ export type ServiceSlug =
   | "fractional-services"
   | "custom-development";
 
-export type ServiceCta = {
-  label: string;
-  href: string;
-};
-
 export type Service = {
   slug: ServiceSlug;
   /** Nav dropdown, mobile nav, and tab-bar label. */
@@ -23,20 +18,19 @@ export type Service = {
   title: string;
   lead: string;
   prompt: string;
-  heroCta: ServiceCta;
+  /** CTA copy only — the booking URL is built by BookingButton, not stored here. */
+  heroCtaLabel: string;
   image: { src: string; alt: string };
   heading: string;
   paragraphs: [string, string];
   benefitTitle: string;
   benefits: string[];
   closing: string;
-  bottomCta: ServiceCta;
+  bottomCtaLabel: string;
 };
 
 /** Shown when the URL hash is absent or unrecognized. */
 export const DEFAULT_SERVICE: ServiceSlug = "custom-development";
-
-const CONSULT_HREF = "/#consult";
 
 export const services: Service[] = [
   {
@@ -45,7 +39,7 @@ export const services: Service[] = [
     title: "Hourly Consulting",
     lead: "Our team works to understand your unique process so that we can help you create a solution that is unique to how you operate.",
     prompt: "Start with our application below!",
-    heroCta: { label: "Book a Consultancy", href: CONSULT_HREF },
+    heroCtaLabel: "Book a Consultancy",
     image: { src: "/svc-hourly.png", alt: "Hourly consulting" },
     heading: "Schedule an hour with an expert",
     paragraphs: [
@@ -62,7 +56,7 @@ export const services: Service[] = [
     ],
     closing:
       "Book a block of time whenever you need it and get unstuck fast — no long-term commitment required.",
-    bottomCta: { label: "Book a Consultancy", href: CONSULT_HREF },
+    bottomCtaLabel: "Book a Consultancy",
   },
   {
     slug: "fractional-services",
@@ -70,7 +64,7 @@ export const services: Service[] = [
     title: "Fractional Services",
     lead: "Access expert operational technology talent without the overhead of a full-time hire. Our fractional experts integrate with your team to create lasting value.",
     prompt: "Scale your capabilities as needed!",
-    heroCta: { label: "Explore Fractional Services", href: CONSULT_HREF },
+    heroCtaLabel: "Explore Fractional Services",
     image: { src: "/svc-fractional.png", alt: "Fractional services" },
     heading: "Flexible Expertise When You Need It",
     paragraphs: [
@@ -88,7 +82,7 @@ export const services: Service[] = [
     ],
     closing:
       "Our fractional team members typically work 10–20 hours per week on your projects, providing consistent progress without the overhead of a full-time employee. This model is perfect for growing businesses that need expert guidance but aren't ready for a permanent hire.",
-    bottomCta: { label: "Explore Fractional Services", href: CONSULT_HREF },
+    bottomCtaLabel: "Explore Fractional Services",
   },
   {
     slug: "custom-development",
@@ -96,7 +90,7 @@ export const services: Service[] = [
     title: "Custom Development",
     lead: "Tailored software solutions built specifically for your business needs. From workflow automation to custom portals, we create the exact tools you need to excel.",
     prompt: "Start your custom project today!",
-    heroCta: { label: "Request Custom Solution", href: CONSULT_HREF },
+    heroCtaLabel: "Request Custom Solution",
     image: { src: "/svc-custom.png", alt: "Custom development" },
     heading: "Bespoke Solutions for Your Business",
     paragraphs: [
@@ -115,7 +109,7 @@ export const services: Service[] = [
     ],
     closing:
       "We build using modern technologies and platforms, focusing on maintainable, scalable solutions. Our process includes regular check-ins, thorough testing, and comprehensive documentation — and once your solution is live, we provide training and ongoing support to ensure its success.",
-    bottomCta: { label: "Start Your Custom Project", href: CONSULT_HREF },
+    bottomCtaLabel: "Start Your Custom Project",
   },
 ];
 

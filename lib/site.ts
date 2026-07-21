@@ -5,8 +5,9 @@ export const SITE_URL = "https://processmaestro.co";
 export const SITE = {
   name: "Process Maestro",
   title: "Process Maestro — Workflow Design & Business Process Automation",
+  // Kept ~155 chars so it isn't truncated in search results.
   description:
-    "Process Maestro helps teams replace scattered spreadsheets and disconnected apps with clean, scalable systems — through workflow design, database architecture, automation, and AI. Founded by Vasken.",
+    "Process Maestro replaces scattered spreadsheets and disconnected apps with clean, scalable systems: workflow design, database architecture, automation & AI.",
   keywords: [
     "workflow design",
     "business process automation",
@@ -21,7 +22,6 @@ export const SITE = {
   ],
   founder: "Vasken",
   email: "vasken@processmaestro.co",
-  // TODO: replace with the real phone number when supplied by the client.
-  phone: "+972 XX XXX XXXX",
+  phone: "+374 55 023420",
   ogImage: "/pm-logo.png",
 } as const;

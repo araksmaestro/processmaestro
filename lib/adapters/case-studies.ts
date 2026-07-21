@@ -94,13 +94,20 @@ function splitSolution(title: string): { tool: string; desc: string } {
 
 // Detail media: prefer Detail Page Image (s4f476378c), fall back to Cover Image.
 function mediaFrom(rec: CaseStudyRecord): CaseMedia[] {
+  const title = str(rec.title);
   const detail = rec.s4f476378c as SmartSuiteFile[] | undefined;
   const cover = rec.sae9c2cd99 as SmartSuiteFile[] | undefined;
   const files = Array.isArray(detail) && detail.length > 0 ? detail : cover;
   if (!Array.isArray(files)) return [];
   return files
     .filter((f) => f && typeof f.handle === "string" && f.handle)
-    .map((f) => ({ type: "image" as const, src: `/api/ss-file/${f.handle}`, alt: "" }));
+    // Descriptive alt (case title for the hero, numbered thereafter) instead of
+    // empty — better image SEO and accessibility.
+    .map((f, i) => ({
+      type: "image" as const,
+      src: `/api/ss-file/${f.handle}`,
+      alt: title ? (i === 0 ? title : `${title} — image ${i + 1}`) : "",
+    }));
 }
 
 async function resolveCountryNames(ids: string[]): Promise<Map<string, string>> {

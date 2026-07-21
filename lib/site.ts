@@ -21,7 +21,6 @@ export const SITE = {
   ],
   founder: "Vasken",
   email: "vasken@processmaestro.co",
-  // TODO: replace with the real phone number when supplied by the client.
-  phone: "+972 XX XXX XXXX",
+  phone: "+374 55 023420",
   ogImage: "/pm-logo.png",
 } as const;

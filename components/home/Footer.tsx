@@ -77,9 +77,10 @@ export default function Footer() {
             >
               <span aria-hidden="true">✉</span>
             </a>
-            {/* TODO: point at the real LinkedIn profile once confirmed. */}
             <a
-              href="#"
+              href="https://www.linkedin.com/in/vasken-bakalian/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="pm-social"
               aria-label="Process Maestro on LinkedIn"
               style={{
@@ -140,8 +141,7 @@ export default function Footer() {
             Contact Info
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
-            {/* TODO: replace placeholder phone with the real number when supplied. */}
-            <a href="tel:+972000000000" className="pm-footer-link" style={linkStyle}>
+            <a href="tel:+37455023420" className="pm-footer-link" style={linkStyle}>
               <span aria-hidden="true">📞</span> {SITE.phone}
             </a>
             <a href={`mailto:${SITE.email}`} className="pm-footer-link" style={linkStyle}>

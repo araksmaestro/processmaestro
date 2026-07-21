@@ -83,6 +83,20 @@ export function ensureCalendly(): Promise<void> {
   if (calendlyLoader) return calendlyLoader;
 
   calendlyLoader = new Promise<void>((resolve) => {
+    // Warm the connections first. The popup's scheduling page loads from
+    // calendly.com — a host we otherwise never touch until the click fires
+    // initPopupWidget. Preconnecting during the hover→click gap means the click
+    // skips DNS + TCP + TLS and only pays for the page fetch. Downloads nothing.
+    for (const host of [
+      "https://assets.calendly.com",
+      "https://calendly.com",
+    ]) {
+      const preconnect = document.createElement("link");
+      preconnect.rel = "preconnect";
+      preconnect.href = host;
+      document.head.appendChild(preconnect);
+    }
+
     const link = document.createElement("link");
     link.rel = "stylesheet";
     link.href = "https://assets.calendly.com/assets/external/widget.css";

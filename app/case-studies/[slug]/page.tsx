@@ -6,6 +6,7 @@ import Footer from "@/components/home/Footer";
 import CaseMediaSlider from "@/components/case-studies/CaseMediaSlider";
 import BookingButton from "@/components/BookingButton";
 import { getCaseStudy, getCaseStudySlugs } from "@/lib/adapters/case-studies";
+import { SITE, SITE_URL } from "@/lib/site";
 
 // Revalidate so newly published / edited case studies appear without a redeploy.
 export const revalidate = 30;
@@ -152,8 +153,34 @@ export default async function CaseStudyDetailPage({
   const hasTestimonial = Boolean(d.testimonial && d.testimonial.quote);
   const hasKeyOutcomesCard = hasOutcomes || hasTestimonial;
 
+  // Article structured data — makes each case study eligible for rich results.
+  // Absolute image URL (media src is a same-origin proxy path); no date fields
+  // exist on the record, so those are intentionally omitted rather than faked.
+  const articleLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: c.title,
+    description: c.subhead,
+    image: c.media[0]?.src ? `${SITE_URL}${c.media[0].src}` : `${SITE_URL}/pm-logo.png`,
+    ...(c.category ? { articleSection: c.category } : null),
+    author: { "@type": "Organization", name: SITE.name, url: SITE_URL },
+    publisher: {
+      "@type": "Organization",
+      name: SITE.name,
+      logo: { "@type": "ImageObject", url: `${SITE_URL}/pm-logo.png` },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${SITE_URL}/case-studies/${c.slug}`,
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }}
+      />
       <Nav variant="dark" active="case-studies" />
 
       <div style={{ background: PAGE_BG, color: "#fff", overflowX: "hidden" }}>

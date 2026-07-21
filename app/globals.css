@@ -120,6 +120,20 @@ body {
   font-family: var(--pm-font-display);
 }
 
+/* Visually hidden, still in the accessibility tree + server HTML (for headings
+   that must exist for SEO/screen readers without altering the visual design). */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ---------- Animations ---------- */
 @keyframes pm-floaty {
   0%,

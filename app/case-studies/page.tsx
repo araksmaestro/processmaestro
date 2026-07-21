@@ -81,7 +81,7 @@ export default async function CaseStudiesPage() {
               Success Stories
             </div>
             <h1 id="cs-hero-heading" className="cs-h1">
-              Real <span style={HEADLINE_GRADIENT}>Businesses!</span>
+              Real <span style={HEADLINE_GRADIENT}>Businesses!</span>{" "}
               <br />
               Real <span style={HEADLINE_GRADIENT}>Results!</span>
             </h1>
@@ -94,7 +94,12 @@ export default async function CaseStudiesPage() {
         </section>
 
         {/* ===== Case grid ===== */}
-        <section aria-label="Case studies" style={{ background: "var(--pm-purple-2)" }}>
+        <section aria-labelledby="cs-grid-heading" style={{ background: "var(--pm-purple-2)" }}>
+          {/* sr-only H2 so the outline is H1 → H2 → H3 (card titles) without
+              adding a visible heading the design doesn't have. */}
+          <h2 id="cs-grid-heading" className="sr-only">
+            Featured case studies
+          </h2>
           <div className="cs-grid-pad">
             <div className="cs-panel">
               <div

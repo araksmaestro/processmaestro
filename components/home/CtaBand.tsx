@@ -1,3 +1,5 @@
+import BookingButton from "@/components/BookingButton";
+
 export default function CtaBand() {
   return (
     <section
@@ -39,9 +41,11 @@ export default function CtaBand() {
             attached.
           </p>
         </div>
-        {/* TODO: point href at the real booking link (e.g. Calendly) once confirmed. */}
-        <a
-          href="#"
+        <BookingButton
+          label="Book a Consultation →"
+          slot="section-cta"
+          service="general"
+          variant="dark"
           className="pm-dark-cta pm-display"
           style={{
             flex: "none",
@@ -54,9 +58,7 @@ export default function CtaBand() {
             borderRadius: 13,
             boxShadow: "0 10px 26px rgba(42,20,64,0.3)",
           }}
-        >
-          Book a Consultation →
-        </a>
+        />
       </div>
     </section>
   );

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
+import BookingButton from "@/components/BookingButton";
 import {
   DEFAULT_SERVICE,
   resolveServiceSlug,
@@ -96,13 +97,14 @@ export default function ServicePanels() {
               <p style={{ fontSize: 16, color: "var(--pm-on-dark-6)", margin: "0 0 26px" }}>
                 {active.prompt}
               </p>
-              <a
-                href={active.heroCta.href}
+              <BookingButton
+                label={active.heroCtaLabel}
+                slot="hero"
+                service={active.slug}
+                variant="svc"
                 className="svc-cta pm-display"
                 style={{ alignSelf: "flex-start", padding: "15px 28px" }}
-              >
-                {active.heroCta.label}
-              </a>
+              />
             </div>
 
             <div className="svc-hero-media">
@@ -211,13 +213,14 @@ export default function ServicePanels() {
             </p>
 
             <div style={{ textAlign: "center" }}>
-              <a
-                href={active.bottomCta.href}
+              <BookingButton
+                label={active.bottomCtaLabel}
+                slot="section-cta"
+                service={active.slug}
+                variant="svc"
                 className="svc-cta pm-display"
                 style={{ padding: "16px 34px" }}
-              >
-                {active.bottomCta.label}
-              </a>
+              />
             </div>
           </div>
         </section>

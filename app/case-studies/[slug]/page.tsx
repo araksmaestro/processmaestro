@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import Nav from "@/components/home/Nav";
 import Footer from "@/components/home/Footer";
 import CaseMediaSlider from "@/components/case-studies/CaseMediaSlider";
+import BookingButton from "@/components/BookingButton";
 import { getCaseStudy, getCaseStudySlugs } from "@/lib/adapters/case-studies";
 
 // Revalidate so newly published / edited case studies appear without a redeploy.
@@ -423,8 +424,11 @@ export default async function CaseStudyDetailPage({
               <p style={{ fontSize: 14.5, lineHeight: 1.5, color: "#C4B5DB", margin: "0 0 20px" }}>
                 Let&apos;s build your custom ad engine.
               </p>
-              <a
-                href="/#consult"
+              <BookingButton
+                label="Book a free consultation"
+                slot="section-cta"
+                service="general"
+                variant="primary"
                 className="pm-cta-primary pm-display"
                 style={{
                   display: "block",
@@ -438,9 +442,7 @@ export default async function CaseStudyDetailPage({
                   borderRadius: 11,
                   boxShadow: "0 8px 20px rgba(140,220,0,0.3)",
                 }}
-              >
-                Book a free consultation
-              </a>
+              />
             </div>
           </aside>
         </div>

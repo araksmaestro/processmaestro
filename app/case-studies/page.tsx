@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Nav from "@/components/home/Nav";
 import Footer from "@/components/home/Footer";
 import CaseCard from "@/components/CaseCard";
+import BookingButton from "@/components/BookingButton";
 import { getCaseStudies } from "@/lib/adapters/case-studies";
 
 // Cover URLs are served through the same-origin /api/ss-file proxy (stable
@@ -143,8 +144,11 @@ export default async function CaseStudiesPage() {
                 automation can save you time and money.
               </p>
             </div>
-            <a
-              href="/#consult"
+            <BookingButton
+              label="Book a Consultation →"
+              slot="section-cta"
+              service="general"
+              variant="dark"
               className="pm-dark-cta pm-display"
               style={{
                 flex: "none",
@@ -157,9 +161,7 @@ export default async function CaseStudiesPage() {
                 borderRadius: 13,
                 boxShadow: "0 10px 26px rgba(42,20,64,0.3)",
               }}
-            >
-              Book a Consultation →
-            </a>
+            />
           </div>
         </section>
       </main>

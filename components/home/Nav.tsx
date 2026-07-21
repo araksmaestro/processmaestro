@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { serviceNavItems } from "@/content/services";
+import BookingButton from "@/components/BookingButton";
 
 type NavVariant = "light" | "dark";
 type NavActive = "industries" | "case-studies" | "services";
@@ -170,8 +171,11 @@ export default function Nav({
             </div>
           </div>
 
-          <a
-            href={`${anchorBase}#consult`}
+          <BookingButton
+            label="Free Consultation"
+            slot="nav"
+            service="general"
+            variant="nav"
             className="pm-nav-consult pm-display"
             style={{
               textDecoration: "none",
@@ -183,9 +187,7 @@ export default function Nav({
               borderRadius: 10,
               boxShadow: "0 4px 14px rgba(140,220,0,0.35)",
             }}
-          >
-            Free Consultation
-          </a>
+          />
         </div>
 
         {/* Mobile hamburger */}
@@ -269,9 +271,14 @@ export default function Nav({
                 )}
               </div>
 
-              <a href={`${anchorBase}#consult`} className="pm-mobile-consult" onClick={close}>
-                Free Consultation
-              </a>
+              <BookingButton
+                label="Free Consultation"
+                slot="mobile-menu"
+                service="general"
+                variant="primary"
+                className="pm-mobile-consult"
+                onActivate={close}
+              />
             </nav>
           </div>
         </>

@@ -1,3 +1,5 @@
+import BookingButton from "@/components/BookingButton";
+
 const HERO_PILLS = [
   "Hourly Consulting",
   "Fractional Services",
@@ -131,8 +133,11 @@ export default function Hero() {
               marginBottom: 40,
             }}
           >
-            <a
-              href="#consult"
+            <BookingButton
+              label="Free Consultation →"
+              slot="hero"
+              service="general"
+              variant="primary"
               className="pm-cta-primary pm-display"
               style={{
                 textDecoration: "none",
@@ -144,9 +149,7 @@ export default function Hero() {
                 borderRadius: 12,
                 boxShadow: "var(--pm-shadow-cta)",
               }}
-            >
-              Free Consultation →
-            </a>
+            />
             <a
               href="#cases"
               className="pm-ghost pm-display"

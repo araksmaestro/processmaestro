@@ -53,6 +53,14 @@ function countryName(field: unknown): string {
   return firstTitle(field).replace(/^[A-Za-z]{2}\s*-\s*/, "").trim();
 }
 
+// Location shown on cards/detail: prefer the manual "Country Display Name"
+// (s34952484e) so editors can override the raw country name (e.g. "United
+// Kingdom" instead of the ISO official name); fall back to the linked Country.
+function locationOf(rec: CaseStudyRecord): string {
+  const display = str(rec.s34952484e).trim();
+  return display || countryName(rec.s81a7abc62);
+}
+
 function firstTitle(field: unknown): string {
   if (!Array.isArray(field) || field.length === 0) return "";
   const f = field[0];
@@ -140,7 +148,7 @@ export async function getCaseStudies(
         href: slug ? `/case-studies/${slug}` : "#",
         cover: handle ? `/api/ss-file/${handle}` : "",
         category: firstTitle(rec.sf3d75aea0),
-        location: countryName(rec.s81a7abc62),
+        location: locationOf(rec),
         title: str(rec.title),
         summary: str(rec.s48d6c3d8d),
         results: allTitles(rec.s058517f16).slice(0, 2),
@@ -179,7 +187,7 @@ export async function getCaseStudy(slug: string): Promise<CaseStudyFull | null> 
       href: `/case-studies/${slug}`,
       title: str(rec.title),
       category: firstTitle(rec.sf3d75aea0),
-      location: countryName(rec.s81a7abc62),
+      location: locationOf(rec),
       subhead: str(rec.s4affd4869),
       client: str(rec.se89cb4378),
       duration: str(rec.s76732d846),

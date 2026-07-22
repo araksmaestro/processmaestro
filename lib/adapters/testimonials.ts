@@ -4,7 +4,6 @@ import { listRecords, getRecord } from "@/lib/smartsuite/client";
 import type { TestimonialRecord, NamedRecord } from "@/lib/smartsuite/types";
 
 const TESTIMONIALS_TABLE = "6a4b8d0431a2c6ad0fe4e42f";
-const CONTACTS_TABLE = "64ceb4f21c6a27ff1583dcb9";
 const ORGS_TABLE = "64ceb00a3dd12a0e8b9c920e";
 const SECTION_FIELD = "s7987685a8";
 const SECTION_TESTIMONIALS = "KwWGD"; // "Testimonials" option value code
@@ -19,8 +18,13 @@ export type Testimonial = {
   company: string;
 };
 
-function contactIdOf(rec: TestimonialRecord): string | undefined {
-  return Array.isArray(rec.s57b3d9959) ? rec.s57b3d9959[0] : undefined;
+// The record title is auto-generated as "[[Contact]] - ", so the reviewer's name
+// is everything before the trailing " - ". Reading it straight from the title
+// avoids a per-contact getRecord that can rate-limit (429) and silently blank
+// the name — which is exactly what was dropping names on some cards.
+function nameFromTitle(rec: TestimonialRecord): string {
+  const title = typeof rec.title === "string" ? rec.title : "";
+  return title.split(/\s+-\s*/)[0].trim();
 }
 
 function orgIdOf(rec: TestimonialRecord): string | undefined {
@@ -83,20 +87,17 @@ export async function getTestimonials(): Promise<Testimonial[]> {
         r.status?.value === STATUS_PUBLISH
     );
 
-    const contactIds = tagged.map(contactIdOf).filter((x): x is string => Boolean(x));
+    // Name comes from the title (no network call). Only the company still needs
+    // resolving — via the org lookup ids.
     const orgIds = tagged.map(orgIdOf).filter((x): x is string => Boolean(x));
-    const [contactMap, orgMap] = await Promise.all([
-      resolveNames(CONTACTS_TABLE, contactIds),
-      resolveNames(ORGS_TABLE, orgIds),
-    ]);
+    const orgMap = await resolveNames(ORGS_TABLE, orgIds);
 
     return tagged.map((rec): Testimonial => {
-      const cId = contactIdOf(rec);
       const oId = orgIdOf(rec);
       return {
         id: rec.id,
         quote: typeof rec.se807231b4 === "string" ? rec.se807231b4 : "",
-        name: (cId && contactMap.get(cId)) || "",
+        name: nameFromTitle(rec),
         position: positionOf(rec),
         company: (oId && orgMap.get(oId)) || "",
       };

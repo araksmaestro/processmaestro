@@ -1,15 +1,14 @@
 import Link from "next/link";
 import CaseCard from "@/components/CaseCard";
-import { homeCases } from "@/content/home";
 import { getCaseStudies } from "@/lib/adapters/case-studies";
 
 export default async function CaseStudies() {
-  // Featured, published case studies from SmartSuite (same shared adapter as the
-  // list page). On empty/error, fall back to the static homeCases so the section
-  // always renders. Keep the count (3) this section has always shown.
-  let cases = homeCases;
-  const featured = await getCaseStudies({ featuredOnly: true, limit: 3 });
-  if (featured.length > 0) cases = featured;
+  // Live featured, published case studies from SmartSuite (same shared adapter as
+  // the list page). NO static fallback: a broken fetch must surface as an empty
+  // section plus a server-side error log (the adapter logs the real failure and
+  // returns []), never fabricated cards with dead links. Every card's href is
+  // derived from the SmartSuite Slug, so it resolves to a real detail route.
+  const cases = await getCaseStudies({ featuredOnly: true, limit: 3 });
 
   // Keep the 3-up desktop layout identical; center 1–2 cards so the grid reads cleanly.
   const gridColumns =
@@ -47,19 +46,21 @@ export default async function CaseStudies() {
           </p>
         </div>
 
-        <div
-          className="pm-cards"
-          style={{
-            display: "grid",
-            gridTemplateColumns: gridColumns,
-            gap: 22,
-            justifyContent: "center",
-          }}
-        >
-          {cases.map((cs) => (
-            <CaseCard key={cs.title} {...cs} />
-          ))}
-        </div>
+        {cases.length > 0 && (
+          <div
+            className="pm-cards"
+            style={{
+              display: "grid",
+              gridTemplateColumns: gridColumns,
+              gap: 22,
+              justifyContent: "center",
+            }}
+          >
+            {cases.map((cs) => (
+              <CaseCard key={cs.slug || cs.title} {...cs} />
+            ))}
+          </div>
+        )}
 
         <div style={{ textAlign: "center", marginTop: 44 }}>
           <Link

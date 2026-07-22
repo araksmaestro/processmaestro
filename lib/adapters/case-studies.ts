@@ -1,13 +1,11 @@
 // Shared adapter: maps SmartSuite Case Studies records to the shapes the UI needs.
 // Consumed by the /case-studies list, the homepage case section, and the
 // /case-studies/[slug] detail page. The frontend imports THIS, never the client.
-import { listRecords, getRecord } from "@/lib/smartsuite/client";
+import { listRecords } from "@/lib/smartsuite/client";
 import type { CaseStudyRecord, SmartSuiteLinkedRecord, SmartSuiteFile } from "@/lib/smartsuite/types";
 import type { CaseMedia } from "@/content/case-studies";
 
 const CASE_STUDIES_TABLE = "6a464a1dc29d15c9caeec59c";
-const COUNTRY_TABLE = "687e0a45103799a6ba5955e0";
-const COUNTRY_NAME_FIELD = "scbd84eea5"; // Country name (NOT `title`, which is "ZA- South Africa")
 const FEATURED_FIELD = "s03f4a8d8f";
 const STATUS_PUBLISHED = "complete";
 const REVALIDATE = 30;
@@ -47,12 +45,12 @@ export type CaseStudyFull = {
 // ---- small field helpers ----
 const str = (v: unknown): string => (typeof v === "string" ? v : "");
 
-function firstLinkId(field: unknown): string | undefined {
-  if (!Array.isArray(field) || field.length === 0) return undefined;
-  const f = field[0];
-  if (typeof f === "string") return f;
-  if (f && typeof f === "object" && "id" in f) return (f as SmartSuiteLinkedRecord).id;
-  return undefined;
+// The linked Country record's title is "XX- Country Name" (e.g. "ZA- South
+// Africa"); strip the 2-letter-code prefix for the clean name. Read straight
+// from the hydrated link (same as category) — no extra per-country request that
+// could rate-limit (429) and silently blank the location.
+function countryName(field: unknown): string {
+  return firstTitle(field).replace(/^[A-Za-z]{2}\s*-\s*/, "").trim();
 }
 
 function firstTitle(field: unknown): string {
@@ -110,22 +108,6 @@ function mediaFrom(rec: CaseStudyRecord): CaseMedia[] {
     }));
 }
 
-async function resolveCountryNames(ids: string[]): Promise<Map<string, string>> {
-  const map = new Map<string, string>();
-  await Promise.all(
-    [...new Set(ids)].map(async (id) => {
-      try {
-        const rec = await getRecord<Record<string, unknown>>(COUNTRY_TABLE, id, REVALIDATE);
-        const name = rec?.[COUNTRY_NAME_FIELD];
-        if (typeof name === "string" && name) map.set(id, name);
-      } catch {
-        /* unresolved → "" */
-      }
-    })
-  );
-  return map;
-}
-
 // Single shared read of all published records (hydrated). Identical body across
 // callers so Next's Data Cache dedupes it during a build/request.
 async function fetchPublished(): Promise<CaseStudyRecord[]> {
@@ -150,21 +132,15 @@ export async function getCaseStudies(
     let items = await fetchPublished();
     if (opts.featuredOnly) items = items.filter((r) => r[FEATURED_FIELD] === true);
 
-    const countryIds = items
-      .map((r) => firstLinkId(r.s81a7abc62))
-      .filter((x): x is string => Boolean(x));
-    const countryMap = await resolveCountryNames(countryIds);
-
     const cards = items.map((rec): CaseStudyCard => {
       const handle = Array.isArray(rec.sae9c2cd99) ? rec.sae9c2cd99[0]?.handle : undefined;
       const slug = normalizeSlug(rec.sf1fb67a8f);
-      const countryId = firstLinkId(rec.s81a7abc62);
       return {
         slug,
         href: slug ? `/case-studies/${slug}` : "#",
         cover: handle ? `/api/ss-file/${handle}` : "",
         category: firstTitle(rec.sf3d75aea0),
-        location: (countryId && countryMap.get(countryId)) || "",
+        location: countryName(rec.s81a7abc62),
         title: str(rec.title),
         summary: str(rec.s48d6c3d8d),
         results: allTitles(rec.s058517f16).slice(0, 2),
@@ -196,11 +172,6 @@ export async function getCaseStudy(slug: string): Promise<CaseStudyFull | null> 
     const rec = items.find((r) => normalizeSlug(r.sf1fb67a8f) === slug);
     if (!rec) return null;
 
-    const countryId = firstLinkId(rec.s81a7abc62);
-    const countryMap = countryId
-      ? await resolveCountryNames([countryId])
-      : new Map<string, string>();
-
     const statValue = str(rec.s635ca48c8);
 
     return {
@@ -208,7 +179,7 @@ export async function getCaseStudy(slug: string): Promise<CaseStudyFull | null> 
       href: `/case-studies/${slug}`,
       title: str(rec.title),
       category: firstTitle(rec.sf3d75aea0),
-      location: (countryId && countryMap.get(countryId)) || "",
+      location: countryName(rec.s81a7abc62),
       subhead: str(rec.s4affd4869),
       client: str(rec.se89cb4378),
       duration: str(rec.s76732d846),

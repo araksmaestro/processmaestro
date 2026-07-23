@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { expertise } from "@/content/home";
 
 export default function Expertise() {
@@ -8,6 +8,16 @@ export default function Expertise() {
   // the desktop panel falls back to item 0 when null.
   const [active, setActive] = useState<number | null>(0);
   const desktopIndex = active ?? 0;
+
+  // The desktop panel is server-rendered (it carries the h3 + description for
+  // each area). The mobile accordion is the SAME content in a different DOM, so
+  // to avoid every expertise description appearing twice in the server HTML it's
+  // mounted client-side only. CSS still decides which is visible per breakpoint.
+  const [mounted, setMounted] = useState(false);
+  // Mount gate so the client-only mobile accordion doesn't duplicate the SSR
+  // panel's descriptions in the server HTML.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => setMounted(true), []);
 
   return (
     <section
@@ -119,7 +129,10 @@ export default function Expertise() {
           </div>
         </div>
 
-        {/* ===== Mobile: accordion, one open at a time (<= 820px) ===== */}
+        {/* ===== Mobile: accordion, one open at a time (<= 820px) =====
+            Client-only so its descriptions don't duplicate the desktop panel's
+            in the server HTML. */}
+        {mounted && (
         <div className="pm-exp-mobile">
           {expertise.map((item, i) => {
             const open = active === i;
@@ -149,6 +162,7 @@ export default function Expertise() {
             );
           })}
         </div>
+        )}
       </div>
     </section>
   );

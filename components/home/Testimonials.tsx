@@ -33,10 +33,21 @@ function toDisplay(t: Testimonial): DisplayTestimonial {
   };
 }
 
-function TestiCard({ t, onOpen }: { t: DisplayTestimonial; onOpen: () => void }) {
+function TestiCard({
+  t,
+  onOpen,
+  clone,
+}: {
+  t: DisplayTestimonial;
+  onOpen: () => void;
+  clone?: boolean;
+}) {
   return (
     <figure
       className="pm-testi-card"
+      // Clones exist only for the seamless client-side loop; hide them from
+      // assistive tech and the tab order so each testimonial is announced once.
+      aria-hidden={clone || undefined}
       style={{
         boxSizing: "border-box",
         margin: 0,
@@ -98,6 +109,7 @@ function TestiCard({ t, onOpen }: { t: DisplayTestimonial; onOpen: () => void })
       <button
         type="button"
         onClick={onOpen}
+        tabIndex={clone ? -1 : undefined}
         className="pm-display"
         style={{
           alignSelf: "flex-start",
@@ -121,9 +133,11 @@ export default function Testimonials({ testimonials }: { testimonials: Testimoni
   const n = items.length;
 
   const [selected, setSelected] = useState<number | null>(null);
-  // Copies of the base set rendered back-to-back for a seamless loop. Grown
-  // after measuring so the track always overflows the viewport by >= 1 period.
-  const [reps, setReps] = useState(3);
+  // Copies of the base set rendered back-to-back for a seamless loop. Starts at
+  // 1 so the SERVER HTML contains each testimonial exactly once (no SEO-hurting
+  // duplication); the clones are added after hydration and grown after measuring
+  // so the track always overflows the viewport by >= 1 period.
+  const [reps, setReps] = useState(1);
 
   const trackRef = useRef<HTMLDivElement>(null);
   const periodRef = useRef(0); // width of one base-set period (incl. connecting gap)
@@ -163,6 +177,14 @@ export default function Testimonials({ testimonials }: { testimonials: Testimoni
       initedRef.current = true;
     }
   }, [n, reps]);
+
+  // After hydration, add the clone copies the seamless loop needs (SSR shipped
+  // just one set). measure() then grows this further to fill the viewport.
+  useEffect(() => {
+    // Clones are a post-hydration enhancement so SSR ships exactly one set.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setReps((r) => Math.max(r, 3));
+  }, []);
 
   useLayoutEffect(() => {
     measure();
@@ -326,7 +348,7 @@ export default function Testimonials({ testimonials }: { testimonials: Testimoni
             onClickCapture={onClickCapture}
           >
             {rendered.map((t, i) => (
-              <TestiCard key={i} t={t} onOpen={() => setSelected(i % n)} />
+              <TestiCard key={i} t={t} clone={i >= n} onOpen={() => setSelected(i % n)} />
             ))}
           </div>
 

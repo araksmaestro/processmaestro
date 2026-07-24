@@ -7,6 +7,7 @@ import CaseMediaSlider from "@/components/case-studies/CaseMediaSlider";
 import BookingButton from "@/components/BookingButton";
 import { getCaseStudy, getCaseStudySlugs } from "@/lib/adapters/case-studies";
 import { SITE, SITE_URL } from "@/lib/site";
+import { caseBreadcrumbJsonLd } from "@/lib/jsonld";
 
 // Revalidate so newly published / edited case studies appear without a redeploy.
 export const revalidate = 30;
@@ -23,6 +24,12 @@ export async function generateMetadata({
   const { slug } = await params;
   const c = await getCaseStudy(slug);
   if (!c) return { title: "Case Study" };
+  // Prefer the case study's own cover for the social card; fall back to the
+  // site default (resolved to absolute via metadataBase).
+  const cover = c.media[0]?.src;
+  const images = cover
+    ? [{ url: cover, alt: c.title }]
+    : [{ url: SITE.ogCard, width: 1200, height: 630, alt: SITE.name }];
   return {
     title: c.title,
     description: c.subhead,
@@ -32,6 +39,13 @@ export async function generateMetadata({
       description: c.subhead,
       url: `/case-studies/${c.slug}`,
       type: "article",
+      images,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${c.title} | Process Maestro`,
+      description: c.subhead,
+      images,
     },
   };
 }
@@ -175,11 +189,17 @@ export default async function CaseStudyDetailPage({
     },
   };
 
+  const breadcrumbLd = caseBreadcrumbJsonLd(c.title, c.slug);
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
       />
       <Nav variant="dark" active="case-studies" />
 

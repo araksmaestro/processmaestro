@@ -23,5 +23,11 @@ export const SITE = {
   founder: "Vasken",
   email: "vasken@processmaestro.co",
   phone: "+374 55 023420",
+  // Founder's LinkedIn (same profile linked in the footer) — used as `sameAs`
+  // for both the organization and the founder Person in JSON-LD.
+  linkedin: "https://www.linkedin.com/in/vasken-bakalian/",
+  // Logo (used in JSON-LD and as the org image).
   ogImage: "/pm-logo.png",
+  // Purpose-built 1200x630 social card (default og:image / twitter:image).
+  ogCard: "/og-card.png",
 } as const;

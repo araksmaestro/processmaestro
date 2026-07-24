@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Nav from "@/components/home/Nav";
 import Footer from "@/components/home/Footer";
 import ServicePanels from "@/components/services/ServicePanels";
+import { services } from "@/content/services";
+import { servicesJsonLd } from "@/lib/jsonld";
 
 export const metadata: Metadata = {
   title: "Services",
@@ -18,8 +20,16 @@ export const metadata: Metadata = {
 };
 
 export default function ServicesPage() {
+  const jsonLd = servicesJsonLd(
+    services.map((s) => ({ slug: s.slug, title: s.title, lead: s.lead })),
+  );
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Nav variant="dark" active="services" />
 
       <main style={{ background: "var(--pm-services-bg)", color: "#fff", overflowX: "hidden" }}>

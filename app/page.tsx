@@ -10,6 +10,7 @@ import Testimonials from "@/components/home/Testimonials";
 import CtaBand from "@/components/home/CtaBand";
 import Footer from "@/components/home/Footer";
 import { getTestimonials } from "@/lib/adapters/testimonials";
+import { homepageJsonLd } from "@/lib/jsonld";
 
 // Revalidate periodically so SmartSuite content changes appear without a redeploy.
 export const revalidate = 30;
@@ -17,8 +18,16 @@ export const revalidate = 30;
 export default async function Home() {
   const testimonials = await getTestimonials();
 
+  // Reviews are built from the SAME testimonials rendered below, so the markup
+  // never asserts a review that isn't visible on the page.
+  const jsonLd = homepageJsonLd(testimonials);
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Nav />
       <main>
         <Hero />

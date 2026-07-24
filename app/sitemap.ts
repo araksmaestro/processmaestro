@@ -6,10 +6,12 @@ import { getCaseStudySlugs } from "@/lib/adapters/case-studies";
 export const revalidate = 30;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  // Indexable routes only. /thanks is intentionally excluded (noindex).
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: SITE_URL, changeFrequency: "monthly", priority: 1 },
     { url: `${SITE_URL}/case-studies`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${SITE_URL}/services`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${SITE_URL}/privacy`, changeFrequency: "yearly", priority: 0.3 },
   ];
 
   // Individual case-study pages — the content-rich, keyword-rich URLs. If the

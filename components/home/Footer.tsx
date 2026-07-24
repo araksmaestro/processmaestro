@@ -151,16 +151,42 @@ export default function Footer() {
         </div>
       </div>
 
+      {/* Utility row — legal links live here on EVERY page. The withdrawal slot
+          is always rendered but hidden by CSS unless consent is granted (see the
+          html[data-pm-consent] rule), avoiding any server/client render mismatch. */}
       <div
         style={{
           borderTop: "1px solid rgba(255,255,255,0.08)",
-          textAlign: "center",
+          display: "flex",
+          flexWrap: "wrap",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "8px 18px",
           padding: 22,
           fontSize: 13,
           color: "var(--pm-on-dark-muted-3)",
         }}
       >
-        © 2026 Process Maestro. All rights reserved.
+        <span>© 2026 Process Maestro. All rights reserved.</span>
+        <span aria-hidden="true" style={{ opacity: 0.5 }}>
+          •
+        </span>
+        <Link href="/privacy" className="pm-footer-link" style={{ textDecoration: "none", color: "var(--pm-on-dark-muted-1)" }}>
+          Privacy Policy
+        </Link>
+        <span className="pm-withdraw-slot">
+          <span aria-hidden="true" style={{ opacity: 0.5, marginRight: 18 }}>
+            •
+          </span>
+          <a
+            href="#"
+            data-pm-withdraw
+            className="pm-footer-link"
+            style={{ textDecoration: "none", color: "var(--pm-on-dark-muted-1)" }}
+          >
+            Turn off analytics
+          </a>
+        </span>
       </div>
     </footer>
   );

@@ -1071,3 +1071,158 @@ body {
     justify-content: center;
   }
 }
+
+/* ============================================================
+   Cookie consent banner + withdrawal link
+   ============================================================ */
+.pm-consent-btn {
+  cursor: pointer;
+  font-family: var(--pm-font-display);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 12px 24px;
+  border-radius: 11px;
+  transition: background 0.16s ease, border-color 0.16s ease;
+}
+/* Accept and Decline are equal size + prominence (a GDPR requirement, not a
+   style choice) — same padding, both fully-formed buttons. */
+.pm-consent-accept {
+  border: none;
+  background: #8cdc00;
+  color: #22350a;
+  box-shadow: 0 6px 18px rgba(140, 220, 0, 0.35);
+}
+.pm-consent-accept:hover {
+  background: #7cc700;
+}
+.pm-consent-decline {
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: transparent;
+  color: #e4dcf0;
+}
+.pm-consent-decline:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Footer withdrawal slot: always in the DOM (server-rendered), shown only once
+   consent is granted — driven by the attribute the Consent component sets on
+   <html>, so there is no server/client conditional-render mismatch. */
+.pm-withdraw-slot {
+  display: none;
+}
+html[data-pm-consent="granted"] .pm-withdraw-slot {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ============================================================
+   Privacy policy page (/privacy)
+   ============================================================ */
+.pm-legal-h1 {
+  font-family: var(--pm-font-display);
+  font-weight: 700;
+  font-size: 46px;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  margin: 0 0 14px;
+}
+.pm-legal-prose p {
+  color: #cbb8e6;
+  font-size: 16.5px;
+  line-height: 1.75;
+  margin: 0 0 16px;
+}
+.pm-legal-prose h2 {
+  font-family: var(--pm-font-display);
+  font-weight: 600;
+  font-size: 25px;
+  color: #fff;
+  margin: 46px 0 8px;
+  letter-spacing: -0.01em;
+}
+.pm-legal-rule {
+  width: 60px;
+  height: 3px;
+  background: #8cdc00;
+  border-radius: 2px;
+  margin-bottom: 20px;
+}
+.pm-legal-prose h3 {
+  font-family: var(--pm-font-display);
+  font-weight: 600;
+  font-size: 17.5px;
+  color: #fff;
+  margin: 26px 0 8px;
+}
+.pm-legal-prose ul {
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.pm-legal-prose li {
+  position: relative;
+  padding-left: 26px;
+  color: #cbb8e6;
+  font-size: 16px;
+  line-height: 1.65;
+}
+.pm-legal-prose li::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 9px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #8cdc00;
+}
+.pm-legal-prose strong {
+  color: #e4dcf0;
+}
+.pm-legal-prose a {
+  color: #8cdc00;
+}
+.pm-legal-prose a:hover {
+  color: #7cc700;
+}
+.pm-legal-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4px 0 8px;
+  min-width: 520px;
+}
+.pm-legal-th {
+  text-align: left;
+  font-family: var(--pm-font-display);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #8cdc00;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+.pm-legal-td {
+  padding: 15px 18px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #cbb8e6;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  vertical-align: top;
+}
+.pm-legal-table-wrap {
+  overflow-x: auto;
+}
+@media (max-width: 760px) {
+  .pm-legal-h1 {
+    font-size: 40px;
+  }
+}
+@media (max-width: 620px) {
+  .pm-legal-h1 {
+    font-size: 33px;
+  }
+}

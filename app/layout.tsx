@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Space_Grotesk, Instrument_Sans } from "next/font/google";
 import "./globals.css";
 import { SITE, SITE_URL } from "@/lib/site";
+import Consent from "@/components/consent/Consent";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -56,7 +57,10 @@ export default function RootLayout({
       lang="en"
       className={`${spaceGrotesk.variable} ${instrumentSans.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        {children}
+        <Consent />
+      </body>
     </html>
   );
 }

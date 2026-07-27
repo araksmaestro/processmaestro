@@ -4,9 +4,15 @@ import Nav from "@/components/home/Nav";
 import Footer from "@/components/home/Footer";
 import BookingCompleted from "@/components/consent/BookingCompleted";
 
-// Calendly redirects here after a booking, appending invitee name/email as query
-// params. This page never reads, renders, logs, or stores them — it stays fully
-// static. It is also kept out of search results.
+// DORMANT — this is the Calendly confirmation-page redirect target. Calendly's
+// external redirect requires a PAID plan; the account is currently on Free, so no
+// real booking reaches this route yet. Keep the page and its `booking_completed`
+// event exactly as-is: the day the plan upgrades and the Calendly redirect is set
+// to /thanks, this goes live with no code change. (The interim conversion signal
+// is `booking_click`, fired from BookingButton.) Not a bug — do not delete.
+//
+// Calendly appends invitee name/email as query params. This page never reads,
+// renders, logs, or stores them — it stays fully static and out of search results.
 export const metadata: Metadata = {
   title: "Booking confirmed",
   robots: { index: false, follow: false },

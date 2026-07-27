@@ -20,6 +20,23 @@ const VARIANT_CLASS: Record<string, string> = {
   svc: "svc-cta",
 };
 
+// Interim conversion signal. Calendly's Free plan has no confirmation-page
+// redirect, so /thanks and its `booking_completed` event are dormant. Until the
+// plan is upgraded, the conversion signal is the CTA click itself: `booking_click`
+// measures intent to book (the visitor is leaving for Calendly). It fires only
+// with analytics consent, carries just slot + service (no personal data), and
+// never blocks the navigation — if gtag is absent (consent denied / no GA id),
+// the click still proceeds normally.
+function trackBookingClick(slot: BookingSlot, service: BookingService) {
+  if (typeof window === "undefined" || typeof window.gtag !== "function") return;
+  try {
+    if (localStorage.getItem("pm-consent") !== "granted") return;
+  } catch {
+    return;
+  }
+  window.gtag("event", "booking_click", { slot, service });
+}
+
 export default function BookingButton({
   label,
   slot,
@@ -51,6 +68,10 @@ export default function BookingButton({
   };
 
   const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
+    // Fire the interim conversion signal on any click (including modified /
+    // new-tab clicks). Non-blocking and never throws, so navigation is untouched.
+    trackBookingClick(slot, service);
+
     // Leave modified clicks alone — cmd/ctrl/shift/alt and middle-click open a
     // new tab via the href, which is the correct behavior.
     if (

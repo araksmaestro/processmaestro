@@ -16,6 +16,8 @@ export type Testimonial = {
   name: string;
   position: string;
   company: string;
+  /** Reviewer photo (same-origin file-proxy URL), or undefined → show initials. */
+  avatar?: string;
 };
 
 // The record title is auto-generated as "[[Contact]] - ", so the reviewer's name
@@ -38,6 +40,22 @@ function orgIdOf(rec: TestimonialRecord): string | undefined {
 function positionOf(rec: TestimonialRecord): string {
   const v = rec.sc53e5a510;
   return (Array.isArray(v) && Array.isArray(v[0]) ? v[0][0] : undefined) ?? "";
+}
+
+// The Contact-photo lookup (s883fae9a9) returns the linked contact's image file
+// nested a few levels deep: [[[ { handle, ... } ]]]. It rides along in the single
+// testimonials listRecords call — no extra request. Flatten to the first file
+// handle and serve it through the same-origin proxy (optimizable by next/image).
+function avatarUrlOf(rec: TestimonialRecord): string | undefined {
+  const field = rec.s883fae9a9;
+  if (!Array.isArray(field)) return undefined;
+  const file = (field as unknown[])
+    .flat(Infinity)
+    .find(
+      (f): f is { handle: string } =>
+        !!f && typeof f === "object" && typeof (f as { handle?: unknown }).handle === "string"
+    );
+  return file ? `/api/ss-file/${file.handle}` : undefined;
 }
 
 // Resolve linked-record ids to their `title` via per-id GET (deduped, in
@@ -100,6 +118,7 @@ export async function getTestimonials(): Promise<Testimonial[]> {
         name: nameFromTitle(rec),
         position: positionOf(rec),
         company: (oId && orgMap.get(oId)) || "",
+        avatar: avatarUrlOf(rec),
       };
     });
   } catch (err) {

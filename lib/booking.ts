@@ -26,14 +26,17 @@ export type BookingService =
 
 /** Route → utm_campaign. Derived from the path, never passed at the call site. */
 export function campaignFromPath(pathname: string): string {
-  if (pathname === "/") return "homepage";
-  if (pathname === "/services") return "services";
-  if (pathname === "/case-studies") return "case-studies";
-  if (pathname.startsWith("/case-studies/")) {
-    return `case-${pathname.slice("/case-studies/".length)}`;
-  }
-  // Fallback for any future route: strip the leading slash, hyphenate.
-  return pathname.replace(/^\//, "").replace(/\//g, "-") || "homepage";
+  // Normalize: strip leading/trailing slashes. Vercel's static prerender hands
+  // the root route through as "/index" (local dev resolves it as "/"), so treat
+  // "" and "index" as the homepage — otherwise homepage clicks are mis-tagged
+  // utm_campaign=index.
+  const p = (pathname || "").replace(/^\/+|\/+$/g, "");
+  if (p === "" || p === "index") return "homepage";
+  if (p === "services") return "services";
+  if (p === "case-studies") return "case-studies";
+  if (p.startsWith("case-studies/")) return `case-${p.slice("case-studies/".length)}`;
+  // Fallback for any future route: hyphenate.
+  return p.replace(/\//g, "-");
 }
 
 /**

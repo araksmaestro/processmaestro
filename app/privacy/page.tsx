@@ -64,14 +64,16 @@ export default function PrivacyPage() {
 
           <h2>2. What we collect</h2>
           <div className="pm-legal-rule" />
-          <h3>If you visit the site and accept analytics cookies</h3>
+          <h3>If you visit the site</h3>
           <p>
             We use Google Analytics to understand how the site is used. This data is pseudonymous. It
             does not tell us who you are.
           </p>
           <p>
-            We only load Google Analytics after you accept it. If you decline, no analytics cookies are
-            set and no analytics data is collected.
+            Until you accept analytics cookies, Google Analytics runs in a restricted mode: it sets no
+            cookies and cannot identify you, and sends only anonymous, aggregated measurements. If you
+            accept, it additionally sets analytics cookies that let us understand return visits and
+            journeys through the site. If you decline, it stays in the restricted, cookieless mode.
           </p>
           <h3>If you book a consultation</h3>
           <p>
@@ -152,8 +154,9 @@ export default function PrivacyPage() {
           </p>
           <p>
             You can withdraw your consent at any time using the &ldquo;Turn off analytics&rdquo; link in
-            the site footer (shown once you have accepted). That stops analytics immediately. You can also
-            clear this site&rsquo;s cookies in your browser settings.
+            the site footer. That deletes the analytics cookies and returns Google Analytics to its
+            restricted, cookieless mode. You can also clear this site&rsquo;s cookies in your browser
+            settings.
           </p>
 
           <h2>5. Who else sees your data</h2>

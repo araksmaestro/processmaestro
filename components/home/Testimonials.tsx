@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import Image from "next/image";
 import type { Testimonial } from "@/lib/adapters/testimonials";
 import TestimonialModal from "@/components/TestimonialModal";
 
@@ -14,6 +15,7 @@ type DisplayTestimonial = {
   name: string;
   role: string;
   quote: string;
+  avatar?: string;
 };
 
 function initialsFromName(name: string): string {
@@ -30,7 +32,58 @@ function toDisplay(t: Testimonial): DisplayTestimonial {
     name: t.name,
     role: [t.position, t.company].filter(Boolean).join(", "),
     quote: t.quote,
+    avatar: t.avatar,
   };
+}
+
+// Shared avatar: photo when present (optimized + lazy), initials otherwise.
+function Avatar({
+  avatar,
+  initials,
+  size,
+  fontSize,
+}: {
+  avatar?: string;
+  initials: string;
+  size: number;
+  fontSize: number;
+}) {
+  return (
+    <div
+      aria-hidden="true"
+      className="pm-display"
+      style={{
+        flex: "none",
+        width: size,
+        height: size,
+        borderRadius: "50%",
+        overflow: "hidden",
+        background: "var(--pm-grad-avatar)",
+        color: "#fff",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontWeight: 700,
+        fontSize,
+      }}
+    >
+      {avatar ? (
+        // Fixed-size avatar: no `sizes` so next/image emits a tight 1x/2x srcset
+        // (~48/96px) instead of the full responsive set. Lazy by default (the
+        // section is below the fold), and the same URL is cached across the
+        // carousel clones — so each photo is fetched at most once.
+        <Image
+          src={avatar}
+          alt=""
+          width={size}
+          height={size}
+          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+        />
+      ) : (
+        initials
+      )}
+    </div>
+  );
 }
 
 function TestiCard({
@@ -60,24 +113,7 @@ function TestiCard({
       }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: 13, marginBottom: 16 }}>
-        <div
-          aria-hidden="true"
-          className="pm-display"
-          style={{
-            width: 44,
-            height: 44,
-            borderRadius: "50%",
-            background: "var(--pm-grad-avatar)",
-            color: "#fff",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontWeight: 700,
-            fontSize: 17,
-          }}
-        >
-          {t.initials}
-        </div>
+        <Avatar avatar={t.avatar} initials={t.initials} size={44} fontSize={17} />
         <figcaption>
           <div className="pm-display" style={{ fontWeight: 600, fontSize: 16, color: "var(--pm-ink-3)" }}>
             {t.name}

@@ -1,10 +1,18 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import type { Testimonial } from "@/content/home";
+import Image from "next/image";
+
+type ModalTestimonial = {
+  initials: string;
+  name: string;
+  role: string;
+  quote: string;
+  avatar?: string;
+};
 
 type Props = {
-  testimonial: Testimonial | null;
+  testimonial: ModalTestimonial | null;
   onClose: () => void;
 };
 
@@ -99,6 +107,7 @@ export default function TestimonialModal({ testimonial, onClose }: Props) {
               width: 56,
               height: 56,
               borderRadius: "50%",
+              overflow: "hidden",
               background: "var(--pm-grad-avatar)",
               color: "#fff",
               display: "flex",
@@ -108,7 +117,17 @@ export default function TestimonialModal({ testimonial, onClose }: Props) {
               fontSize: 20,
             }}
           >
-            {testimonial.initials}
+            {testimonial.avatar ? (
+              <Image
+                src={testimonial.avatar}
+                alt=""
+                width={56}
+                height={56}
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
+            ) : (
+              testimonial.initials
+            )}
           </div>
           <div>
             <div

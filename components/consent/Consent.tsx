@@ -3,14 +3,18 @@
 import { useCallback, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
-// Cookie consent + GA4 gating, re-expressed from the handoff's consent.js as an
-// idiomatic React client component. Behaviour contract:
+// Cookie consent + GA4 via Google Consent Mode v2.
+//
+// GA loads on every page from first paint, but starts in a DENIED default state
+// (cookieless pings only — no cookies, no identifiers). Accepting updates
+// analytics_storage to granted and full tracking begins; declining leaves it
+// denied. Consent state is carried entirely through Consent Mode signals — there
+// is no script-injection gate and no `ga-disable` flag anymore.
+//
 //  - Choice persists in localStorage under `pm-consent` ("granted" | "denied").
-//  - GA is HARD-gated: no gtag request at all before Accept (not Consent Mode).
-//  - <html data-pm-consent> mirrors the choice so CSS can show/hide the footer
-//    withdrawal link without server-side conditional rendering (no hydration
-//    mismatch).
-//  - The Measurement ID comes from NEXT_PUBLIC_GA_ID; absent → no GA, no error.
+//  - <html data-pm-consent> mirrors the choice so the footer withdrawal link
+//    toggles via CSS with no server/client render mismatch.
+//  - Measurement ID comes from NEXT_PUBLIC_GA_ID; absent → no GA, no error.
 
 const KEY = "pm-consent";
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
@@ -37,22 +41,21 @@ function saveChoice(v: Choice) {
   try {
     localStorage.setItem(KEY, v);
   } catch {
-    /* storage unavailable — banner will simply reappear next load */
+    /* storage unavailable — banner reappears next load */
   }
 }
 function reflect(v: Choice | null) {
   document.documentElement.setAttribute("data-pm-consent", v ?? "none");
 }
 
-// Inject gtag.js. Only ever called once, only after consent, and only when a
-// real Measurement ID is configured (so preview deploys send nothing).
-function loadGA() {
+// Load GA once, with Consent Mode v2. The denied `default` is the FIRST gtag call
+// — before config, before any event — so no unconsented storage is ever used. A
+// stored prior grant is applied immediately after, so a returning accepter isn't
+// tracked in denied mode (wait_for_update covers the timing).
+function loadGA(stored: Choice | null) {
   if (!GA_ID || window.__pmGALoaded) return;
   window.__pmGALoaded = true;
-  const s = document.createElement("script");
-  s.async = true;
-  s.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
-  document.head.appendChild(s);
+
   window.dataLayer = window.dataLayer || [];
   window.gtag = function gtag() {
     // Google's canonical stub pushes the `arguments` object; GA reads dataLayer
@@ -60,16 +63,43 @@ function loadGA() {
     // eslint-disable-next-line prefer-rest-params
     window.dataLayer!.push(arguments);
   };
+
+  // 1) Denied defaults, before everything else.
+  window.gtag("consent", "default", {
+    ad_storage: "denied",
+    ad_user_data: "denied",
+    ad_personalization: "denied",
+    analytics_storage: "denied",
+    wait_for_update: 500,
+  });
+
+  // 2) Apply a stored prior choice. Only analytics_storage is relevant here —
+  //    there is no advertising, so the ad_* signals stay denied.
+  if (stored === "granted") {
+    window.gtag("consent", "update", { analytics_storage: "granted" });
+  }
+
+  // 3) Load the script and configure. We emit page_view ourselves on route
+  //    change, so the automatic one is off (avoids SPA double-counting).
+  const s = document.createElement("script");
+  s.async = true;
+  s.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+  document.head.appendChild(s);
   window.gtag("js", new Date());
-  // We emit page_view ourselves on every route change (incl. the first), so the
-  // built-in one is turned off — otherwise SPA navigations double-count.
   window.gtag("config", GA_ID, { send_page_view: false });
 }
-function disableGA() {
-  if (GA_ID) (window as unknown as Record<string, boolean>)[`ga-disable-${GA_ID}`] = true;
+
+function updateConsent(granted: boolean) {
+  if (!GA_ID || typeof window.gtag !== "function") return;
+  window.gtag("consent", "update", {
+    analytics_storage: granted ? "granted" : "denied",
+  });
 }
+
+// Pageview for EVERY visitor: a cookieless ping when denied, a full hit when
+// granted. Consent Mode governs what may be stored, not whether we send.
 function sendPageView() {
-  if (!GA_ID || !window.gtag) return;
+  if (!GA_ID || typeof window.gtag !== "function") return;
   window.gtag("event", "page_view", {
     page_path: window.location.pathname,
     page_location: window.location.href,
@@ -78,26 +108,27 @@ function sendPageView() {
 }
 
 export default function Consent() {
-  // null = not yet read (SSR/first paint); "none" = read, no stored choice.
+  // null = not yet read (first paint); "none" = read, no stored choice.
   const [choice, setChoice] = useState<Choice | "none" | null>(null);
   const pathname = usePathname();
 
-  // Init once on mount: reflect the stored choice and gate GA accordingly.
+  // Init once on mount: reflect the stored choice and load GA (always) with
+  // denied defaults + any stored grant. Declared FIRST so window.gtag exists
+  // before the pageview effect below runs.
   useEffect(() => {
     const c = readChoice();
     reflect(c);
-    // localStorage is unreadable during SSR, so the stored choice can only be
-    // applied here after mount — the whole point of gating the banner client-side.
+    // localStorage is unreadable during SSR, so the banner gate is applied here.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setChoice(c ?? "none");
-    if (c === "granted") loadGA();
-    else if (c === "denied") disableGA();
+    loadGA(c);
   }, []);
 
-  // Client-side pageviews on route change (only when GA is actually running).
+  // Pageviews on every route change (and the initial load). Fires for all
+  // visitors; storage is gated by Consent Mode.
   useEffect(() => {
-    if (choice === "granted") sendPageView();
-  }, [pathname, choice]);
+    sendPageView();
+  }, [pathname]);
 
   // Delegated withdrawal: any [data-pm-withdraw] element in the footer.
   useEffect(() => {
@@ -115,14 +146,15 @@ export default function Consent() {
     saveChoice("granted");
     reflect("granted");
     setChoice("granted");
-    loadGA();
+    updateConsent(true);
   }, []);
 
   const decline = useCallback(() => {
     saveChoice("denied");
     reflect("denied");
     setChoice("denied");
-    disableGA();
+    // No consent update needed — defaults are already denied. GA keeps running
+    // in cookieless-ping mode.
   }, []);
 
   // Banner only renders client-side, only when no choice has been stored.
@@ -130,13 +162,14 @@ export default function Consent() {
   return <Banner onAccept={accept} onDecline={decline} />;
 }
 
-// Persist the denial, disable GA, wipe GA cookies, and confirm inline on the
-// footer link(s). The <html> attribute is deliberately left as "granted" for the
-// rest of this session so the "Analytics consent withdrawn" text stays visible;
-// on the next load the stored "denied" hides the slot.
+// Revoke: persist the denial, update Consent Mode back to denied, wipe GA
+// cookies, and confirm inline on the footer link(s). The <html> attribute is
+// deliberately left as "granted" for the rest of this session so the "Analytics
+// consent withdrawn" text stays visible; the stored "denied" hides it next load.
+// GA reverts to cookieless-ping mode rather than stopping entirely.
 function withdraw() {
   saveChoice("denied");
-  disableGA();
+  updateConsent(false);
   document.cookie.split(";").forEach((c) => {
     const name = c.split("=")[0].trim();
     if (name.startsWith("_ga") || name.startsWith("_gid")) {
@@ -158,9 +191,9 @@ function Banner({ onAccept, onDecline }: { onAccept: () => void; onDecline: () =
     <div
       role="dialog"
       aria-label="Cookie consent"
-      // z-index sits above page content and the sticky nav but BELOW the mobile
-      // menu modal (backdrop z-60), so opening the hamburger covers the banner
-      // rather than colliding with it.
+      // Above page content and the sticky nav, but BELOW the mobile menu modal
+      // (backdrop z-60), so opening the hamburger covers the banner rather than
+      // colliding with it.
       style={{
         position: "fixed",
         left: 16,

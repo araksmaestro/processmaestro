@@ -21,6 +21,13 @@ export const SITE = {
     "AI automation",
   ],
   founder: "Vasken",
+  // Full name for the founder Person JSON-LD (the visible page uses the first
+  // name; the LinkedIn sameAs disambiguates the entity).
+  founderFullName: "Vasken Bakalian",
+  // Plain-text bio for the Person `description` — kept in sync with the visible
+  // "Hi, I'm Vasken" bio's opening paragraph in components/home/Founder.tsx.
+  founderBio:
+    "17 years in tech — developer, team lead, product manager, and founder of a software shop. After deep-diving into every corner of building software, I found my calling in workflow design and process automation.",
   email: "vasken@processmaestro.co",
   phone: "+374 55 023420",
   // Founder's LinkedIn (same profile linked in the footer) — used as `sameAs`

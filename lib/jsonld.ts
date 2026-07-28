@@ -9,8 +9,10 @@ import { SITE, SITE_URL } from "@/lib/site";
 import { expertise } from "@/content/home";
 import type { Testimonial } from "@/lib/adapters/testimonials";
 
-const ORG_ID = `${SITE_URL}/#organization`;
-const PERSON_ID = `${SITE_URL}/#founder`;
+// Stable global entity ids so other pages (e.g. the case-study Article) can
+// reference the same Organization/Person by @id instead of minting duplicates.
+export const ORG_ID = `${SITE_URL}/#organization`;
+export const PERSON_ID = `${SITE_URL}/#founder`;
 const LOGO = `${SITE_URL}${SITE.ogImage}`;
 
 function organizationNode() {
@@ -35,8 +37,9 @@ function founderNode() {
   return {
     "@type": "Person",
     "@id": PERSON_ID,
-    name: SITE.founder,
+    name: SITE.founderFullName,
     jobTitle: "Founder & CEO",
+    description: SITE.founderBio,
     worksFor: { "@id": ORG_ID },
     sameAs: [SITE.linkedin],
   };

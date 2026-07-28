@@ -116,7 +116,10 @@ export async function getRecord<T = Record<string, unknown>>(
  * Returns the raw fetch Response so the proxy route can stream the body.
  */
 export async function fetchFile(handle: string): Promise<Response> {
-  const res = await fetch(
+  // Same retry policy as record reads: a transient 429/5xx on a file fetch would
+  // otherwise surface as a broken image (the proxy returns 404), which is the very
+  // failure class the resilience pass set out to eliminate.
+  const res = await fetchWithRetry(
     `${BASE_URL}/shared-files/${encodeURIComponent(handle)}/get_url/`,
     { headers: buildHeaders(), cache: "no-store" }
   );
@@ -128,7 +131,7 @@ export async function fetchFile(handle: string): Promise<Response> {
     const data = (await res.json()) as { url?: string } | string;
     const url = typeof data === "string" ? data : data.url;
     if (!url) throw new Error(`get_url ${handle} returned no url`);
-    const fileRes = await fetch(url, { cache: "no-store" });
+    const fileRes = await fetchWithRetry(url, { cache: "no-store" });
     if (!fileRes.ok) throw new Error(`file fetch ${handle} → ${fileRes.status}`);
     return fileRes;
   }

@@ -98,6 +98,10 @@ function TestiCard({
   return (
     <figure
       className="pm-testi-card"
+      // The whole card opens the modal (mouse affordance). A real drag is
+      // suppressed by the scroller's onClickCapture, so this only fires on a
+      // genuine click. The inner button remains the keyboard/AT control.
+      onClick={onOpen}
       // Clones exist only for the seamless client-side loop; hide them from
       // assistive tech and the tab order so each testimonial is announced once.
       aria-hidden={clone || undefined}

@@ -522,6 +522,11 @@ body {
   flex: none;
   width: 360px;
   scroll-snap-align: start;
+  cursor: pointer; /* whole card opens the testimonial modal */
+}
+/* While actively dragging the carousel, show the drag cursor over cards too. */
+.pm-testi-scroller.pm-dragging .pm-testi-card {
+  cursor: grabbing;
 }
 .pm-testi-arrow {
   position: absolute;

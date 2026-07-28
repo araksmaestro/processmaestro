@@ -57,11 +57,11 @@ export default async function CaseStudiesPage() {
     <>
       <Nav variant="dark" active="case-studies" />
 
-      <main style={{ background: "var(--pm-purple-2)", color: "#fff", overflowX: "hidden" }}>
+      <main style={{ background: "#F7F5FB", color: "var(--pm-ink-1)", overflowX: "hidden" }}>
         {/* ===== Hero ===== */}
         <section
           aria-labelledby="cs-hero-heading"
-          style={{ position: "relative", background: HERO_BG, overflow: "hidden" }}
+          style={{ position: "relative", background: HERO_BG, overflow: "hidden", color: "#fff" }}
         >
           <div
             aria-hidden="true"
@@ -110,31 +110,31 @@ export default async function CaseStudiesPage() {
         </section>
 
         {/* ===== Case grid ===== */}
-        <section aria-labelledby="cs-grid-heading" style={{ background: "var(--pm-purple-2)" }}>
+        <section aria-labelledby="cs-grid-heading" style={{ background: "#F7F5FB" }}>
           {/* sr-only H2 so the outline is H1 → H2 → H3 (card titles) without
               adding a visible heading the design doesn't have. */}
           <h2 id="cs-grid-heading" className="sr-only">
             Featured case studies
           </h2>
+          {/* Cards sit directly on the light section (no elevated panel), so the
+              padding that used to live on the panel now lives on this container. */}
           <div className="cs-grid-pad">
-            <div className="cs-panel">
-              <div
-                className="pm-cards"
-                style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 28 }}
-              >
-                {cards.map((cs) => (
-                  <CaseCard
-                    key={cs.slug || cs.title}
-                    href={cs.href}
-                    cover={cs.cover}
-                    category={cs.category}
-                    location={cs.location}
-                    title={cs.title}
-                    summary={cs.summary}
-                    results={cs.results}
-                  />
-                ))}
-              </div>
+            <div
+              className="pm-cards"
+              style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 28 }}
+            >
+              {cards.map((cs) => (
+                <CaseCard
+                  key={cs.slug || cs.title}
+                  href={cs.href}
+                  cover={cs.cover}
+                  category={cs.category}
+                  location={cs.location}
+                  title={cs.title}
+                  summary={cs.summary}
+                  results={cs.results}
+                />
+              ))}
             </div>
           </div>
         </section>

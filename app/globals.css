@@ -314,6 +314,8 @@ body {
 .pm-header--dark {
   background: rgba(42, 20, 64, 0.82);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  /* Explicit: the page root is now light, so the dark header can't inherit white. */
+  color: #fff;
 }
 .pm-header--dark .pm-logo-img {
   filter: brightness(0) invert(1);
@@ -842,13 +844,7 @@ body {
 .cs-grid-pad {
   max-width: 1240px;
   margin: 0 auto;
-  padding: 0 24px 90px;
-}
-.cs-panel {
-  background: var(--pm-purple-3);
-  border-radius: 28px;
-  padding: 56px 48px;
-  box-shadow: 0 30px 70px rgba(20, 8, 40, 0.45);
+  padding: 84px 24px 92px;
 }
 .cs-cta-inner {
   max-width: 1000px;
@@ -876,10 +872,7 @@ body {
     font-size: 17px;
   }
   .cs-grid-pad {
-    padding: 0 16px 64px;
-  }
-  .cs-panel {
-    padding: 36px 20px;
+    padding: 56px 16px 64px;
   }
   .cs-cta-inner {
     padding: 48px 20px;

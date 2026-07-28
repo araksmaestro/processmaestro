@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
+import { PHASE_PRODUCTION_BUILD } from "next/constants";
 import Nav from "@/components/home/Nav";
 import Footer from "@/components/home/Footer";
 import CaseCard from "@/components/CaseCard";
 import BookingButton from "@/components/BookingButton";
-import { getCaseStudies } from "@/lib/adapters/case-studies";
+import { getCaseStudies, type CaseStudyCard } from "@/lib/adapters/case-studies";
 
 // Cover URLs are served through the same-origin /api/ss-file proxy (stable
-// paths), so ISR is safe; revalidate so publish/featured changes appear.
-export const revalidate = 30;
+// paths), so ISR is safe. 5-minute revalidate: publish/featured edits appear
+// within ~5 min while keeping background SmartSuite reads to at most ~1 per
+// 5 min per fetch (deduped across all visitors), well under any rate limit.
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Case Studies",
@@ -34,8 +37,21 @@ const HEADLINE_GRADIENT = {
 } as const;
 
 export default async function CaseStudiesPage() {
-  // Live published case studies from SmartSuite only (no static fallback).
-  const cards = await getCaseStudies();
+  // Live published case studies from SmartSuite (no fabricated fallback).
+  // On a fetch failure at runtime we RETHROW so ISR keeps serving the last
+  // successfully-rendered page — the previously-shown cards, real data — rather
+  // than caching a blank one. At build there is no prior page to fall back to, so
+  // there we tolerate an empty result instead of failing the whole build.
+  let cards: CaseStudyCard[];
+  try {
+    cards = await getCaseStudies();
+  } catch (err) {
+    if (process.env.NEXT_PHASE === PHASE_PRODUCTION_BUILD) {
+      cards = [];
+    } else {
+      throw err;
+    }
+  }
 
   return (
     <>

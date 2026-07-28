@@ -8,7 +8,9 @@ import type { CaseMedia } from "@/content/case-studies";
 const CASE_STUDIES_TABLE = "6a464a1dc29d15c9caeec59c";
 const FEATURED_FIELD = "s03f4a8d8f";
 const STATUS_PUBLISHED = "complete";
-const REVALIDATE = 30;
+// 5 min: case studies change rarely, so a longer TTL cuts SmartSuite reads ~10×
+// vs the old 30s while still surfacing edits within minutes.
+const REVALIDATE = 300;
 // SmartSuite Tools table has no icon field yet — default until one is added.
 const DEFAULT_TOOL_ICON = "🛠️";
 
@@ -157,8 +159,15 @@ export async function getCaseStudies(
 
     return opts.limit ? cards.slice(0, opts.limit) : cards;
   } catch (err) {
+    // Log the real failure (the status/message shows in Vercel Runtime Logs),
+    // then RETHROW. A genuinely empty result set (0 published records) returns []
+    // above and never reaches here — so this only fires on an actual fetch error.
+    // Rethrowing lets ISR keep serving the last successfully-rendered page (the
+    // previously-shown cards — real data, never fabricated) instead of caching an
+    // empty one. The /case-studies list lets this propagate; the homepage section
+    // catches it and degrades to an empty section.
     console.error("[case-studies] SmartSuite fetch failed:", err);
-    return [];
+    throw err instanceof Error ? err : new Error(String(err));
   }
 }
 

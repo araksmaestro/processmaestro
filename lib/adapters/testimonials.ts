@@ -8,7 +8,8 @@ const ORGS_TABLE = "64ceb00a3dd12a0e8b9c920e";
 const SECTION_FIELD = "s7987685a8";
 const SECTION_TESTIMONIALS = "KwWGD"; // "Testimonials" option value code
 const STATUS_PUBLISH = "complete"; // "Publish" status value (is_complete)
-const REVALIDATE = 30;
+// 5 min: testimonials change rarely; longer TTL keeps SmartSuite reads low.
+const REVALIDATE = 300;
 
 export type Testimonial = {
   id: string;

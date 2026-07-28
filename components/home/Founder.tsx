@@ -41,7 +41,7 @@ export default function Founder() {
             }}
           >
             <Image
-              src="/founder_vasken.png"
+              src="/founder_vasken.jpg"
               alt="Vasken, founder of Process Maestro"
               fill
               sizes="(max-width: 960px) 90vw, 400px"

@@ -3,7 +3,8 @@ import { SITE_URL } from "@/lib/site";
 import { getCaseStudySlugs } from "@/lib/adapters/case-studies";
 
 // Keep the sitemap fresh as case studies are published/unpublished in SmartSuite.
-export const revalidate = 30;
+// 5 min: shares the published-records fetch cache with the case pages.
+export const revalidate = 300;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Indexable routes only. /thanks is intentionally excluded (noindex).

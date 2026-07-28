@@ -1,14 +1,19 @@
 import Link from "next/link";
 import CaseCard from "@/components/CaseCard";
-import { getCaseStudies } from "@/lib/adapters/case-studies";
+import { getCaseStudies, type CaseStudyCard } from "@/lib/adapters/case-studies";
 
 export default async function CaseStudies() {
   // Live featured, published case studies from SmartSuite (same shared adapter as
-  // the list page). NO static fallback: a broken fetch must surface as an empty
-  // section plus a server-side error log (the adapter logs the real failure and
-  // returns []), never fabricated cards with dead links. Every card's href is
-  // derived from the SmartSuite Slug, so it resolves to a real detail route.
-  const cases = await getCaseStudies({ featuredOnly: true, limit: 3 });
+  // the list page). NO fabricated fallback. Unlike the /case-studies list (which
+  // rethrows so ISR keeps its last-good page), this is one section of a larger
+  // page, so a fetch failure degrades to an empty section — never fake cards, and
+  // never taking down the rest of the homepage. The adapter logs the real failure.
+  let cases: CaseStudyCard[] = [];
+  try {
+    cases = await getCaseStudies({ featuredOnly: true, limit: 3 });
+  } catch {
+    cases = [];
+  }
 
   // Keep the 3-up desktop layout identical; center 1–2 cards so the grid reads cleanly.
   const gridColumns =

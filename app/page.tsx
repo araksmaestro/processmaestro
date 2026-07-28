@@ -13,7 +13,8 @@ import { getTestimonials } from "@/lib/adapters/testimonials";
 import { homepageJsonLd } from "@/lib/jsonld";
 
 // Revalidate periodically so SmartSuite content changes appear without a redeploy.
-export const revalidate = 30;
+// 5 min balances freshness against background SmartSuite read volume.
+export const revalidate = 300;
 
 export default async function Home() {
   const testimonials = await getTestimonials();

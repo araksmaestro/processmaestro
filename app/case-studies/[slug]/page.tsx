@@ -10,7 +10,8 @@ import { SITE, SITE_URL } from "@/lib/site";
 import { caseBreadcrumbJsonLd } from "@/lib/jsonld";
 
 // Revalidate so newly published / edited case studies appear without a redeploy.
-export const revalidate = 30;
+// 5 min: same shared fetch as the list, so this adds no extra SmartSuite reads.
+export const revalidate = 300;
 
 export async function generateStaticParams() {
   return (await getCaseStudySlugs()).map((slug) => ({ slug }));

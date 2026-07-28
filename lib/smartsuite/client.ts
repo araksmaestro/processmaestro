@@ -21,6 +21,44 @@ function buildHeaders(): HeadersInit {
   };
 }
 
+// Transient statuses worth retrying: rate-limit + gateway/service errors.
+const RETRYABLE_STATUS = new Set([429, 500, 502, 503, 504]);
+const MAX_ATTEMPTS = 3;
+
+/**
+ * fetch with bounded retry + exponential backoff for transient failures (429,
+ * 5xx, and network errors/timeouts). A non-retryable non-2xx (e.g. 401/404) is
+ * returned as-is for the caller to handle. Retry-After is honoured on 429.
+ * Keeps a single flaky read from blanking a page — the caller still sees a
+ * successful Response most of the time.
+ */
+async function fetchWithRetry(url: string, init: RequestInit): Promise<Response> {
+  let lastError: unknown;
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    try {
+      const res = await fetch(url, init);
+      if (res.ok || !RETRYABLE_STATUS.has(res.status)) return res;
+      lastError = new Error(`${res.status} ${res.statusText}`);
+      if (attempt < MAX_ATTEMPTS) {
+        const retryAfter = Number(res.headers.get("retry-after"));
+        const backoff = 300 * 2 ** (attempt - 1) + Math.floor(Math.random() * 150);
+        await sleep(retryAfter > 0 ? Math.min(retryAfter * 1000, 4000) : backoff);
+      }
+    } catch (err) {
+      // Network error / timeout — retry.
+      lastError = err;
+      if (attempt < MAX_ATTEMPTS) {
+        await sleep(300 * 2 ** (attempt - 1) + Math.floor(Math.random() * 150));
+      }
+    }
+  }
+  throw lastError instanceof Error ? lastError : new Error(String(lastError));
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 /** POST the records/list endpoint for a table. */
 export async function listRecords<T = Record<string, unknown>>(
   tableId: string,
@@ -28,7 +66,7 @@ export async function listRecords<T = Record<string, unknown>>(
   revalidateSeconds = 300
 ): Promise<ListResponse<T>> {
   try {
-    const res = await fetch(`${BASE_URL}/applications/${tableId}/records/list/`, {
+    const res = await fetchWithRetry(`${BASE_URL}/applications/${tableId}/records/list/`, {
       method: "POST",
       headers: buildHeaders(),
       body: JSON.stringify(body),
@@ -56,7 +94,7 @@ export async function getRecord<T = Record<string, unknown>>(
   revalidateSeconds = 300
 ): Promise<T> {
   try {
-    const res = await fetch(
+    const res = await fetchWithRetry(
       `${BASE_URL}/applications/${tableId}/records/${recordId}/`,
       { headers: buildHeaders(), next: { revalidate: revalidateSeconds } }
     );

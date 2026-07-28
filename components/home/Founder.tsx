@@ -4,7 +4,6 @@ import Image from "next/image";
  * TODO (copy): These founder paragraphs are placeholder copy transcribed from the
  * design handoff. Confirm the final wording — and the exact years of experience
  * (handoff says "17 years"; the build brief referenced ~15) — with the client.
- * TODO (asset): Swap `/founder-placeholder.svg` for Vasken's real headshot once supplied.
  */
 export default function Founder() {
   return (
@@ -42,10 +41,9 @@ export default function Founder() {
             }}
           >
             <Image
-              src="/founder-placeholder.svg"
+              src="/founder_vasken.jpg"
               alt="Vasken, founder of Process Maestro"
               fill
-              unoptimized
               sizes="(max-width: 960px) 90vw, 400px"
               style={{ objectFit: "cover" }}
             />

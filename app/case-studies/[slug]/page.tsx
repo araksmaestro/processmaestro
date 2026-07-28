@@ -7,7 +7,7 @@ import CaseMediaSlider from "@/components/case-studies/CaseMediaSlider";
 import BookingButton from "@/components/BookingButton";
 import { getCaseStudy, getCaseStudySlugs } from "@/lib/adapters/case-studies";
 import { SITE, SITE_URL } from "@/lib/site";
-import { caseBreadcrumbJsonLd } from "@/lib/jsonld";
+import { caseBreadcrumbJsonLd, ORG_ID } from "@/lib/jsonld";
 
 // Revalidate so newly published / edited case studies appear without a redeploy.
 // 5 min: same shared fetch as the list, so this adds no extra SmartSuite reads.
@@ -178,8 +178,11 @@ export default async function CaseStudyDetailPage({
     description: c.subhead,
     image: c.media[0]?.src ? `${SITE_URL}${c.media[0].src}` : `${SITE_URL}/pm-logo.png`,
     ...(c.category ? { articleSection: c.category } : null),
-    author: { "@type": "Organization", name: SITE.name, url: SITE_URL },
+    // Reference the same Organization entity defined on the homepage by @id
+    // rather than minting a separate, duplicate org node.
+    author: { "@id": ORG_ID, "@type": "Organization", name: SITE.name, url: SITE_URL },
     publisher: {
+      "@id": ORG_ID,
       "@type": "Organization",
       name: SITE.name,
       logo: { "@type": "ImageObject", url: `${SITE_URL}/pm-logo.png` },

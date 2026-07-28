@@ -167,7 +167,7 @@ export default function Footer() {
           color: "var(--pm-on-dark-muted-3)",
         }}
       >
-        <span>© 2026 Process Maestro. All rights reserved.</span>
+        <span>© {new Date().getFullYear()} Process Maestro. All rights reserved.</span>
         <span aria-hidden="true" style={{ opacity: 0.5 }}>
           •
         </span>

@@ -1,10 +1,9 @@
 // Adapter: maps SmartSuite Testimonials records to the shape the section needs.
 // The frontend imports THIS, never the SmartSuite client directly.
-import { listRecords, getRecord } from "@/lib/smartsuite/client";
-import type { TestimonialRecord, NamedRecord } from "@/lib/smartsuite/types";
+import { listRecords } from "@/lib/smartsuite/client";
+import type { TestimonialRecord } from "@/lib/smartsuite/types";
 
 const TESTIMONIALS_TABLE = "6a4b8d0431a2c6ad0fe4e42f";
-const ORGS_TABLE = "64ceb00a3dd12a0e8b9c920e";
 const SECTION_FIELD = "s7987685a8";
 const SECTION_TESTIMONIALS = "KwWGD"; // "Testimonials" option value code
 const STATUS_PUBLISH = "complete"; // "Publish" status value (is_complete)
@@ -25,22 +24,45 @@ export type Testimonial = {
 // is everything before the trailing " - ". Reading it straight from the title
 // avoids a per-contact getRecord that can rate-limit (429) and silently blank
 // the name — which is exactly what was dropping names on some cards.
+// A multi-select value is present. With `hydrated: true` the section field comes
+// back as { label, value } objects; a raw read returns bare value codes. Accept
+// either shape so hydration can't silently empty the safety-net filter.
+function hasSection(field: unknown, value: string): boolean {
+  return (
+    Array.isArray(field) &&
+    field.some(
+      (v) =>
+        v === value ||
+        (!!v && typeof v === "object" && (v as { value?: unknown }).value === value)
+    )
+  );
+}
+
 function nameFromTitle(rec: TestimonialRecord): string {
   const title = typeof rec.title === "string" ? rec.title : "";
   return title.split(/\s+-\s*/)[0].trim();
 }
 
-function orgIdOf(rec: TestimonialRecord): string | undefined {
-  const flat = Array.isArray(rec.s839847d0a)
-    ? (rec.s839847d0a as unknown[]).flat(Infinity)
-    : [];
-  const first = flat[0];
-  return typeof first === "string" ? first : undefined;
+// Company name. With `hydrated: true` the org link rides along already resolved
+// as [[[{ id, title }]]] (title = company), so we read it straight off the single
+// listRecords call — no per-org getRecord that can rate-limit (429) and silently
+// blank the company. This mirrors how the case-studies adapter reads its country.
+function companyOf(rec: TestimonialRecord): string {
+  const field = rec.s839847d0a;
+  if (!Array.isArray(field)) return "";
+  const linked = (field as unknown[])
+    .flat(Infinity)
+    .find(
+      (v): v is { title?: unknown } =>
+        !!v && typeof v === "object" && "title" in v
+    );
+  return linked && typeof linked.title === "string" ? linked.title : "";
 }
 
 function positionOf(rec: TestimonialRecord): string {
   const v = rec.sc53e5a510;
-  return (Array.isArray(v) && Array.isArray(v[0]) ? v[0][0] : undefined) ?? "";
+  const first = Array.isArray(v) && Array.isArray(v[0]) ? v[0][0] : undefined;
+  return typeof first === "string" ? first : "";
 }
 
 // The Contact-photo lookup (s883fae9a9) returns the linked contact's image file
@@ -57,23 +79,6 @@ function avatarUrlOf(rec: TestimonialRecord): string | undefined {
         !!f && typeof f === "object" && typeof (f as { handle?: unknown }).handle === "string"
     );
   return file ? `/api/ss-file/${file.handle}` : undefined;
-}
-
-// Resolve linked-record ids to their `title` via per-id GET (deduped, in
-// parallel). SmartSuite rejects filtering by `id`, so we can't batch these.
-async function resolveNames(tableId: string, ids: string[]): Promise<Map<string, string>> {
-  const map = new Map<string, string>();
-  await Promise.all(
-    [...new Set(ids)].map(async (id) => {
-      try {
-        const rec = await getRecord<NamedRecord>(tableId, id, REVALIDATE);
-        if (rec?.title) map.set(id, rec.title);
-      } catch {
-        // Leave unresolved → name/company falls back to "".
-      }
-    })
-  );
-  return map;
 }
 
 /**
@@ -94,34 +99,28 @@ export async function getTestimonials(): Promise<Testimonial[]> {
         ],
       },
       sort: [{ field: "autonumber", direction: "asc" }],
+      // Hydrate so the org link resolves to its title (company) inline — no
+      // follow-up per-org getRecord calls.
+      hydrated: true,
     };
 
     const { items } = await listRecords<TestimonialRecord>(TESTIMONIALS_TABLE, body, REVALIDATE);
 
     // Safety net: only tagged AND published records, even if the server filter changes.
     const tagged = items.filter(
-      (r) =>
-        Array.isArray(r.s7987685a8) &&
-        r.s7987685a8.includes(SECTION_TESTIMONIALS) &&
-        r.status?.value === STATUS_PUBLISH
+      (r) => hasSection(r.s7987685a8, SECTION_TESTIMONIALS) && r.status?.value === STATUS_PUBLISH
     );
 
-    // Name comes from the title (no network call). Only the company still needs
-    // resolving — via the org lookup ids.
-    const orgIds = tagged.map(orgIdOf).filter((x): x is string => Boolean(x));
-    const orgMap = await resolveNames(ORGS_TABLE, orgIds);
-
-    return tagged.map((rec): Testimonial => {
-      const oId = orgIdOf(rec);
-      return {
-        id: rec.id,
-        quote: typeof rec.se807231b4 === "string" ? rec.se807231b4 : "",
-        name: nameFromTitle(rec),
-        position: positionOf(rec),
-        company: (oId && orgMap.get(oId)) || "",
-        avatar: avatarUrlOf(rec),
-      };
-    });
+    // Everything — name (title), company (hydrated org link), position, avatar —
+    // now comes from this single listRecords call; no extra network round-trips.
+    return tagged.map((rec): Testimonial => ({
+      id: rec.id,
+      quote: typeof rec.se807231b4 === "string" ? rec.se807231b4 : "",
+      name: nameFromTitle(rec),
+      position: positionOf(rec),
+      company: companyOf(rec),
+      avatar: avatarUrlOf(rec),
+    }));
   } catch (err) {
     console.error("[testimonials] SmartSuite fetch failed:", err);
     return [];

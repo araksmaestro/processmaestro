@@ -7,7 +7,7 @@ import { SITE_URL } from "@/lib/site";
 export const metadata: Metadata = {
   title: "How We Work",
   description:
-    "We solve the problem first, then choose the tools that fit. Process Maestro is a consulting-first, tool-agnostic team — deep in SmartSuite, Make.com, Claude Code and Xano, but never limited to them.",
+    "We solve the problem first, then choose the tools that fit. Process Maestro is a consulting-first, tool-agnostic team - deep in SmartSuite, Make.com, Claude Code and Xano, but never limited to them.",
   alternates: { canonical: "/how-we-work" },
   openGraph: {
     title: "How We Work | Process Maestro",
@@ -18,33 +18,23 @@ export const metadata: Metadata = {
   },
 };
 
-// Page-specific gradients (used once here).
-const HERO_BG =
-  "radial-gradient(120% 130% at 50% 0%, #5c2f86 0%, #3a1e5c 55%, #2a1440 100%)";
-const HEADLINE_GRADIENT = {
-  background: "linear-gradient(100deg, #8CDC00 30%, #b9a9d1 100%)",
-  WebkitBackgroundClip: "text",
-  backgroundClip: "text",
-  color: "transparent",
-} as const;
-
 // The core stack: role + a credential/tag line. `partner` renders the "Official
-// Partner" pill (the natural home for the SmartSuite + Make.com badges — swap the
+// Partner" pill (the natural home for the SmartSuite + Make.com badges - swap the
 // text pill for the badge image once supplied).
 const STACK = [
   { name: "SmartSuite", role: "Ops data & workflows", tag: "Official Partner", partner: true },
-  { name: "Make.com", role: "Automation engine", tag: "Official Partner", partner: true },
+  { name: "Make.com", role: "Automation & integrations", tag: "Official Partner", partner: true },
   { name: "Claude Code", role: "Custom front-ends", tag: "AI-accelerated", partner: false },
   { name: "Xano", role: "Backend at scale", tag: "For big data", partner: false },
 ] as const;
 
-// The method is a real, ordered sequence (discovery → support), so the numbering
+// The method is a real, ordered sequence (discovery to support), so the numbering
 // carries meaning rather than decoration.
 const STEPS = [
   {
     n: "01",
     title: "Discover",
-    desc: "Focused sessions to learn how your business actually runs — the real workflow, not the org-chart version.",
+    desc: "Focused sessions to learn how your business actually runs - the real workflow, not the org-chart version.",
   },
   {
     n: "02",
@@ -54,7 +44,7 @@ const STEPS = [
   {
     n: "03",
     title: "Choose the right tools",
-    desc: "Only now do we pick the stack — SmartSuite, Make.com, Xano, a custom build — based on your data, budget and team. Never a default.",
+    desc: "Only now do we pick the stack - SmartSuite, Make.com, Xano, a custom build - based on your data, budget and team. Never a default.",
   },
   {
     n: "04",
@@ -69,8 +59,17 @@ const STEPS = [
   {
     n: "06",
     title: "Support & scale",
-    desc: "We stay with you as you grow — and we'll tell you honestly when it's time to move up, like SmartSuite to Xano for bigger data.",
+    desc: "We stay with you as you grow - and we'll tell you honestly when it's time to move up, like SmartSuite to Xano for bigger data.",
   },
+] as const;
+
+// Hero convergence: the capabilities that combine into working systems.
+const NODES = [
+  "Workflow design",
+  "Data structure",
+  "Custom front-end",
+  "Process automation",
+  "Integrations",
 ] as const;
 
 const breadcrumbLd = {
@@ -93,271 +92,182 @@ export default function HowWeWorkPage() {
 
       <main style={{ background: "var(--pm-bg)", color: "var(--pm-ink-1)", overflowX: "hidden" }}>
         {/* ===== Hero ===== */}
-        <section
-          aria-labelledby="hww-hero-heading"
-          style={{ position: "relative", background: HERO_BG, overflow: "hidden", color: "#fff" }}
-        >
-          <div
-            aria-hidden="true"
-            style={{
-              position: "absolute",
-              inset: 0,
-              backgroundImage:
-                "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0)",
-              backgroundSize: "26px 26px",
-            }}
-          />
-          <div className="hww-hero pm-pad">
-            <div
-              className="pm-eyebrow"
-              style={{ color: "var(--pm-lime-light)", marginBottom: 18 }}
-            >
-              How we work
-            </div>
-            <h1
-              id="hww-hero-heading"
-              className="pm-display"
-              style={{
-                fontWeight: 800,
-                fontSize: 46,
-                lineHeight: 1.05,
-                letterSpacing: "-0.02em",
-                margin: "0 0 20px",
-              }}
-            >
-              Right <span style={HEADLINE_GRADIENT}>solution</span> first.
-              <br />
-              Tools second.
-            </h1>
-            <p
-              style={{
-                fontSize: 19,
-                lineHeight: 1.6,
-                color: "var(--pm-on-dark-4)",
-                maxWidth: 620,
-                margin: "0 auto",
-              }}
-            >
-              Process Maestro is an outcomes team, not a tool vendor. We diagnose
-              the real problem, then choose — and build with — whatever fits. We go
-              deep in a core stack, and we&apos;re never limited to it.
-            </p>
-          </div>
-        </section>
-
-        {/* ===== Consulting-first + the stack ===== */}
-        <section aria-labelledby="hww-stack-heading" style={{ background: "var(--pm-bg)" }}>
-          <div className="hww-pad" style={{ padding: "84px 32px 20px" }}>
-            <div
-              style={{
-                background: "var(--pm-purple-primary)",
-                borderRadius: 18,
-                padding: "26px 30px",
-                boxShadow: "0 16px 40px rgba(42,20,64,0.16)",
-              }}
-            >
-              <div
-                className="pm-eyebrow"
-                style={{ color: "var(--pm-lime-light)", marginBottom: 8 }}
-              >
-                The #1 thing · quality consulting
+        <header className="hww-hero" aria-labelledby="hww-hero-heading">
+          <div className="hww-hero-grid">
+            <div>
+              <div className="pm-eyebrow hww-anim hww-d1" style={{ color: "var(--pm-lime-light)" }}>
+                How we work
               </div>
-              <div
-                className="pm-display"
-                style={{ fontWeight: 700, fontSize: 24, lineHeight: 1.25, color: "#fff" }}
-              >
-                We solve the problem first — then choose the tools that fit.
+              <h1 id="hww-hero-heading" className="pm-display hww-h1 hww-anim hww-d2">
+                Right <span className="hww-lime">solution</span> first.
+                <br />
+                Tools second.
+              </h1>
+              <p className="hww-hero-sub hww-anim hww-d3">
+                Process Maestro is an outcomes team, not a tool vendor. We diagnose
+                the real problem, then choose and build with whatever fits. Deep in
+                a core stack, never limited to it.
+              </p>
+              <div className="hww-anim hww-d4" style={{ marginTop: 34 }}>
+                <BookingButton
+                  label="Book a consultation →"
+                  slot="hero"
+                  service="general"
+                  variant="dark"
+                  className="pm-display"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 10,
+                    background: "var(--pm-lime)",
+                    color: "#20330a",
+                    fontWeight: 700,
+                    fontSize: 16,
+                    textDecoration: "none",
+                    padding: "15px 26px",
+                    borderRadius: 12,
+                    boxShadow: "0 12px 30px rgba(140,220,0,0.28)",
+                  }}
+                />
               </div>
             </div>
-          </div>
 
-          <div className="hww-pad" style={{ padding: "24px 32px 0" }}>
-            <h2 id="hww-stack-heading" className="sr-only">
-              Our core stack
-            </h2>
-            <div
-              className="pm-eyebrow"
-              style={{ color: "var(--pm-muted-1)", marginBottom: 16 }}
+            {/* Convergence motif: four capabilities -> one working system. */}
+            <svg
+              className="hww-converge hww-anim hww-d3"
+              viewBox="0 0 400 304"
+              role="img"
+              aria-label="Five capabilities - workflow design, data structure, custom front-end, process automation and integrations - converge into apps that run themselves."
             >
-              Our core stack
+              {NODES.map((label, i) => {
+                const y = 20 + i * 56;
+                const cy = y + 20;
+                return (
+                  <g key={label}>
+                    <rect className="n" x="6" y={y} width="176" height="40" rx="9" />
+                    <text className="nt" x="20" y={cy + 4.5}>
+                      {label}
+                    </text>
+                    <path className="wire" d={`M182,${cy} C242,${cy} 255,152 300,152`} />
+                  </g>
+                );
+              })}
+              <circle className="pulse" cx="300" cy="152" r="7" fill="var(--pm-lime)" />
+              <rect className="out" x="306" y="122" width="88" height="60" rx="12" />
+              <text className="ot" x="350" y="148" textAnchor="middle" fontSize="12.5">
+                Apps that
+              </text>
+              <text className="ot" x="350" y="165" textAnchor="middle" fontSize="12.5">
+                run themselves
+              </text>
+            </svg>
+          </div>
+        </header>
+
+        {/* ===== #1 thing strip ===== */}
+        <div className="hww-strip">
+          <div className="hww-strip-in">
+            <div className="lbl">The&nbsp;#1&nbsp;thing · quality consulting</div>
+            <div className="stmt">
+              We solve the problem first - <b>then choose the tools that fit.</b>
+            </div>
+          </div>
+        </div>
+
+        {/* ===== Core stack ===== */}
+        <section aria-labelledby="hww-stack-heading">
+          <div className="hww-sec">
+            <div className="hww-sechead">
+              <div className="pm-eyebrow" style={{ color: "var(--pm-purple-soft, #8a63b8)" }}>
+                Our core stack
+              </div>
+              <h2 id="hww-stack-heading" className="pm-display">
+                Deep expertise in a few tools. Loyalty to none.
+              </h2>
             </div>
             <div className="hww-stack">
-              {STACK.map((t) => (
-                <div
-                  key={t.name}
-                  style={{
-                    background: "var(--pm-card-light)",
-                    border: "1px solid var(--pm-card-border)",
-                    borderRadius: 16,
-                    padding: 22,
-                  }}
-                >
-                  <div
-                    style={{
-                      width: 28,
-                      height: 4,
-                      borderRadius: 2,
-                      background: "var(--pm-lime)",
-                      marginBottom: 16,
-                    }}
-                  />
-                  <div
-                    className="pm-display"
-                    style={{ fontWeight: 700, fontSize: 19, color: "var(--pm-ink-1)" }}
-                  >
-                    {t.name}
-                  </div>
-                  <div style={{ fontSize: 14, color: "var(--pm-muted-1)", marginTop: 6 }}>
-                    {t.role}
-                  </div>
-                  <div style={{ marginTop: 14 }}>
-                    <span
-                      style={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: 6,
-                        fontSize: 12,
-                        fontWeight: 700,
-                        color: t.partner ? "var(--pm-purple-primary)" : "var(--pm-muted-1)",
-                        background: t.partner ? "rgba(140,220,0,0.14)" : "transparent",
-                        border: t.partner
-                          ? "1px solid rgba(140,220,0,0.35)"
-                          : "1px solid var(--pm-card-border)",
-                        borderRadius: 100,
-                        padding: "3px 10px",
-                      }}
-                    >
-                      {t.partner && (
-                        <span
-                          aria-hidden="true"
-                          style={{
-                            width: 6,
-                            height: 6,
-                            borderRadius: "50%",
-                            background: "var(--pm-lime)",
-                          }}
-                        />
-                      )}
-                      {t.tag}
-                    </span>
-                  </div>
+              {STACK.map((t, i) => (
+                <div className="hww-tool" key={t.name}>
+                  <div className="idx">{`0${i + 1}`}</div>
+                  <div className="nm">{t.name}</div>
+                  <div className="role">{t.role}</div>
+                  <span className={`hww-tag ${t.partner ? "partner" : "plain"}`}>
+                    {t.partner && <span className="dot" aria-hidden="true" />}
+                    {t.tag}
+                  </span>
                 </div>
               ))}
             </div>
-          </div>
-
-          {/* Never locked in */}
-          <div className="hww-pad" style={{ padding: "24px 32px 84px" }}>
-            <div
-              style={{
-                border: "1.5px dashed var(--pm-line-strong, #c9b7d9)",
-                borderRadius: 16,
-                padding: "22px 26px",
-                background: "var(--pm-bg)",
-              }}
-            >
-              <div
-                className="pm-display"
-                style={{ fontWeight: 700, fontSize: 18, color: "var(--pm-ink-1)", marginBottom: 6 }}
-              >
-                Never locked to one tool
-              </div>
-              <p style={{ margin: 0, fontSize: 15.5, lineHeight: 1.6, color: "var(--pm-ink-2)", maxWidth: 760 }}>
-                The core stack covers most needs. When your problem calls for
-                something else — Airtable, n8n, Softr, or fully custom code — that&apos;s
-                what we use. The right fit always beats a favorite tool.
-              </p>
+            <div className="hww-open">
+              <span className="lead">Never locked in</span>
+              <span className="chips">
+                <span>Airtable</span>
+                <span>n8n</span>
+                <span>Softr</span>
+                <span>WeWeb</span>
+                <span>custom code</span>
+              </span>
+              <span className="tail">- whatever the problem actually calls for.</span>
             </div>
           </div>
         </section>
 
-        {/* ===== The method ===== */}
-        <section
-          aria-labelledby="hww-method-heading"
-          style={{ background: "var(--pm-purple-2)", color: "#fff" }}
-        >
-          <div className="hww-pad" style={{ padding: "84px 32px" }}>
-            <div className="pm-eyebrow" style={{ color: "var(--pm-lime-light)", marginBottom: 14 }}>
-              Our method
+        {/* ===== Method ===== */}
+        <section className="hww-method" aria-labelledby="hww-method-heading">
+          <div className="hww-sec">
+            <div className="hww-sechead">
+              <div className="pm-eyebrow" style={{ color: "var(--pm-lime-light)" }}>
+                Our method
+              </div>
+              <h2 id="hww-method-heading" className="pm-display">
+                Six steps from problem to system
+              </h2>
+              <p className="hww-method-lead">
+                The tools change per project. The method doesn&apos;t - it&apos;s how we
+                make sure you get the right solution, not our favorite one.
+              </p>
             </div>
-            <h2
-              id="hww-method-heading"
-              className="pm-display"
-              style={{
-                fontWeight: 700,
-                fontSize: 36,
-                lineHeight: 1.1,
-                letterSpacing: "-0.02em",
-                margin: "0 0 12px",
-              }}
-            >
-              Six steps from problem to system
-            </h2>
-            <p style={{ fontSize: 18, lineHeight: 1.6, color: "var(--pm-on-dark-7)", maxWidth: 640, margin: "0 0 44px" }}>
-              The tools change per project. The method doesn&apos;t — it&apos;s how we make
-              sure you get the right solution, not our favorite one.
-            </p>
             <div className="hww-steps">
               {STEPS.map((s) => (
-                <div
-                  key={s.n}
-                  style={{
-                    background: "rgba(255,255,255,0.04)",
-                    border: "1px solid rgba(255,255,255,0.10)",
-                    borderRadius: 16,
-                    padding: 24,
-                  }}
-                >
-                  <div
-                    className="pm-display"
-                    style={{
-                      fontWeight: 800,
-                      fontSize: 15,
-                      color: "var(--pm-lime-light)",
-                      letterSpacing: "0.06em",
-                      marginBottom: 12,
-                    }}
-                  >
-                    {s.n}
+                <div className="hww-step" key={s.n}>
+                  <div className="no">{s.n}</div>
+                  <div>
+                    <p className="t pm-display">{s.title}</p>
+                    <p className="d">{s.desc}</p>
                   </div>
-                  <div
-                    className="pm-display"
-                    style={{ fontWeight: 700, fontSize: 20, color: "#fff", marginBottom: 8 }}
-                  >
-                    {s.title}
-                  </div>
-                  <p style={{ margin: 0, fontSize: 14.5, lineHeight: 1.6, color: "var(--pm-on-dark-2)" }}>
-                    {s.desc}
-                  </p>
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+
+        {/* ===== Manifesto ===== */}
+        <section className="hww-manifesto" aria-labelledby="hww-manifesto-heading">
+          <div className="hww-sec">
+            <div className="pm-eyebrow" style={{ color: "var(--pm-purple-soft, #8a63b8)" }}>
+              Why tool-agnostic wins
+            </div>
+            <p id="hww-manifesto-heading" className="hww-quote">
+              Most shops sell you their <span className="hww-lime">one tool.</span> We
+              tell you when yours isn&apos;t enough.
+            </p>
+            <p className="hww-msub">
+              That honesty is the whole point. The right architecture outlasts any
+              single platform, so we design for your outcome, then pick the tools
+              that get you there fastest and scale the longest.
+            </p>
           </div>
         </section>
 
         {/* ===== CTA band ===== */}
-        <section
-          aria-labelledby="hww-cta-heading"
-          style={{ background: "var(--pm-grad-cta)", color: "#22350a" }}
-        >
-          <div className="hww-cta-inner">
-            <div style={{ maxWidth: 600 }}>
-              <h2
-                id="hww-cta-heading"
-                className="pm-display"
-                style={{
-                  fontWeight: 700,
-                  fontSize: 36,
-                  lineHeight: 1.1,
-                  letterSpacing: "-0.02em",
-                  margin: "0 0 10px",
-                  color: "#1f2f08",
-                }}
-              >
+        <section className="hww-cta" aria-labelledby="hww-cta-heading">
+          <div className="hww-cta-in">
+            <div>
+              <h2 id="hww-cta-heading" className="pm-display">
                 Not sure which tools your business actually needs?
               </h2>
-              <p style={{ fontSize: 18, lineHeight: 1.55, color: "#33470f", margin: 0 }}>
-                Book a free 30-minute consult. We&apos;ll diagnose the problem first —
+              <p>
+                Book a free 30-minute consult. We&apos;ll diagnose the problem first -
                 and tell you honestly what it&apos;ll take.
               </p>
             </div>

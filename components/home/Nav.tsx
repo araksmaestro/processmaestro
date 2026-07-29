@@ -7,7 +7,7 @@ import { serviceNavItems } from "@/content/services";
 import BookingButton from "@/components/BookingButton";
 
 type NavVariant = "light" | "dark";
-type NavActive = "industries" | "case-studies" | "services";
+type NavActive = "industries" | "case-studies" | "how-we-work" | "services";
 
 export default function Nav({
   variant = "light",
@@ -123,6 +123,14 @@ export default function Nav({
             style={linkStyle(active === "case-studies")}
           >
             Case Studies
+          </Link>
+
+          <Link
+            href="/how-we-work"
+            aria-current={active === "how-we-work" ? "page" : undefined}
+            style={linkStyle(active === "how-we-work")}
+          >
+            How We Work
           </Link>
 
           {/* Services + dropdown — ships to every page, independent of the
@@ -241,6 +249,9 @@ export default function Nav({
               </a>
               <Link href="/case-studies" className="pm-mobile-link" onClick={close}>
                 Case Studies
+              </Link>
+              <Link href="/how-we-work" className="pm-mobile-link" onClick={close}>
+                How We Work
               </Link>
 
               {/* Services owns its three sub-items rather than listing them as siblings. */}

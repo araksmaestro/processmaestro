@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Nav from "@/components/home/Nav";
 import Footer from "@/components/home/Footer";
 import BookingButton from "@/components/BookingButton";
@@ -21,12 +22,25 @@ export const metadata: Metadata = {
 // The core stack: role + a credential/tag line. `partner` renders the "Official
 // Partner" pill (the natural home for the SmartSuite + Make.com badges - swap the
 // text pill for the badge image once supplied).
-const STACK = [
-  { name: "SmartSuite", role: "Ops data & workflows", tag: "Official Partner", partner: true },
-  { name: "Make.com", role: "Automation & integrations", tag: "Official Partner", partner: true },
+type Tool = { name: string; role: string; tag: string; partner: boolean; badge?: string };
+const STACK: Tool[] = [
+  {
+    name: "SmartSuite",
+    role: "Ops data & workflows",
+    tag: "Certified Consultant",
+    partner: true,
+    badge: "/smartsuite-partner.png",
+  },
+  {
+    name: "Make.com",
+    role: "Automation & integrations",
+    tag: "Certified Partner",
+    partner: true,
+    badge: "/make-partner.png",
+  },
   { name: "Claude Code", role: "Custom front-ends", tag: "AI-accelerated", partner: false },
   { name: "Xano", role: "Backend at scale", tag: "For big data", partner: false },
-] as const;
+];
 
 // The method is a real, ordered sequence (discovery to support), so the numbering
 // carries meaning rather than decoration.
@@ -191,10 +205,20 @@ export default function HowWeWorkPage() {
                   <div className="idx">{`0${i + 1}`}</div>
                   <div className="nm">{t.name}</div>
                   <div className="role">{t.role}</div>
-                  <span className={`hww-tag ${t.partner ? "partner" : "plain"}`}>
-                    {t.partner && <span className="dot" aria-hidden="true" />}
-                    {t.tag}
-                  </span>
+                  {t.badge ? (
+                    <Image
+                      src={t.badge}
+                      alt={`${t.name} ${t.tag}`}
+                      width={48}
+                      height={48}
+                      style={{ display: "block", marginTop: 14 }}
+                    />
+                  ) : (
+                    <span className={`hww-tag ${t.partner ? "partner" : "plain"}`}>
+                      {t.partner && <span className="dot" aria-hidden="true" />}
+                      {t.tag}
+                    </span>
+                  )}
                 </div>
               ))}
             </div>

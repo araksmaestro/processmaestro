@@ -1224,3 +1224,62 @@ html[data-pm-consent="granted"] .pm-withdraw-slot {
     font-size: 33px;
   }
 }
+
+/* ============================================================
+   How We Work page (/how-we-work)
+   ============================================================ */
+.hww-hero {
+  position: relative;
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 84px 32px 76px;
+  text-align: center;
+}
+.hww-pad {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+.hww-stack {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+.hww-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.hww-cta-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 64px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+@media (max-width: 900px) {
+  .hww-stack {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .hww-steps {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 620px) {
+  .hww-hero {
+    padding: 56px 20px 52px;
+  }
+  .hww-pad {
+    padding: 0 20px;
+  }
+  .hww-stack,
+  .hww-steps {
+    grid-template-columns: 1fr;
+  }
+  .hww-cta-inner {
+    padding: 48px 20px;
+  }
+}

@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Blog | Process Maestro",
     description:
-      "Automation, no-code systems, and the honest calls behind them - for the people who run operations, not the developers who build them.",
+      "Automation, no-code systems, and the honest calls behind them - for the people who run operations.",
     url: "/blog",
     type: "website",
   },
@@ -85,7 +85,7 @@ export default function BlogIndexPage() {
             <h1 id="blog-hero-heading">Straight talk on running your business better</h1>
             <p>
               Automation, no-code systems, and the honest calls behind them - written for the
-              people who run operations, not the developers who build them.
+              people who run operations.
             </p>
           </div>
         </section>

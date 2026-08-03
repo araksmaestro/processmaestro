@@ -69,40 +69,21 @@ export const posts: BlogPost[] = [
     gradient: 1,
     bodyHtml: `
 <p class="lede">The world of business tools is changing faster than anyone can keep up with - new apps, no-code platforms, and AI promising to automate everything overnight. It's easy to feel behind. You're not. This blog exists to cut through that noise and give you a calm, practical path to getting your operations under control.</p>
-<p>We write for the people who actually run the business - owners and operations leaders who want things to work better. Everything here is practical and in plain language - no hype, no jargon, and no worshipping a particular tool. Just honest guidance on how to structure, automate, and scale the systems your business depends on. Here's how to find your way around.</p>
-<h2>1. Get your data right first</h2>
-<p>Most "we need better software" problems are really "our data is a mess" problems. Structured data is the unglamorous foundation of everything that follows - because you can't automate, report on, or scale a mess. Get this right and everything after it gets far easier.</p>
-<ul>
-  <li><a href="/blog/what-structured-data-means">What Structured Data Really Means (and Why Messy Data Costs You)</a></li>
-</ul>
-<h2>2. Figure out where to start</h2>
-<p>With a clean foundation in place, the next question is where to begin. The goal isn't a big-bang overhaul - it's finding the one painful, repetitive thing to improve first, then building from there.</p>
-<ul>
-  <li><a href="/blog/where-to-start-automating-your-operations">Where to Start with Automating Your Operations</a></li>
-  <li><a href="/blog/what-does-it-mean-to-automate-a-process">What Does It Mean to Automate a Process?</a></li>
-</ul>
-<h2>3. Automate the busywork</h2>
-<p>Once the data is clean, you can start removing the manual, repetitive work that eats your team's time - carefully, one step at a time, with the right tool for the job.</p>
-<ul>
-  <li><a href="/blog/reduce-manual-data-entry">Reduce Manual Data Entry: The Real Cost and 5 Ways to Kill It</a></li>
-  <li><a href="/blog/make-com-vs-n8n-for-business">Make.com vs n8n for Business: Which Engine, and When</a></li>
-</ul>
-<h2>4. When you need a custom application</h2>
-<p>Sometimes off-the-shelf tools and templates run out of room, and you need something built for exactly how you work - a custom app, portal, or internal tool. Modern AI-assisted development makes that far faster than it used to be, as long as it's done with discipline.</p>
-<ul>
-  <li><a href="/blog/how-we-build-custom-apps-design-led">From Design to Working Software in Days: How We Build Custom Apps</a></li>
-  <li><a href="/blog/building-custom-software-with-ai-done-right">Building Custom Software with AI: What to Get Right</a></li>
-</ul>
-<h2>5. Know when to change tools</h2>
-<p>Every tool has a ceiling. Part of doing this well is recognizing when you've outgrown one - and moving before it becomes a problem, not after.</p>
-<ul>
-  <li><a href="/blog/when-to-move-off-smartsuite-to-xano">When to Move Off SmartSuite to Xano (and When to Stay)</a></li>
-</ul>
-<h2>What working with us actually looks like</h2>
-<p>Running through all of these is one belief: the tool is never the answer - the right solution is. We're consultants first and tool specialists second. We diagnose the real problem, map how your business actually works, and only then choose what to build it with. We go deep in a core stack - SmartSuite, Make.com, Xano, custom builds - but we're never loyal to any single tool, and we'll tell you honestly when the one you have isn't enough.</p>
-<p>If you'd rather see it than read about it, our <a href="/case-studies">case studies</a> show the same approach applied to real businesses.</p>
-<blockquote>Start small, fix the foundation, automate what hurts most, and change tools only when you've truly outgrown them. That's the whole philosophy - the rest is detail.</blockquote>
-<p>However you got here, you're in the right place. Pick the section that matches where you're stuck, and start there.</p>
+<p>We write for the people who actually run the business - owners and operations leaders who want things to work better. Everything here is practical and in plain language - no hype, no jargon, and no worshipping a particular tool. Just honest guidance on the ideas that actually move the needle. Here's what we write about, and roughly the order it makes sense to tackle it.</p>
+<h2>Structured data - the foundation</h2>
+<p>Most "we need better software" problems are really "our data is a mess" problems. Before anything else, your information needs to be clean and well-structured - because you can't automate, report on, or scale a mess. It's the least glamorous step and the most important one; get it right and everything after it gets far easier.</p>
+<h2>Understanding your processes</h2>
+<p>You can't improve what you haven't looked at clearly. Mapping how work actually flows through your business - the real version, not the idealized one - is what exposes the bottlenecks, the dropped handoffs, and the steps worth changing. That clarity becomes the blueprint for everything you build later.</p>
+<h2>Process automation</h2>
+<p>Once the data is clean and the process is clear, you can start removing the manual, repetitive work that eats your team's time. The key is to go slowly and prioritize: automate the single most painful thing first, let people feel the difference, then move to the next. Teams need time to adapt, so we experiment and improve in small steps rather than forcing huge changes all at once.</p>
+<h2>Custom applications</h2>
+<p>Sometimes off-the-shelf tools and templates run out of room, and you need something built for exactly how you work - a custom app, portal, or internal tool with the interface and logic you actually want. Modern AI-assisted development makes that far faster and more affordable than it used to be, as long as it's done with real discipline around structure, security, and quality.</p>
+<h2>Choosing the right tools - and knowing when to switch</h2>
+<p>There's no single best tool, only the right tool for your problem, your data, and your team. Part of doing this well is being honest about when you've outgrown something and it's time to move - before it becomes a problem, not after. We stay deep in a handful of modern tools but loyal to none, so the choice always serves your outcome rather than a preference.</p>
+<h2>What working with us looks like</h2>
+<p>Running through all of this is one belief: the tool is never the answer - the right solution is. We're consultants first. We diagnose the real problem, map how your business actually works, and only then decide what to build it with - and we'll tell you honestly when the tool you already have is enough, or when it isn't. If you'd rather see it than read about it, our <a href="/case-studies">case studies</a> show the same approach applied to real businesses.</p>
+<blockquote>Fix the foundation, understand the process, automate what hurts most, and pick tools to fit the problem - never the other way around. That's the whole philosophy.</blockquote>
+<p>Whatever you're wrestling with, you'll likely find a practical guide for it here. Browse around, and start with whatever matches where you're stuck.</p>
 `.trim(),
   },
   {

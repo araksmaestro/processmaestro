@@ -70,16 +70,16 @@ export const posts: BlogPost[] = [
     bodyHtml: `
 <p class="lede">The world of business tools is changing faster than anyone can keep up with - new apps, no-code platforms, and AI promising to automate everything overnight. It's easy to feel behind. You're not. This blog exists to cut through that noise and give you a calm, practical path to getting your operations under control.</p>
 <p>We write for the people who actually run the business - owners and operations leaders who want things to work better. Everything here is practical and in plain language - no hype, no jargon, and no worshipping a particular tool. Just honest guidance on how to structure, automate, and scale the systems your business depends on. Here's how to find your way around.</p>
-<h2>1. Figure out where to start</h2>
-<p>If everything feels like it needs fixing at once, begin here. The goal isn't a big-bang overhaul - it's finding the one painful, repetitive thing to improve first, then building from there.</p>
+<h2>1. Get your data right first</h2>
+<p>Most "we need better software" problems are really "our data is a mess" problems. Structured data is the unglamorous foundation of everything that follows - because you can't automate, report on, or scale a mess. Get this right and everything after it gets far easier.</p>
+<ul>
+  <li><a href="/blog/what-structured-data-means">What Structured Data Really Means (and Why Messy Data Costs You)</a></li>
+</ul>
+<h2>2. Figure out where to start</h2>
+<p>With a clean foundation in place, the next question is where to begin. The goal isn't a big-bang overhaul - it's finding the one painful, repetitive thing to improve first, then building from there.</p>
 <ul>
   <li><a href="/blog/where-to-start-automating-your-operations">Where to Start with Automating Your Operations</a></li>
   <li><a href="/blog/what-does-it-mean-to-automate-a-process">What Does It Mean to Automate a Process?</a></li>
-</ul>
-<h2>2. Get your data right first</h2>
-<p>Most "we need better software" problems are really "our data is a mess" problems. Structured data is the unglamorous foundation that makes everything else - reporting, automation, growth - either easy or painful.</p>
-<ul>
-  <li><a href="/blog/what-structured-data-means">What Structured Data Really Means (and Why Messy Data Costs You)</a></li>
 </ul>
 <h2>3. Automate the busywork</h2>
 <p>Once the data is clean, you can start removing the manual, repetitive work that eats your team's time - carefully, one step at a time, with the right tool for the job.</p>

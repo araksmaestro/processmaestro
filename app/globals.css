@@ -1458,6 +1458,7 @@ html[data-pm-consent="granted"] .pm-withdraw-slot {
   width: 38px;
   height: 38px;
   border-radius: 50%;
+  overflow: hidden;
   background: var(--pm-grad-avatar);
   color: #fff;
   display: flex;
@@ -1590,6 +1591,7 @@ html[data-pm-consent="granted"] .pm-withdraw-slot {
   height: 52px;
   flex: none;
   border-radius: 50%;
+  overflow: hidden;
   background: var(--pm-grad-avatar);
   color: #fff;
   display: flex;

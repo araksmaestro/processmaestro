@@ -102,7 +102,17 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               <h1>{post.title}</h1>
               <div className="blog-art-meta">
                 <span className="blog-av" aria-hidden="true">
-                  {AUTHOR.initials}
+                  {AUTHOR.photo ? (
+                    <Image
+                      src={AUTHOR.photo}
+                      alt=""
+                      width={38}
+                      height={38}
+                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    />
+                  ) : (
+                    AUTHOR.initials
+                  )}
                 </span>
                 <span>
                   <strong style={{ color: "var(--pm-ink-1)" }}>{AUTHOR.name}</strong> ·
@@ -122,7 +132,17 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
             <aside className="blog-author">
               <div className="av" aria-hidden="true">
-                {AUTHOR.initials}
+                {AUTHOR.photo ? (
+                  <Image
+                    src={AUTHOR.photo}
+                    alt=""
+                    width={52}
+                    height={52}
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  />
+                ) : (
+                  AUTHOR.initials
+                )}
               </div>
               <div>
                 <div className="nm">{AUTHOR.name}</div>

@@ -26,6 +26,7 @@ export const AUTHOR = {
   role: "Founder, Process Maestro · SmartSuite Certified Consultant · Make.com Certified Partner",
   bio: "17 years in tech. I help operations teams pick the right tools - and I'll tell you when the one you have isn't enough.",
   initials: "VB",
+  photo: "/founder_vasken.jpg", // same headshot as the homepage founder section
 } as const;
 
 export const posts: BlogPost[] = [

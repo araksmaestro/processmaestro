@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Nav from "@/components/home/Nav";
@@ -166,7 +167,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             <div className="blog-grid" style={{ padding: 0 }}>
               {related.map((p) => (
                 <Link key={p.slug} href={`/blog/${p.slug}`} className="blog-card">
-                  <div className={`ph blog-cover g${p.gradient ?? 1}`} />
+                  <div className={`blog-cover g${p.gradient ?? 1}`}>
+                    {p.cover && (
+                      <Image src={p.cover} alt="" fill sizes="(max-width: 820px) 100vw, 380px" style={{ objectFit: "cover" }} />
+                    )}
+                  </div>
                   <div className="in">
                     <div className="blog-cat">{p.category}</div>
                     <h3>{p.title}</h3>

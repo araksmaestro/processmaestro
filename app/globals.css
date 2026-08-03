@@ -1297,6 +1297,7 @@ html[data-pm-consent="granted"] .pm-withdraw-slot {
 }
 .blog-cover {
   position: relative;
+  overflow: hidden;
   min-height: 260px;
 }
 .blog-cover.g1 {
@@ -1383,8 +1384,9 @@ html[data-pm-consent="granted"] .pm-withdraw-slot {
   transform: translateY(-4px);
   border-color: var(--pm-lime);
 }
-.blog-card .ph {
-  height: 150px;
+.blog-card .blog-cover {
+  height: 172px;
+  min-height: 0;
 }
 .blog-card .in {
   padding: 22px;

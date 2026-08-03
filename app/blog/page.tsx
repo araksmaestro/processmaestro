@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import Nav from "@/components/home/Nav";
 import Footer from "@/components/home/Footer";
@@ -25,6 +26,7 @@ const CHIPS = ["All", "SmartSuite", "Make.com", "Xano", "Operations", "Automatio
 function PostCard({
   href,
   gradient,
+  cover,
   category,
   title,
   excerpt,
@@ -32,6 +34,7 @@ function PostCard({
 }: {
   href: string;
   gradient?: 1 | 2 | 3;
+  cover?: string;
   category: string;
   title: string;
   excerpt: string;
@@ -39,7 +42,11 @@ function PostCard({
 }) {
   return (
     <Link href={href} className="blog-card">
-      <div className={`ph blog-cover g${gradient ?? 1}`} />
+      <div className={`blog-cover g${gradient ?? 1}`}>
+        {cover && (
+          <Image src={cover} alt="" fill sizes="(max-width: 820px) 100vw, 380px" style={{ objectFit: "cover" }} />
+        )}
+      </div>
       <div className="in">
         <div className="blog-cat">{category}</div>
         <h3>{title}</h3>
@@ -95,6 +102,15 @@ export default function BlogIndexPage() {
           {featured && (
             <Link href={`/blog/${featured.slug}`} className="blog-feat">
               <div className={`blog-cover g${featured.gradient ?? 1}`}>
+                {featured.cover && (
+                  <Image
+                    src={featured.cover}
+                    alt=""
+                    fill
+                    sizes="(max-width: 820px) 100vw, 560px"
+                    style={{ objectFit: "cover" }}
+                  />
+                )}
                 <span className="tag">Featured</span>
               </div>
               <div className="body">
@@ -114,6 +130,7 @@ export default function BlogIndexPage() {
                 key={p.slug}
                 href={`/blog/${p.slug}`}
                 gradient={p.gradient}
+                cover={p.cover}
                 category={p.category}
                 title={p.title}
                 excerpt={p.excerpt}

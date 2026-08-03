@@ -16,7 +16,8 @@ export type BlogPost = {
   dateLabel: string; // human display, e.g. "July 2026"
   readMinutes: number;
   featured?: boolean;
-  gradient?: 1 | 2 | 3; // placeholder cover gradient variant
+  gradient?: 1 | 2 | 3; // cover gradient variant (fallback behind the cover image)
+  cover?: string; // on-brand cover graphic in /public/blog; falls back to the gradient
   bodyHtml: string;
 };
 
@@ -30,6 +31,7 @@ export const AUTHOR = {
 export const posts: BlogPost[] = [
   {
     slug: "when-to-move-off-smartsuite-to-xano",
+    cover: "/blog/when-to-move-off-smartsuite-to-xano.png",
     title: "When to Move Off SmartSuite to Xano (and When to Stay)",
     excerpt:
       "SmartSuite caps out at 125,000 records per table - even on its top tier. Here's how to know if you've actually hit the ceiling, and what to do about it.",
@@ -72,6 +74,7 @@ export const posts: BlogPost[] = [
   },
   {
     slug: "how-we-build-custom-apps-design-led",
+    cover: "/blog/how-we-build-custom-apps-design-led.png",
     title: "From Design to Working Software in Days: How We Build Custom Apps",
     excerpt:
       "Custom CRMs, portals, and web apps used to mean slow. A design-led, AI-accelerated process gives you bespoke software - shaped with you - in a fraction of the time.",
@@ -108,6 +111,7 @@ export const posts: BlogPost[] = [
   },
   {
     slug: "building-custom-software-with-ai-done-right",
+    cover: "/blog/building-custom-software-with-ai-done-right.png",
     title: "Building Custom Software with AI: What to Get Right",
     excerpt:
       "AI can produce a working prototype fast. Turning it into software a business can trust - secure, well-structured, built to scale - is where the real discipline lives.",
@@ -144,6 +148,7 @@ export const posts: BlogPost[] = [
   },
   {
     slug: "connect-smartsuite-to-quickbooks",
+    cover: "/blog/connect-smartsuite-to-quickbooks.png",
     title: "How to Connect SmartSuite to QuickBooks (Without Losing Your Mind)",
     excerpt:
       "The step-by-step for syncing invoices and payments between SmartSuite and QuickBooks - and the one gotcha that trips everyone up.",
@@ -170,6 +175,7 @@ export const posts: BlogPost[] = [
   },
   {
     slug: "make-com-vs-n8n-for-business",
+    cover: "/blog/make-com-vs-n8n-for-business.png",
     title: "Make.com vs n8n for Business: Which Engine, and When",
     excerpt:
       "An automation consultant's honest take on Make.com vs n8n - not a sales pitch for either one.",
@@ -201,6 +207,7 @@ export const posts: BlogPost[] = [
   },
   {
     slug: "reduce-manual-data-entry",
+    cover: "/blog/reduce-manual-data-entry.png",
     title: "Reduce Manual Data Entry: The Real Cost and 5 Ways to Kill It",
     excerpt:
       "Teams lose roughly 240 hours a year to re-keying data. Here's where it hides and how to end it for good.",

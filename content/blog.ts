@@ -74,6 +74,147 @@ export const posts: BlogPost[] = [
 `.trim(),
   },
   {
+    slug: "where-to-start-automating-your-operations",
+    cover: "/blog/where-to-start-automating-your-operations.png",
+    title: "Where to Start with Automating Your Operations: A Beginner's Guide",
+    excerpt:
+      "New tools and AI are arriving faster than anyone can keep up with. You don't need to overhaul everything - here's the calm, step-by-step way to structure and automate your operations, starting from zero.",
+    category: "Operations",
+    tags: ["Operations", "Automation"],
+    date: "2026-07-28",
+    dateLabel: "July 2026",
+    readMinutes: 7,
+    gradient: 1,
+    bodyHtml: `
+<p class="lede">New tools and AI are arriving faster than anyone can keep up with, and it's easy to feel like you're already behind. You're not. You don't need to overhaul everything or master every new tool - you need a clear order to work in. Here's where to start.</p>
+<p>Almost every business we meet is sitting on the same pile of scattered spreadsheets, disconnected apps, and manual work. The good news: getting out of it follows a predictable path. Take it in order and it's genuinely manageable.</p>
+<h2>Start with questions, not tools</h2>
+<p>The single biggest mistake is buying software before you understand the problem. Before you look at a single tool, answer a few plain questions:</p>
+<ul>
+  <li>Where does your team actually lose the most time?</li>
+  <li>What gets missed, dropped, or done wrong most often?</li>
+  <li>Which tasks get repeated over and over?</li>
+  <li>What would "noticeably better" look like six months from now?</li>
+</ul>
+<p>You're not looking for a product yet. You're looking for a clear answer to "what is slowing us down, and what's worth fixing first?"</p>
+<h2>Map how the work really flows</h2>
+<p>You can't automate what you can't see. Before changing anything, map your actual process - the real steps from start to finish, not the tidy version in your head. We usually draw this as a simple process map (a technique called BPMN), but it's really just: "here is exactly how this happens today."</p>
+<div class="blog-callout">
+  <div class="k">The rule</div>
+  <div class="big">You can't automate what you can't see</div>
+  <p>A clear map of how the work happens instantly shows the bottlenecks, the handoffs that get dropped, and the steps a computer could quietly take over.</p>
+</div>
+<h2>Get the foundation right: your data</h2>
+<p>Underneath every good system is a clean data structure - where your information lives, how it connects, and one place that counts as the source of truth. Skip this and you build fast on sand: every report, every automation, and every new hire gets harder. We start projects with a simple data model for the same reason you'd pour a foundation before framing a house.</p>
+<h2>Automate slowly - one important thing at a time</h2>
+<p>Here's what most people get wrong: they try to change everything at once. Big-bang automation projects are where budgets and trust go to die. Do the opposite.</p>
+<ul>
+  <li>Pick the single task that's both the most painful and the most frequent.</li>
+  <li>Automate just that one thing.</li>
+  <li>Watch what happens, measure it, and adjust.</li>
+  <li>Only then move to the next one.</li>
+</ul>
+<p>Every automation should earn its place before you add the next. Small, compounding wins beat one giant rollout every time.</p>
+<h2>Change at the speed your team can absorb</h2>
+<p>The real bottleneck is almost never the technology - it's adoption. People need time to trust a new way of working, and a change your team doesn't actually adopt is worse than no change at all. When one automation quietly saves someone two hours a week, the next one is welcomed instead of resisted.</p>
+<blockquote>You don't need the perfect system. You need the next right step - and a team that's ready to take it.</blockquote>
+<h2>Choose tools (and help) for the problem, not the hype</h2>
+<p>The tool landscape shifts every month, and AI adds a new "must-have" every week. You can't chase all of it, and you shouldn't try. The right tool is the one that fits your problem, your budget, and your team's comfort - not the loudest one. Sometimes that's a no-code platform like SmartSuite; sometimes an automation engine like Make.com; sometimes a scalable backend or a custom build. Usually it's a sensible mix. What matters is that the tool follows the problem, never a trend.</p>
+<p>And if you're spending more time evaluating tools than running your business - or you've already been burned by a "solution" that didn't fit - that's the moment to bring in a guide who is tool-agnostic and will tell you honestly what you actually need.</p>
+<h2>The fundamentals don't change, even when everything else does</h2>
+<p>Tools will keep changing. AI will keep raising the bar. But the path stays the same: understand the work, structure the data, automate the important things slowly, and bring your team along. Master that order and you'll never be at the mercy of the next shiny thing.</p>
+<p>If you're not sure where your own starting point is, that's exactly the kind of thing a short conversation can settle.</p>
+`.trim(),
+  },
+  {
+    slug: "what-structured-data-means",
+    cover: "/blog/what-structured-data-means.png",
+    title: "What Structured Data Really Means (and Why Messy Data Costs You)",
+    excerpt:
+      "Most 'we need better software' problems are really 'our data is a mess' problems. Here's what structured data means in plain terms - and why it's the quiet foundation of everything.",
+    category: "Operations",
+    tags: ["Operations", "Data"],
+    date: "2026-07-30",
+    dateLabel: "July 2026",
+    readMinutes: 6,
+    gradient: 2,
+    bodyHtml: `
+<p class="lede">Most problems that feel like "we need better software" are really "our data is a mess." Structured data is the quiet foundation that makes everything - reporting, automation, growth - either easy or painful. Here's what it means, in plain terms.</p>
+<h2>What "structured data" actually means</h2>
+<p>It simply means your information is organized consistently: every customer, order, or project is stored the same way, in the same place, with clear fields - instead of scattered across spreadsheets, inboxes, and people's heads. Structured data is data a computer (and a new hire) can find and trust. Unstructured data is data only the person who created it can navigate.</p>
+<h2>What messy data quietly costs you</h2>
+<p>When data isn't structured, the symptoms are always the same:</p>
+<ul>
+  <li>Duplicates - three slightly different versions of the same customer</li>
+  <li>Inconsistency - "N/A", blank, and "none" all meaning the same thing</li>
+  <li>No single source of truth - two systems disagree and nobody knows which is right</li>
+  <li>Reports you can't fully trust, and hours lost reconciling them</li>
+</ul>
+<div class="blog-callout">
+  <div class="k">The default, not the exception</div>
+  <div class="big">88-94%</div>
+  <p>of business spreadsheets contain errors, according to decades of research. Messy data isn't a rare accident - it's what you get by default when structure is an afterthought.</p>
+</div>
+<h2>What good structure looks like</h2>
+<ul>
+  <li><strong>One record per real thing.</strong> One customer is one record - everywhere - not a new row every time they come up.</li>
+  <li><strong>Consistent fields and formats.</strong> Dates, statuses, and categories follow the same rules every time.</li>
+  <li><strong>Relationships instead of duplication.</strong> Link records together rather than copying the same information into ten places.</li>
+  <li><strong>One source of truth.</strong> Every piece of data has one home that everything else points to.</li>
+</ul>
+<h3>Why this is what makes automation possible</h3>
+<p>You can't automate on top of a mess. Automation needs data it can rely on - clean, consistent, and connected. Get the structure right and automation becomes almost easy; skip it and every automation you build simply inherits the chaos underneath.</p>
+<blockquote>You don't have a software problem. You have a data-structure problem wearing a software costume.</blockquote>
+<p>Structuring your data isn't glamorous work, but it's the highest-leverage thing most businesses can do - and everything else gets easier once it's done. It's usually where we start, and it's rarely where clients expect the real fix to be.</p>
+`.trim(),
+  },
+  {
+    slug: "what-does-it-mean-to-automate-a-process",
+    cover: "/blog/what-does-it-mean-to-automate-a-process.png",
+    title: "What Does It Mean to Automate a Process? A Plain-English Intro",
+    excerpt:
+      "If 'automation' sounds like something only big tech companies do, this is for you. At its heart it's simple: let software do the repetitive work you're doing by hand. Here's what that really looks like.",
+    category: "Automation",
+    tags: ["Automation"],
+    date: "2026-07-29",
+    dateLabel: "July 2026",
+    readMinutes: 6,
+    gradient: 3,
+    bodyHtml: `
+<p class="lede">If "automation" sounds like something only big tech companies with engineering teams do, this is for you. At its heart, automation is simple: let software do the repetitive work a person is currently doing by hand. Here's what that really looks like.</p>
+<h2>What automating a process actually means</h2>
+<p>A "process" is just a series of steps to get something done - onboarding a client, sending an invoice, updating a record after a call. Automating it means software does those steps for you whenever a trigger happens, so no one has to remember or do them manually.</p>
+<p>A simple example: a new client fills out a form. Instantly, the system creates their record, sends a welcome email, and notifies your team - the whole chain, done by itself, in seconds. Nobody copied anything or forgot a step.</p>
+<h2>The everyday things you can automate</h2>
+<ul>
+  <li>Moving data between your apps, so you stop copy-pasting</li>
+  <li>Sending follow-ups, reminders, and notifications</li>
+  <li>Creating records automatically from forms or emails</li>
+  <li>Generating and sending reports on a schedule</li>
+  <li>Routing approvals and updates to the right people</li>
+</ul>
+<h2>What you actually get out of it</h2>
+<p>The payoff is bigger than "saving a bit of time":</p>
+<ul>
+  <li><strong>Hours back</strong> every week, for you and your team</li>
+  <li><strong>Fewer errors</strong>, because no one is retyping things by hand</li>
+  <li><strong>Consistency</strong> - it happens the same way every single time</li>
+  <li><strong>Room to grow</strong> without hiring a person for every new repetitive task</li>
+</ul>
+<div class="blog-callout">
+  <div class="k">The appeal, in one line</div>
+  <div class="big">One task, automated, runs 24/7</div>
+  <p>It never forgets, never makes a typo, and doesn't need a salary. That's the whole reason automation is worth it.</p>
+</div>
+<h2>You don't need to automate everything</h2>
+<p>The goal isn't a fully robotic business. It's removing the specific, repetitive, low-value tasks that quietly drain your team - starting with one. Automate the worst offender, feel the difference, then move to the next.</p>
+<h3>The tools that make it possible</h3>
+<p>Platforms like Make.com and n8n connect your apps and run these automations without custom code. Which one fits depends on your needs, but the barrier to entry is far lower than most people assume - you don't need to be technical to benefit, you just need to know which repetitive task to point it at first.</p>
+<blockquote>Automation isn't about replacing people. It's about not wasting them on work a computer should be doing.</blockquote>
+<p>Here's the simple test: if you can describe a repetitive task step by step, it can almost certainly be automated. The hardest part is usually just deciding which one to start with.</p>
+`.trim(),
+  },
+  {
     slug: "how-we-build-custom-apps-design-led",
     cover: "/blog/how-we-build-custom-apps-design-led.png",
     title: "From Design to Working Software in Days: How We Build Custom Apps",

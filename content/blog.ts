@@ -60,10 +60,13 @@ export const posts: BlogPost[] = [
   <li>You're bolting a "real" database onto the side because SmartSuite can't hold it all</li>
 </ul>
 <blockquote>The tool isn't the answer. The right architecture is - and sometimes that means moving the heavy data somewhere built for it.</blockquote>
+<h2>It's not only about data - it's about the experience</h2>
+<p>There's a second reason teams move off SmartSuite, and it has nothing to do with record counts. SmartSuite's interface is quick to set up, but it's a template - you work inside the dashboards and views it hands you. If you want a genuinely custom experience - a client portal or internal app that looks and behaves exactly the way you picture it, with your own layouts, interactions, and branding - you'll eventually hit the edges of what a no-code interface allows.</p>
+<p>This is where the pairing shines. Move the data to Xano and put a custom front end on top - one we build with Claude Code - and you get the best of both: Xano handles the scale and the logic, while the custom interface delivers the exact look, feel, and workflow you want, with no template ceiling.</p>
 <h2>When to stay on SmartSuite</h2>
-<p>Migrating is real work, so don't do it prematurely. If your largest table is comfortably under the cap, your team lives in SmartSuite's interface daily, and your reporting is fast enough - stay. The interface, permissions, and no-code workflows are genuinely great, and Xano won't give you those out of the box.</p>
+<p>Migrating is real work, so don't do it prematurely. If your largest table is comfortably under the cap, your team is happy working in SmartSuite's ready-made views, and your reporting is fast enough - stay. Its interface, permissions, and no-code workflows are genuinely great for standard operational needs, and there's no reason to add complexity you don't need.</p>
 <h3>Where Xano fits</h3>
-<p>Xano is a scalable no-code backend built for exactly the job SmartSuite isn't: large datasets, custom APIs, and application logic. A common pattern we build is a hybrid - keep the team-facing workflows in SmartSuite, move the high-volume data to Xano, and connect them so nobody notices the seam.</p>
+<p>Xano is a scalable no-code backend built for exactly the jobs SmartSuite isn't: large datasets, custom APIs, and application logic. On its own it's the engine; paired with a custom front end we build in Claude Code, it becomes a full application with a bespoke interface you'd never get from an off-the-shelf tool. A common pattern we build is a hybrid - keep the everyday team workflows in SmartSuite, move the high-volume data and any custom-UI experience to Xano plus a custom front end, and connect it all so nobody notices the seam.</p>
 <p>The right call depends on your data, not your loyalty to a tool. If you're not sure which side of the line you're on, that's exactly the kind of thing a short conversation can settle.</p>
 `.trim(),
   },

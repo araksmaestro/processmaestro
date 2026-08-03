@@ -71,6 +71,78 @@ export const posts: BlogPost[] = [
 `.trim(),
   },
   {
+    slug: "how-we-build-custom-apps-design-led",
+    title: "From Design to Working Software in Days: How We Build Custom Apps",
+    excerpt:
+      "Custom CRMs, portals, and web apps used to mean slow. A design-led, AI-accelerated process gives you bespoke software - shaped with you - in a fraction of the time.",
+    category: "Custom Development",
+    tags: ["Custom Development", "Claude Code"],
+    date: "2026-07-24",
+    dateLabel: "July 2026",
+    readMinutes: 5,
+    gradient: 2,
+    bodyHtml: `
+<p class="lede">For years, custom software meant a hard trade-off: fast and templated, or bespoke and slow. A design-led, AI-accelerated process finally breaks that - you get software built exactly for you, in a fraction of the usual time.</p>
+<p>Here's how we actually build a custom CRM, client portal, internal tool, or web app - and why the order of operations is the whole trick.</p>
+<h2>Design first - and it moves at the speed of a conversation</h2>
+<p>Most custom projects go wrong because building starts before anyone agrees on what the thing should look and feel like. We flip that. Before a line of application logic is written, we design the interface - the screens, the flows, the way it should feel to use - and we iterate it with you directly.</p>
+<p>Because the design is generated and refined with AI, a round of changes takes hours, not another week and another invoice. You see your actual product taking shape, react to it, and shape it - fast. By the time we move on, you've approved something real, not a slide-deck promise.</p>
+<div class="blog-callout">
+  <div class="k">Why it matters</div>
+  <div class="big">You approve the experience before we build the engine</div>
+  <p>No expensive surprises halfway through. The look, feel, and flow are locked in with you first - so the build has a clear, agreed target instead of a moving one.</p>
+</div>
+<h2>Then the design hands off to the build</h2>
+<p>Once the interface is right, it moves to the build side - where a working application actually comes together: the data model, the business logic, the automations, and the integrations with the tools you already run (SmartSuite, Make.com, Xano, your CRM). The clean, approved interface becomes the foundation everything is built on, instead of something bolted on at the end.</p>
+<p>This is the part that separates a nice mockup from software you can run your business on - and it's where experience, not just speed, does the heavy lifting.</p>
+<h2>What you end up with</h2>
+<ul>
+  <li>A custom CRM, portal, or internal tool that fits your process - not a template you bend your business around</li>
+  <li>An interface that looks and behaves exactly how you wanted, because you shaped it</li>
+  <li>Real logic and automation underneath, connected to your existing stack</li>
+  <li>Software you own, delivered in days and weeks instead of months</li>
+</ul>
+<blockquote>Design-led, expertly built. The AI makes it fast; the judgment - what to build, how to structure it, what to protect - is human.</blockquote>
+<p>Fast doesn't mean cutting corners, though. Building this quickly only works if you're disciplined about the things that bite you later - setup, security, architecture, and code quality. That's a topic on its own, and it's exactly what our next piece is about.</p>
+`.trim(),
+  },
+  {
+    slug: "building-custom-software-with-ai-done-right",
+    title: "Building Custom Software with AI: What to Get Right",
+    excerpt:
+      "AI can produce a working prototype fast. Turning it into software a business can trust - secure, well-structured, built to scale - is where the real discipline lives.",
+    category: "Custom Development",
+    tags: ["Custom Development", "Claude Code"],
+    date: "2026-07-22",
+    dateLabel: "July 2026",
+    readMinutes: 6,
+    gradient: 3,
+    bodyHtml: `
+<p class="lede">AI can produce a working prototype astonishingly fast. Turning that prototype into software a business can actually rely on is a different job - and it's where the real risk hides. Speed is only an advantage if you're disciplined about what comes after the demo.</p>
+<p>We build custom software with AI-accelerated tools every week. Here's what we refuse to cut corners on - and what you should ask any team about before they build something you'll depend on.</p>
+<div class="blog-callout">
+  <div class="k">The reality</div>
+  <div class="big">The prototype is the easy 70%</div>
+  <p>AI gets you to something that runs quickly. The rest - edge cases, error handling, security, and hardening - is human judgment, and it's most of the actual work.</p>
+</div>
+<h2>The things that bite you later</h2>
+<h3>Project setup and architecture</h3>
+<p>A clean structure from day one is the difference between software that grows with you and a codebase that has to be rebuilt in a year. We set clear conventions and a sane architecture up front, and we don't let AI sprawl into a tangle of one-off files. Structure is a decision, not an accident.</p>
+<h3>Security</h3>
+<p>This is the one you can't get wrong. Authentication, permissions, how data is stored and handled, secrets kept out of the code, every input validated. AI-generated code is never shipped without a careful security review - the convenient default is often the insecure one.</p>
+<h3>Refactoring and code quality</h3>
+<p>AI writes a lot of code, and not all of it earns its place. We prune it: remove duplication, consolidate logic, and keep things readable so the next change is easy and safe. Unreviewed AI output quietly accumulates into a mess that slows everything down.</p>
+<h3>Built to scale</h3>
+<p>A data model and architecture that work for a demo can buckle under real volume and real users. We design the structure to hold up as you grow - sensible naming, modular pieces, and boundaries that let parts change without breaking the whole.</p>
+<h3>Review and testing</h3>
+<p>Every meaningful change gets human eyes, and the flows that matter get tested. "It worked when I clicked it" is not the same as "it works."</p>
+<blockquote>Vibe-coding a demo is easy. Shipping software a business can rely on is a discipline - and that discipline is the whole point.</blockquote>
+<h2>Why this matters to you</h2>
+<p>The gap between a demo that impresses in a meeting and software that quietly does its job for years is exactly this discipline. Fast is only valuable if what you're left with is solid, secure, and yours to grow. The worst outcome isn't a slow build - it's inheriting a fast one that nobody can safely change.</p>
+<p>That's why we pair AI speed with expert oversight on every build. The tools changed; the standards didn't.</p>
+`.trim(),
+  },
+  {
     slug: "connect-smartsuite-to-quickbooks",
     title: "How to Connect SmartSuite to QuickBooks (Without Losing Your Mind)",
     excerpt:

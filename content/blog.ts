@@ -19,6 +19,7 @@ export type BlogPost = {
   gradient?: 1 | 2 | 3; // cover gradient variant (fallback behind the cover image)
   cover?: string; // on-brand cover graphic in /public/blog; falls back to the gradient
   author?: string; // key into AUTHORS; defaults to DEFAULT_AUTHOR
+  draft?: boolean; // hidden from listings, sitemap, and static generation (not published)
   bodyHtml: string;
 };
 
@@ -69,7 +70,7 @@ export const posts: BlogPost[] = [
     bodyHtml: `
 <p class="lede">If your SmartSuite base is starting to feel slow, or a table just stopped letting you add records, you haven't done anything wrong. You've hit a real, documented limit - and the fix isn't to fight it.</p>
 <p>SmartSuite is our go-to for operations data and workflows. We're certified consultants and we build on it every week. But part of being honest with clients is telling them where a tool stops - and SmartSuite has one hard stop that catches growing businesses off guard.</p>
-<h2>The hard limit nobody mentions upfront</h2>
+<h2>The hard limit worth knowing about</h2>
 <p>SmartSuite caps the number of records you can store, and the ceiling doesn't lift no matter how much you pay. Straight from their own documentation:</p>
 <div class="blog-callout">
   <div class="k">The ceiling</div>
@@ -316,6 +317,7 @@ export const posts: BlogPost[] = [
   {
     slug: "connect-smartsuite-to-quickbooks",
     cover: "/blog/connect-smartsuite-to-quickbooks.png",
+    draft: true, // hidden for now
     title: "How to Connect SmartSuite to QuickBooks (Without Losing Your Mind)",
     excerpt:
       "The step-by-step for syncing invoices and payments between SmartSuite and QuickBooks - and the one gotcha that trips everyone up.",
@@ -334,7 +336,7 @@ export const posts: BlogPost[] = [
   <li><strong>n8n</strong> - when you need self-hosting or high volume.</li>
 </ul>
 <p>The pattern is the same: when a record changes in SmartSuite (an invoice is marked "Ready"), the scenario creates or updates the matching invoice in QuickBooks, then writes the QuickBooks ID back to SmartSuite so the two stay linked.</p>
-<h2>The gotcha nobody warns you about</h2>
+<h2>The gotcha to watch for</h2>
 <p>The mistake we see most often: syncing on every edit instead of on a clear status change. You end up with duplicate invoices and a reconciliation headache. Trigger on a single, deliberate signal - a status field flipping to "Approved" - and write the external ID straight back, so the automation always knows what it has already sent.</p>
 <h2>Do it once, do it right</h2>
 <p>A well-built sync is boring in the best way: invoices appear in QuickBooks the moment they're approved, payments flow back to SmartSuite, and nobody re-types anything. That's the whole point.</p>
@@ -375,6 +377,7 @@ export const posts: BlogPost[] = [
   {
     slug: "reduce-manual-data-entry",
     cover: "/blog/reduce-manual-data-entry.png",
+    author: "araks",
     title: "Reduce Manual Data Entry: The Real Cost and 5 Ways to Kill It",
     excerpt:
       "Teams lose roughly 240 hours a year to re-keying data. Here's where it hides and how to end it for good.",
@@ -409,16 +412,18 @@ export const posts: BlogPost[] = [
 ];
 
 export function getPost(slug: string): BlogPost | undefined {
-  return posts.find((p) => p.slug === slug);
+  return posts.find((p) => p.slug === slug && !p.draft);
 }
 
 export function getAllSlugs(): string[] {
-  return posts.map((p) => p.slug);
+  return posts.filter((p) => !p.draft).map((p) => p.slug);
 }
 
-/** All posts, featured first, then newest by date. */
+/** All published posts, featured first, then newest by date. */
 export function getPostsSorted(): BlogPost[] {
-  return [...posts].sort((a, b) => {
+  return [...posts]
+    .filter((p) => !p.draft)
+    .sort((a, b) => {
     if (a.featured && !b.featured) return -1;
     if (b.featured && !a.featured) return 1;
     return a.date < b.date ? 1 : -1;

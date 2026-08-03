@@ -13,6 +13,9 @@ export function generateStaticParams() {
   return getAllSlugs().map((slug) => ({ slug }));
 }
 
+// Only build the published slugs; a hidden/draft (or unknown) slug 404s.
+export const dynamicParams = false;
+
 export async function generateMetadata({
   params,
 }: {
@@ -53,7 +56,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const url = `${SITE_URL}/blog/${post.slug}`;
   const authorKey = post.author ?? DEFAULT_AUTHOR;
   const author = AUTHORS[authorKey] ?? AUTHORS[DEFAULT_AUTHOR];
-  const related = posts.filter((p) => p.slug !== post.slug).slice(0, 3);
+  const related = posts.filter((p) => p.slug !== post.slug && !p.draft).slice(0, 3);
 
   const articleLd = {
     "@context": "https://schema.org",

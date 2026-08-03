@@ -69,7 +69,7 @@ export const posts: BlogPost[] = [
     gradient: 1,
     bodyHtml: `
 <p class="lede">The world of business tools is changing faster than anyone can keep up with - new apps, no-code platforms, and AI promising to automate everything overnight. It's easy to feel behind. You're not. This blog exists to cut through that noise and give you a calm, practical path to getting your operations under control.</p>
-<p>We write for the people who actually run the business - owners and operations leaders who want things to work better - not for developers chasing the latest framework. No hype, no jargon, no worshipping a particular tool. Just honest guidance on how to structure, automate, and scale the systems your business depends on. Here's how to find your way around.</p>
+<p>We write for the people who actually run the business - owners and operations leaders who want things to work better. Everything here is practical and in plain language - no hype, no jargon, and no worshipping a particular tool. Just honest guidance on how to structure, automate, and scale the systems your business depends on. Here's how to find your way around.</p>
 <h2>1. Figure out where to start</h2>
 <p>If everything feels like it needs fixing at once, begin here. The goal isn't a big-bang overhaul - it's finding the one painful, repetitive thing to improve first, then building from there.</p>
 <ul>

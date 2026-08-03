@@ -7,7 +7,7 @@ import Footer from "@/components/home/Footer";
 import BookingButton from "@/components/BookingButton";
 import { SITE, SITE_URL } from "@/lib/site";
 import { ORG_ID, PERSON_ID } from "@/lib/jsonld";
-import { getPost, getAllSlugs, posts, AUTHOR } from "@/content/blog";
+import { getPost, getAllSlugs, posts, AUTHORS, DEFAULT_AUTHOR } from "@/content/blog";
 
 export function generateStaticParams() {
   return getAllSlugs().map((slug) => ({ slug }));
@@ -21,6 +21,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = getPost(slug);
   if (!post) return { title: "Blog" };
+  const author = AUTHORS[post.author ?? DEFAULT_AUTHOR] ?? AUTHORS[DEFAULT_AUTHOR];
   const images = [{ url: SITE.ogCard, width: 1200, height: 630, alt: post.title }];
   return {
     title: post.title,
@@ -32,7 +33,7 @@ export async function generateMetadata({
       url: `/blog/${post.slug}`,
       type: "article",
       publishedTime: post.date,
-      authors: [AUTHOR.name],
+      authors: [author.name],
       images,
     },
     twitter: {
@@ -50,6 +51,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   if (!post) notFound();
 
   const url = `${SITE_URL}/blog/${post.slug}`;
+  const authorKey = post.author ?? DEFAULT_AUTHOR;
+  const author = AUTHORS[authorKey] ?? AUTHORS[DEFAULT_AUTHOR];
   const related = posts.filter((p) => p.slug !== post.slug).slice(0, 3);
 
   const articleLd = {
@@ -58,7 +61,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     headline: post.title,
     description: post.excerpt,
     datePublished: post.date,
-    author: { "@id": PERSON_ID, "@type": "Person", name: AUTHOR.name },
+    author: {
+      ...(authorKey === "vasken" ? { "@id": PERSON_ID } : {}),
+      "@type": "Person",
+      name: author.name,
+    },
     publisher: {
       "@id": ORG_ID,
       "@type": "Organization",
@@ -102,21 +109,21 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               <h1>{post.title}</h1>
               <div className="blog-art-meta">
                 <span className="blog-av" aria-hidden="true">
-                  {AUTHOR.photo ? (
+                  {author.photo ? (
                     <Image
-                      src={AUTHOR.photo}
+                      src={author.photo}
                       alt=""
                       width={38}
                       height={38}
                       style={{ width: "100%", height: "100%", objectFit: "cover" }}
                     />
                   ) : (
-                    AUTHOR.initials
+                    author.initials
                   )}
                 </span>
                 <span>
-                  <strong style={{ color: "var(--pm-ink-1)" }}>{AUTHOR.name}</strong> ·
-                  SmartSuite Certified Consultant
+                  <strong style={{ color: "var(--pm-ink-1)" }}>{author.name}</strong> ·{" "}
+                  {author.byline}
                 </span>
                 <span className="blog-dot" aria-hidden="true" />
                 <span>{post.readMinutes} min read</span>
@@ -132,22 +139,22 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
             <aside className="blog-author">
               <div className="av" aria-hidden="true">
-                {AUTHOR.photo ? (
+                {author.photo ? (
                   <Image
-                    src={AUTHOR.photo}
+                    src={author.photo}
                     alt=""
                     width={52}
                     height={52}
                     style={{ width: "100%", height: "100%", objectFit: "cover" }}
                   />
                 ) : (
-                  AUTHOR.initials
+                  author.initials
                 )}
               </div>
               <div>
-                <div className="nm">{AUTHOR.name}</div>
-                <div className="rl">{AUTHOR.role}</div>
-                <p>{AUTHOR.bio}</p>
+                <div className="nm">{author.name}</div>
+                <div className="rl">{author.role}</div>
+                <p>{author.bio}</p>
               </div>
             </aside>
 

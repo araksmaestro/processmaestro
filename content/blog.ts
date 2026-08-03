@@ -18,16 +18,39 @@ export type BlogPost = {
   featured?: boolean;
   gradient?: 1 | 2 | 3; // cover gradient variant (fallback behind the cover image)
   cover?: string; // on-brand cover graphic in /public/blog; falls back to the gradient
+  author?: string; // key into AUTHORS; defaults to DEFAULT_AUTHOR
   bodyHtml: string;
 };
 
-export const AUTHOR = {
-  name: "Vasken Bakalian",
-  role: "Founder, Process Maestro · SmartSuite Certified Consultant · Make.com Certified Partner",
-  bio: "17 years in tech. I help operations teams pick the right tools - and I'll tell you when the one you have isn't enough.",
-  initials: "VB",
-  photo: "/founder_vasken.jpg", // same headshot as the homepage founder section
-} as const;
+export type Author = {
+  name: string;
+  byline: string; // short credential shown in the article byline
+  role: string; // full role shown in the author bio box
+  bio: string;
+  initials: string;
+  photo?: string;
+};
+
+export const AUTHORS: Record<string, Author> = {
+  vasken: {
+    name: "Vasken Bakalian",
+    byline: "SmartSuite Certified Consultant",
+    role: "Founder, Process Maestro · SmartSuite Certified Consultant · Make.com Certified Partner",
+    bio: "17 years in tech. I help operations teams pick the right tools - and I'll tell you when the one you have isn't enough.",
+    initials: "VB",
+    photo: "/founder_vasken.jpg", // same headshot as the homepage founder section
+  },
+  araks: {
+    name: "Araks Yeprikyan",
+    byline: "Process Automation Expert (Make.com Partner)",
+    role: "Process Automation Expert, Process Maestro · Make.com Partner",
+    bio: "I help businesses automate the repetitive work that eats their time - designing Make.com scenarios and connected systems that run quietly in the background.",
+    initials: "AY",
+    photo: "/araks-yeprikyan.jpg",
+  },
+};
+
+export const DEFAULT_AUTHOR = "vasken";
 
 export const posts: BlogPost[] = [
   {
@@ -76,7 +99,8 @@ export const posts: BlogPost[] = [
   {
     slug: "where-to-start-automating-your-operations",
     cover: "/blog/where-to-start-automating-your-operations.png",
-    title: "Where to Start with Automating Your Operations: A Beginner's Guide",
+    author: "araks",
+    title: "Where to Start with Automating Your Operations",
     excerpt:
       "New tools and AI are arriving faster than anyone can keep up with. You don't need to overhaul everything - here's the calm, step-by-step way to structure and automate your operations, starting from zero.",
     category: "Operations",
@@ -171,7 +195,7 @@ export const posts: BlogPost[] = [
   {
     slug: "what-does-it-mean-to-automate-a-process",
     cover: "/blog/what-does-it-mean-to-automate-a-process.png",
-    title: "What Does It Mean to Automate a Process? A Plain-English Intro",
+    title: "What Does It Mean to Automate a Process?",
     excerpt:
       "If 'automation' sounds like something only big tech companies do, this is for you. At its heart it's simple: let software do the repetitive work you're doing by hand. Here's what that really looks like.",
     category: "Automation",

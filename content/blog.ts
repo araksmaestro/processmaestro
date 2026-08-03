@@ -195,6 +195,7 @@ export const posts: BlogPost[] = [
   {
     slug: "what-does-it-mean-to-automate-a-process",
     cover: "/blog/what-does-it-mean-to-automate-a-process.png",
+    author: "araks",
     title: "What Does It Mean to Automate a Process?",
     excerpt:
       "If 'automation' sounds like something only big tech companies do, this is for you. At its heart it's simple: let software do the repetitive work you're doing by hand. Here's what that really looks like.",

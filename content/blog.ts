@@ -44,7 +44,7 @@ export const AUTHORS: Record<string, Author> = {
     name: "Araks Yeprikyan",
     byline: "Process Automation Expert (Make.com Partner)",
     role: "Process Automation Expert, Process Maestro · Make.com Partner",
-    bio: "I help businesses automate the repetitive work that eats their time - designing Make.com scenarios and connected systems that run quietly in the background.",
+    bio: "I help businesses automate the repetitive work that eats their time - designing Make.com scenarios and connected systems that run in the background.",
     initials: "AY",
     photo: "/araks-yeprikyan.jpg",
   },
@@ -126,7 +126,7 @@ export const posts: BlogPost[] = [
 <div class="blog-callout">
   <div class="k">The rule</div>
   <div class="big">You can't automate what you can't see</div>
-  <p>A clear map of how the work happens instantly shows the bottlenecks, the handoffs that get dropped, and the steps a computer could quietly take over.</p>
+  <p>A clear map of how the work happens instantly shows the bottlenecks, the handoffs that get dropped, and the steps a computer could take over.</p>
 </div>
 <h2>Get the foundation right: your data</h2>
 <p>Underneath every good system is a clean data structure - where your information lives, how it connects, and one place that counts as the source of truth. Skip this and you build fast on sand: every report, every automation, and every new hire gets harder. We start projects with a simple data model for the same reason you'd pour a foundation before framing a house.</p>
@@ -140,7 +140,7 @@ export const posts: BlogPost[] = [
 </ul>
 <p>Every automation should earn its place before you add the next. Small, compounding wins beat one giant rollout every time.</p>
 <h2>Change at the speed your team can absorb</h2>
-<p>The real bottleneck is almost never the technology - it's adoption. People need time to trust a new way of working, and a change your team doesn't actually adopt is worse than no change at all. When one automation quietly saves someone two hours a week, the next one is welcomed instead of resisted.</p>
+<p>The real bottleneck is almost never the technology - it's adoption. People need time to trust a new way of working, and a change your team doesn't actually adopt is worse than no change at all. When one automation saves someone two hours a week, the next one is welcomed instead of resisted.</p>
 <blockquote>You don't need the perfect system. You need the next right step - and a team that's ready to take it.</blockquote>
 <h2>Choose tools (and help) for the problem, not the hype</h2>
 <p>The tool landscape shifts every month, and AI adds a new "must-have" every week. You can't chase all of it, and you shouldn't try. The right tool is the one that fits your problem, your budget, and your team's comfort - not the loudest one. Sometimes that's a no-code platform like SmartSuite; sometimes an automation engine like Make.com; sometimes a scalable backend or a custom build. Usually it's a sensible mix. What matters is that the tool follows the problem, never a trend.</p>
@@ -155,7 +155,7 @@ export const posts: BlogPost[] = [
     cover: "/blog/what-structured-data-means.png",
     title: "What Structured Data Really Means (and Why Messy Data Costs You)",
     excerpt:
-      "Most 'we need better software' problems are really 'our data is a mess' problems. Here's what structured data means in plain terms - and why it's the quiet foundation of everything.",
+      "Most 'we need better software' problems are really 'our data is a mess' problems. Here's what structured data means in plain terms - and why it's the foundation of everything.",
     category: "Operations",
     tags: ["Operations", "Data"],
     date: "2026-07-30",
@@ -163,10 +163,10 @@ export const posts: BlogPost[] = [
     readMinutes: 6,
     gradient: 2,
     bodyHtml: `
-<p class="lede">Most problems that feel like "we need better software" are really "our data is a mess." Structured data is the quiet foundation that makes everything - reporting, automation, growth - either easy or painful. Here's what it means, in plain terms.</p>
+<p class="lede">Most problems that feel like "we need better software" are really "our data is a mess." Structured data is the foundation that makes everything - reporting, automation, growth - either easy or painful. Here's what it means, in plain terms.</p>
 <h2>What "structured data" actually means</h2>
 <p>It simply means your information is organized consistently: every customer, order, or project is stored the same way, in the same place, with clear fields - instead of scattered across spreadsheets, inboxes, and people's heads. Structured data is data a computer (and a new hire) can find and trust. Unstructured data is data only the person who created it can navigate.</p>
-<h2>What messy data quietly costs you</h2>
+<h2>What messy data costs you</h2>
 <p>When data isn't structured, the symptoms are always the same:</p>
 <ul>
   <li>Duplicates - three slightly different versions of the same customer</li>
@@ -231,7 +231,7 @@ export const posts: BlogPost[] = [
   <p>It never forgets, never makes a typo, and doesn't need a salary. That's the whole reason automation is worth it.</p>
 </div>
 <h2>You don't need to automate everything</h2>
-<p>The goal isn't a fully robotic business. It's removing the specific, repetitive, low-value tasks that quietly drain your team - starting with one. Automate the worst offender, feel the difference, then move to the next.</p>
+<p>The goal isn't a fully robotic business. It's removing the specific, repetitive, low-value tasks that drain your team - starting with one. Automate the worst offender, feel the difference, then move to the next.</p>
 <h3>The tools that make it possible</h3>
 <p>Platforms like Make.com and n8n connect your apps and run these automations without custom code. Which one fits depends on your needs, but the barrier to entry is far lower than most people assume - you don't need to be technical to benefit, you just need to know which repetitive task to point it at first.</p>
 <blockquote>Automation isn't about replacing people. It's about not wasting them on work a computer should be doing.</blockquote>
@@ -301,14 +301,14 @@ export const posts: BlogPost[] = [
 <h3>Security</h3>
 <p>This is the one you can't get wrong. Authentication, permissions, how data is stored and handled, secrets kept out of the code, every input validated. AI-generated code is never shipped without a careful security review - the convenient default is often the insecure one.</p>
 <h3>Refactoring and code quality</h3>
-<p>AI writes a lot of code, and not all of it earns its place. We prune it: remove duplication, consolidate logic, and keep things readable so the next change is easy and safe. Unreviewed AI output quietly accumulates into a mess that slows everything down.</p>
+<p>AI writes a lot of code, and not all of it earns its place. We prune it: remove duplication, consolidate logic, and keep things readable so the next change is easy and safe. Unreviewed AI output accumulates into a mess that slows everything down.</p>
 <h3>Built to scale</h3>
 <p>A data model and architecture that work for a demo can buckle under real volume and real users. We design the structure to hold up as you grow - sensible naming, modular pieces, and boundaries that let parts change without breaking the whole.</p>
 <h3>Review and testing</h3>
 <p>Every meaningful change gets human eyes, and the flows that matter get tested. "It worked when I clicked it" is not the same as "it works."</p>
 <blockquote>Vibe-coding a demo is easy. Shipping software a business can rely on is a discipline - and that discipline is the whole point.</blockquote>
 <h2>Why this matters to you</h2>
-<p>The gap between a demo that impresses in a meeting and software that quietly does its job for years is exactly this discipline. Fast is only valuable if what you're left with is solid, secure, and yours to grow. The worst outcome isn't a slow build - it's inheriting a fast one that nobody can safely change.</p>
+<p>The gap between a demo that impresses in a meeting and software that does its job for years is exactly this discipline. Fast is only valuable if what you're left with is solid, secure, and yours to grow. The worst outcome isn't a slow build - it's inheriting a fast one that nobody can safely change.</p>
 <p>That's why we pair AI speed with expert oversight on every build. The tools changed; the standards didn't.</p>
 `.trim(),
   },
@@ -386,7 +386,7 @@ export const posts: BlogPost[] = [
     bodyHtml: `
 <p class="lede">Manual data entry feels like a small, unavoidable tax. It isn't. It's one of the most expensive habits a growing operation keeps - and one of the easiest to remove.</p>
 <h2>What it's really costing you</h2>
-<p>Re-keying the same information into two or three systems quietly burns hundreds of hours a year per person, and it's where a large share of operational errors come from. The cost isn't just time - it's the bad decisions made on data that was mistyped somewhere upstream.</p>
+<p>Re-keying the same information into two or three systems burns hundreds of hours a year per person, and it's where a large share of operational errors come from. The cost isn't just time - it's the bad decisions made on data that was mistyped somewhere upstream.</p>
 <h2>Where it hides</h2>
 <ul>
   <li>Copying leads from a form or inbox into your CRM</li>

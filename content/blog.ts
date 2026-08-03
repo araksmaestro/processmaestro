@@ -55,6 +55,57 @@ export const DEFAULT_AUTHOR = "vasken";
 
 export const posts: BlogPost[] = [
   {
+    slug: "start-here",
+    cover: "/blog/start-here.png",
+    featured: true,
+    title: "Start Here: A Guide to Structuring and Automating Your Operations",
+    excerpt:
+      "New here? This is your map. A plain-spoken guide to fixing the systems your business runs on - where to begin, what to get right, and how honest, tool-agnostic help actually works.",
+    category: "Start Here",
+    tags: ["Start Here"],
+    date: "2026-07-30",
+    dateLabel: "July 2026",
+    readMinutes: 4,
+    gradient: 1,
+    bodyHtml: `
+<p class="lede">The world of business tools is changing faster than anyone can keep up with - new apps, no-code platforms, and AI promising to automate everything overnight. It's easy to feel behind. You're not. This blog exists to cut through that noise and give you a calm, practical path to getting your operations under control.</p>
+<p>We write for the people who actually run the business - owners and operations leaders who want things to work better - not for developers chasing the latest framework. No hype, no jargon, no worshipping a particular tool. Just honest guidance on how to structure, automate, and scale the systems your business depends on. Here's how to find your way around.</p>
+<h2>1. Figure out where to start</h2>
+<p>If everything feels like it needs fixing at once, begin here. The goal isn't a big-bang overhaul - it's finding the one painful, repetitive thing to improve first, then building from there.</p>
+<ul>
+  <li><a href="/blog/where-to-start-automating-your-operations">Where to Start with Automating Your Operations</a></li>
+  <li><a href="/blog/what-does-it-mean-to-automate-a-process">What Does It Mean to Automate a Process?</a></li>
+</ul>
+<h2>2. Get your data right first</h2>
+<p>Most "we need better software" problems are really "our data is a mess" problems. Structured data is the unglamorous foundation that makes everything else - reporting, automation, growth - either easy or painful.</p>
+<ul>
+  <li><a href="/blog/what-structured-data-means">What Structured Data Really Means (and Why Messy Data Costs You)</a></li>
+</ul>
+<h2>3. Automate the busywork</h2>
+<p>Once the data is clean, you can start removing the manual, repetitive work that eats your team's time - carefully, one step at a time, with the right tool for the job.</p>
+<ul>
+  <li><a href="/blog/reduce-manual-data-entry">Reduce Manual Data Entry: The Real Cost and 5 Ways to Kill It</a></li>
+  <li><a href="/blog/make-com-vs-n8n-for-business">Make.com vs n8n for Business: Which Engine, and When</a></li>
+</ul>
+<h2>4. When you need a custom application</h2>
+<p>Sometimes off-the-shelf tools and templates run out of room, and you need something built for exactly how you work - a custom app, portal, or internal tool. Modern AI-assisted development makes that far faster than it used to be, as long as it's done with discipline.</p>
+<ul>
+  <li><a href="/blog/how-we-build-custom-apps-design-led">From Design to Working Software in Days: How We Build Custom Apps</a></li>
+  <li><a href="/blog/building-custom-software-with-ai-done-right">Building Custom Software with AI: What to Get Right</a></li>
+</ul>
+<h2>5. Know when to change tools</h2>
+<p>Every tool has a ceiling. Part of doing this well is recognizing when you've outgrown one - and moving before it becomes a problem, not after.</p>
+<ul>
+  <li><a href="/blog/when-to-move-off-smartsuite-to-xano">When to Move Off SmartSuite to Xano (and When to Stay)</a></li>
+</ul>
+<h2>What working with us actually looks like</h2>
+<p>Running through all of these is one belief: the tool is never the answer - the right solution is. We're consultants first and tool specialists second. We diagnose the real problem, map how your business actually works, and only then choose what to build it with. We go deep in a core stack - SmartSuite, Make.com, Xano, custom builds - but we're never loyal to any single tool, and we'll tell you honestly when the one you have isn't enough.</p>
+<p>If you'd rather see it than read about it, our <a href="/case-studies">case studies</a> show the same approach applied to real businesses.</p>
+<blockquote>Start small, fix the foundation, automate what hurts most, and change tools only when you've truly outgrown them. That's the whole philosophy - the rest is detail.</blockquote>
+<p>However you got here, you're in the right place. Pick the section that matches where you're stuck, and start there.</p>
+`.trim(),
+  },
+  {
     slug: "when-to-move-off-smartsuite-to-xano",
     cover: "/blog/when-to-move-off-smartsuite-to-xano.png",
     title: "When to Move Off SmartSuite to Xano (and When to Stay)",
@@ -65,7 +116,6 @@ export const posts: BlogPost[] = [
     date: "2026-07-15",
     dateLabel: "July 2026",
     readMinutes: 8,
-    featured: true,
     gradient: 1,
     bodyHtml: `
 <p class="lede">If your SmartSuite base is starting to feel slow, or a table just stopped letting you add records, you haven't done anything wrong. You've hit a real, documented limit - and the fix isn't to fight it.</p>

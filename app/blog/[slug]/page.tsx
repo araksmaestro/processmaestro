@@ -12,9 +12,7 @@ import { getPost, getAllSlugs, posts, AUTHORS, DEFAULT_AUTHOR } from "@/content/
 export function generateStaticParams() {
   return getAllSlugs().map((slug) => ({ slug }));
 }
-
-// Only build the published slugs; a hidden/draft (or unknown) slug 404s.
-export const dynamicParams = false;
+// Note: drafts/unknown slugs 404 via getPost() returning undefined -> notFound().
 
 export async function generateMetadata({
   params,

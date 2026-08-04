@@ -7,7 +7,7 @@ import { serviceNavItems } from "@/content/services";
 import BookingButton from "@/components/BookingButton";
 
 type NavVariant = "light" | "dark";
-type NavActive = "industries" | "case-studies" | "services" | "blog";
+type NavActive = "industries" | "case-studies" | "how-we-work" | "services" | "blog";
 
 export default function Nav({
   variant = "light",
@@ -123,6 +123,14 @@ export default function Nav({
             style={linkStyle(active === "case-studies")}
           >
             Case Studies
+          </Link>
+
+          <Link
+            href="/how-we-work"
+            aria-current={active === "how-we-work" ? "page" : undefined}
+            style={linkStyle(active === "how-we-work")}
+          >
+            How We Work
           </Link>
 
           <Link
@@ -249,6 +257,9 @@ export default function Nav({
               </a>
               <Link href="/case-studies" className="pm-mobile-link" onClick={close}>
                 Case Studies
+              </Link>
+              <Link href="/how-we-work" className="pm-mobile-link" onClick={close}>
+                How We Work
               </Link>
               <Link href="/blog" className="pm-mobile-link" onClick={close}>
                 Blog

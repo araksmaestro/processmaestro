@@ -10,7 +10,7 @@ export type BlogPost = {
   slug: string;
   title: string;
   excerpt: string;
-  category: string; // display label, e.g. "SmartSuite · Xano"
+  category: string; // display label, e.g. "SmartSuite · Supabase"
   tags: string[]; // filter chips
   date: string; // ISO, for datePublished
   dateLabel: string; // human display, e.g. "July 2026"
@@ -87,13 +87,13 @@ export const posts: BlogPost[] = [
 `.trim(),
   },
   {
-    slug: "when-to-move-off-smartsuite-to-xano",
-    cover: "/blog/when-to-move-off-smartsuite-to-xano.png",
-    title: "When to Move Off SmartSuite to Xano (and When to Stay)",
+    slug: "when-to-move-off-smartsuite-to-supabase",
+    cover: "/blog/when-to-move-off-smartsuite-to-supabase.png",
+    title: "When to Move Off SmartSuite to Supabase (and When to Stay)",
     excerpt:
       "SmartSuite caps out at 125,000 records per table - even on its top tier. Here's how to know if you've actually hit the ceiling, and what to do about it.",
-    category: "SmartSuite · Xano",
-    tags: ["SmartSuite", "Xano"],
+    category: "SmartSuite · Supabase",
+    tags: ["SmartSuite", "Supabase"],
     date: "2026-07-15",
     dateLabel: "July 2026",
     readMinutes: 8,
@@ -120,11 +120,11 @@ export const posts: BlogPost[] = [
 <blockquote>The tool isn't the answer. The right architecture is - and sometimes that means moving the heavy data somewhere built for it.</blockquote>
 <h2>It's not only about data - it's about the experience</h2>
 <p>There's a second reason teams move off SmartSuite, and it has nothing to do with record counts. SmartSuite's interface is quick to set up, but it's a template - you work inside the dashboards and views it hands you. If you want a genuinely custom experience - a client portal or internal app that looks and behaves exactly the way you picture it, with your own layouts, interactions, and branding - you'll eventually hit the edges of what a no-code interface allows.</p>
-<p>This is where the pairing shines. Move the data to Xano and put a custom front end on top - one we build with Claude Code - and you get the best of both: Xano handles the scale and the logic, while the custom interface delivers the exact look, feel, and workflow you want, with no template ceiling.</p>
+<p>This is where the pairing shines. Move the data to Supabase and put a custom front end on top - one we build with Claude Code - and you get the best of both: Supabase handles the scale and the logic, while the custom interface delivers the exact look, feel, and workflow you want, with no template ceiling.</p>
 <h2>When to stay on SmartSuite</h2>
 <p>Migrating is real work, so don't do it prematurely. If your largest table is comfortably under the cap, your team is happy working in SmartSuite's ready-made views, and your reporting is fast enough - stay. Its interface, permissions, and no-code workflows are genuinely great for standard operational needs, and there's no reason to add complexity you don't need.</p>
-<h3>Where Xano fits</h3>
-<p>Xano is a scalable no-code backend built for exactly the jobs SmartSuite isn't: large datasets, custom APIs, and application logic. On its own it's the engine; paired with a custom front end we build in Claude Code, it becomes a full application with a bespoke interface you'd never get from an off-the-shelf tool. A common pattern we build is a hybrid - keep the everyday team workflows in SmartSuite, move the high-volume data and any custom-UI experience to Xano plus a custom front end, and connect it all so nobody notices the seam.</p>
+<h3>Where Supabase fits</h3>
+<p>Supabase is a scalable backend built on Postgres, made for exactly the jobs SmartSuite isn't: large datasets, custom APIs, and application logic. On its own it's the engine; paired with a custom front end we build in Claude Code, it becomes a full application with a bespoke interface you'd never get from an off-the-shelf tool. A common pattern we build is a hybrid - keep the everyday team workflows in SmartSuite, move the high-volume data and any custom-UI experience to Supabase plus a custom front end, and connect it all so the transition is invisible to your team.</p>
 <p>The right call depends on your data, not your loyalty to a tool. If you're not sure which side of the line you're on, that's exactly the kind of thing a short conversation can settle.</p>
 `.trim(),
   },

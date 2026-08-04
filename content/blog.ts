@@ -376,6 +376,7 @@ export const posts: BlogPost[] = [
   {
     slug: "make-com-vs-n8n-for-business",
     cover: "/blog/make-com-vs-n8n-for-business.png",
+    draft: true, // hidden for now - to be revised (not deep enough)
     title: "Make.com vs n8n for Business: Which Engine, and When",
     excerpt:
       "An automation consultant's honest take on Make.com vs n8n - not a sales pitch for either one.",

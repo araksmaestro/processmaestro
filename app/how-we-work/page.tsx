@@ -8,7 +8,7 @@ import { SITE_URL } from "@/lib/site";
 export const metadata: Metadata = {
   title: "How We Work",
   description:
-    "We solve the problem first, then choose the tools that fit. Process Maestro is a consulting-first, tool-agnostic team - deep in SmartSuite, Make.com, Claude Code and Xano, but never limited to them.",
+    "We solve the problem first, then choose the tools that fit. Process Maestro is a consulting-first, tool-agnostic team - deep in SmartSuite, Make.com, Claude Code and Supabase, but never limited to them.",
   alternates: { canonical: "/how-we-work" },
   openGraph: {
     title: "How We Work | Process Maestro",
@@ -39,7 +39,7 @@ const STACK: Tool[] = [
     badge: "/make-partner.png",
   },
   { name: "Claude Code", role: "Custom front-ends", tag: "AI-accelerated", partner: false },
-  { name: "Xano", role: "Backend at scale", tag: "For big data", partner: false },
+  { name: "Supabase", role: "Backend at scale", tag: "For big data", partner: false },
 ];
 
 // The method is a real, ordered sequence (discovery to support), so the numbering
@@ -58,7 +58,7 @@ const STEPS = [
   {
     n: "03",
     title: "Choose the right tools",
-    desc: "Only now do we pick the stack - SmartSuite, Make.com, Xano, a custom build - based on your data, budget and team. Never a default.",
+    desc: "Only now do we pick the stack - SmartSuite, Make.com, Supabase, a custom build - based on your data, budget and team. Never a default.",
   },
   {
     n: "04",
@@ -73,7 +73,7 @@ const STEPS = [
   {
     n: "06",
     title: "Support & scale",
-    desc: "We stay with you as you grow - and we'll tell you honestly when it's time to move up, like SmartSuite to Xano for bigger data.",
+    desc: "We stay with you as you grow - and we'll tell you honestly when it's time to move up, like SmartSuite to Supabase for bigger data.",
   },
 ] as const;
 

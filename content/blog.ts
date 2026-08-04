@@ -295,7 +295,7 @@ export const posts: BlogPost[] = [
   <p>No expensive surprises halfway through. The look, feel, and flow are locked in with you first - so the build has a clear, agreed target instead of a moving one.</p>
 </div>
 <h2>Then the design hands off to the build</h2>
-<p>Once the interface is right, it moves to the build side - where a working application actually comes together: the data model, the business logic, the automations, and the integrations with the tools you already run (SmartSuite, Make.com, Xano, your CRM). The clean, approved interface becomes the foundation everything is built on, instead of something bolted on at the end.</p>
+<p>Once the interface is right, it moves to the build side - where a working application actually comes together: the data model, the business logic, the automations, and the integrations with the tools you already run (SmartSuite, Make.com, Supabase, your CRM). The clean, approved interface becomes the foundation everything is built on, instead of something bolted on at the end.</p>
 <p>This is the part that separates a nice mockup from software you can run your business on - and it's where experience, not just speed, does the heavy lifting.</p>
 <h2>What you end up with</h2>
 <ul>

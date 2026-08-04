@@ -7,7 +7,7 @@ import { serviceNavItems } from "@/content/services";
 import BookingButton from "@/components/BookingButton";
 
 type NavVariant = "light" | "dark";
-type NavActive = "industries" | "case-studies" | "how-we-work" | "services";
+type NavActive = "industries" | "case-studies" | "how-we-work" | "services" | "blog";
 
 export default function Nav({
   variant = "light",
@@ -133,6 +133,14 @@ export default function Nav({
             How We Work
           </Link>
 
+          <Link
+            href="/blog"
+            aria-current={active === "blog" ? "page" : undefined}
+            style={linkStyle(active === "blog")}
+          >
+            Blog
+          </Link>
+
           {/* Services + dropdown — ships to every page, independent of the
               Services page's tab state. The hash is the only interface. */}
           <div
@@ -252,6 +260,9 @@ export default function Nav({
               </Link>
               <Link href="/how-we-work" className="pm-mobile-link" onClick={close}>
                 How We Work
+              </Link>
+              <Link href="/blog" className="pm-mobile-link" onClick={close}>
+                Blog
               </Link>
 
               {/* Services owns its three sub-items rather than listing them as siblings. */}

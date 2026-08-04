@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site";
 import { getCaseStudySlugs } from "@/lib/adapters/case-studies";
+import { getAllSlugs as getBlogSlugs } from "@/content/blog";
 
 // Keep the sitemap fresh as case studies are published/unpublished in SmartSuite.
 // 5 min: shares the published-records fetch cache with the case pages.
@@ -12,6 +13,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: SITE_URL, changeFrequency: "monthly", priority: 1 },
     { url: `${SITE_URL}/case-studies`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${SITE_URL}/how-we-work`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${SITE_URL}/blog`, changeFrequency: "weekly", priority: 0.7 },
     { url: `${SITE_URL}/services`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${SITE_URL}/privacy`, changeFrequency: "yearly", priority: 0.3 },
   ];
@@ -25,5 +27,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  return [...staticRoutes, ...caseRoutes];
+  const blogRoutes: MetadataRoute.Sitemap = getBlogSlugs().map((slug) => ({
+    url: `${SITE_URL}/blog/${slug}`,
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
+
+  return [...staticRoutes, ...caseRoutes, ...blogRoutes];
 }
